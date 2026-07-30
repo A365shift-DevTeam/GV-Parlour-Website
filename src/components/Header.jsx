@@ -39,13 +39,20 @@ export default function Header({ theme, onToggleTheme }) {
     const headerHeight = headerEl ? headerEl.getBoundingClientRect().height : 80;
     
     const targetEl = document.querySelector(targetId);
-    if (targetEl) {
-      const targetPosition = targetEl.getBoundingClientRect().top + window.pageYOffset - headerHeight;
-      window.scrollTo({
-        top: targetPosition,
-        behavior: 'smooth'
-      });
+    if (!targetEl) return;
+
+    // Drive Lenis when it's running so anchor jumps share the same easing
+    // as wheel scrolling; fall back to native smooth scroll otherwise.
+    if (window.lenis) {
+      window.lenis.scrollTo(targetEl, { offset: -headerHeight, duration: 1.4 });
+      return;
     }
+
+    const targetPosition = targetEl.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+    window.scrollTo({
+      top: targetPosition,
+      behavior: 'smooth'
+    });
   };
 
   const isDark = theme === 'dark';
@@ -147,7 +154,7 @@ export default function Header({ theme, onToggleTheme }) {
         <div className={`lg:hidden fixed inset-x-0 top-full backdrop-blur-xl border-b shadow-2xl transition-all duration-300 ${
           isDark ? 'bg-[#09090B]/95 border-white/10' : 'bg-white/95 border-slate-200'
         }`}>
-          <div className="px-6 py-6 space-y-4 max-h-[80dvh] overflow-y-auto">
+          <div data-lenis-prevent className="px-6 py-6 space-y-4 max-h-[80dvh] overflow-y-auto">
             {navLinks.map((link) => (
               <a
                 key={link.name}

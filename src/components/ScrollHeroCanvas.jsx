@@ -5,7 +5,7 @@ export default function ScrollHeroCanvas({ theme }) {
   const isCompact = useIsCompact();
   const isDark = theme !== 'light';
 
-  // Reduced motion preference using lazy useState initializer adhering to Rule §10
+  // Rule §10: Reduced motion preference using lazy useState initializer
   const [prefersReducedMotion] = useState(() => {
     if (typeof window === 'undefined') return false;
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -15,16 +15,15 @@ export default function ScrollHeroCanvas({ theme }) {
   const stickyRef = useRef(null);
   const canvasRef = useRef(null);
 
-  // Variant config adhering to Rule §6 (192 frames)
+  // Rule §6: Two asset variants (Desktop = full 192, Compact = decimated 96)
   const variantConfig = useMemo(() => {
     const totalFrames = 192;
     const pad = (n) => String(n).padStart(8, '0');
 
     if (isCompact) {
-      // Compact: decimated 96 frames from frames_compact/
-      const step = 2;
+      // Compact variant (decimated every 2nd frame from frames_compact)
       const paths = [];
-      for (let i = 1; i <= totalFrames; i += step) {
+      for (let i = 1; i <= totalFrames; i += 2) {
         paths.push(`/frames_compact/${pad(i)}.webp`);
       }
       return {
@@ -35,7 +34,7 @@ export default function ScrollHeroCanvas({ theme }) {
         posterSrc: '/frames_compact/00000001.webp'
       };
     } else {
-      // Desktop: all 192 frames from frames/
+      // Desktop variant (all 192 frames from frames)
       const paths = [];
       for (let i = 1; i <= totalFrames; i++) {
         paths.push(`/frames/${pad(i)}.webp`);
@@ -50,7 +49,7 @@ export default function ScrollHeroCanvas({ theme }) {
     }
   }, [isCompact]);
 
-  // Tracked-prop pattern for variant swap state reset adhering to Rule §9
+  // Rule §9: Tracked-prop pattern for variant swap reset during render
   const [trackedVariant, setTrackedVariant] = useState(variantConfig.name);
   const [loadedCount, setLoadedCount] = useState(0);
   const [ready, setReady] = useState(false);
@@ -61,7 +60,7 @@ export default function ScrollHeroCanvas({ theme }) {
     setReady(false);
   }
 
-  // Preloaded HTMLImageElement cache
+  // Preloaded HTMLImageElement array ref
   const imagesRef = useRef([]);
   const lastFrameIndexRef = useRef(-1);
   const progressRef = useRef(0);
@@ -87,7 +86,7 @@ export default function ScrollHeroCanvas({ theme }) {
         loadedImages[idx] = img;
         count++;
         setLoadedCount(count);
-        if (count >= Math.min(15, paths.length)) {
+        if (count >= Math.min(10, paths.length)) {
           setReady(true);
         }
       };
@@ -105,12 +104,12 @@ export default function ScrollHeroCanvas({ theme }) {
     };
   }, [variantConfig]);
 
-  // Paint canvas frame function adhering to Rules §2, §3 & §9
+  // Rule §2: Cover vs Contain draw switch algorithm
   const paint = (ctx, cssW, cssH, frameIndex) => {
     const images = imagesRef.current;
     if (!images || images.length === 0) return;
 
-    // Nearest loaded frame fallback
+    // Fallback to nearest loaded frame if current frame is loading
     let img = images[frameIndex];
     if (!img || !img.complete || img.naturalWidth === 0) {
       for (let offset = 1; offset < images.length; offset++) {
@@ -135,12 +134,12 @@ export default function ScrollHeroCanvas({ theme }) {
     let scale, drawX, drawY;
 
     if (!isCompact) {
-      // Desktop: cover mode (Rule §2)
+      // Landscape/Desktop -> COVER: scale by max(boxW/imgW, boxH/imgH), center both axes (Rule §2)
       scale = Math.max(cssW / imgW, cssH / imgH);
       drawX = (cssW - imgW * scale) / 2;
       drawY = (cssH - imgH * scale) / 2;
     } else {
-      // Compact: contain mode, top-align Y inside plate (Rule §2)
+      // Compact/Portrait -> CONTAIN: scale by min(...), center X, TOP-ALIGN Y inside aspect plate (Rule §2)
       scale = Math.min(cssW / imgW, cssH / imgH);
       drawX = (cssW - imgW * scale) / 2;
       drawY = 0; // Top-align Y
@@ -150,7 +149,7 @@ export default function ScrollHeroCanvas({ theme }) {
     ctx.drawImage(img, drawX, drawY, imgW * scale, imgH * scale);
   };
 
-  // Canvas ResizeObserver & Sizing effect adhering to Rule §3
+  // Rule §3: Canvas sizing tracking real box × DPR (capped at 2) with rAF-debounced ResizeObserver
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -177,8 +176,8 @@ export default function ScrollHeroCanvas({ theme }) {
         canvas.height = Math.round(cssH * dpr);
         canvas.style.width = `${cssW}px`;
         canvas.style.height = `${cssH}px`;
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0); // Reset transform (Rule §3)
-        lastFrameIndexRef.current = -1; // Force repaint
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0); // Reset transform, never compound (Rule §3)
+        lastFrameIndexRef.current = -1; // Force repaint (Rule §3)
       }
 
       const frameIndex = Math.floor(progressRef.current * (variantConfig.frameCount - 1));
@@ -206,7 +205,7 @@ export default function ScrollHeroCanvas({ theme }) {
     };
   }, [variantConfig, isCompact]);
 
-  // Unified Scroll Progress Calculation adhering strictly to Rule §7
+  // Rule §7: Scroll mechanics & unified progress math
   useEffect(() => {
     const handleScroll = () => {
       const container = containerRef.current;
@@ -214,7 +213,13 @@ export default function ScrollHeroCanvas({ theme }) {
       if (!container || !sticky) return;
 
       const padTop = parseFloat(getComputedStyle(container).paddingTop) || 0;
-      const travel = container.offsetHeight - padTop - sticky.offsetHeight;
+
+      // Desktop pins the stage, so the scrub window is the section height minus
+      // the pinned stage. Compact isn't pinned — the plate simply scrolls up out
+      // of view, so its scrub window is the section's own height.
+      const travel = isCompact
+        ? container.offsetHeight - padTop
+        : container.offsetHeight - padTop - sticky.offsetHeight;
 
       if (travel <= 0) return;
 
@@ -251,28 +256,53 @@ export default function ScrollHeroCanvas({ theme }) {
       window.removeEventListener('scroll', handleScroll);
       if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
     };
-  }, [variantConfig]);
+  }, [variantConfig, isCompact]);
+
+  // Paint the first real frame once decoding finishes. Without this the canvas
+  // stays blank whenever the initial measure ran before any image was ready and
+  // no scroll event follows (compact at the top of the page), while the poster
+  // has already faded out on `ready` — leaving an empty plate.
+  useEffect(() => {
+    if (!ready) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const parent = canvas.parentElement;
+    if (!ctx || !parent) return;
+
+    const { width, height } = parent.getBoundingClientRect();
+    if (!width || !height) return;
+
+    lastFrameIndexRef.current = -1;
+    paint(ctx, width, height, Math.floor(progressRef.current * (variantConfig.frameCount - 1)));
+  }, [ready, variantConfig, isCompact]);
 
   return (
     <section 
       id="hero" 
       ref={containerRef} 
-      className={`relative w-full ${isCompact ? 'min-h-[250dvh] pt-0' : 'min-h-[300dvh] pt-0'}`}
+      className={`relative w-full ${isCompact ? 'pt-20' : 'pt-0 min-h-[280dvh]'}`}
     >
-      {/* Sticky Stage Pin adhering to Rules §0 & §7 */}
-      <div 
+      {/* Sticky Stage Pin adhering to Rules §0, §5 & §7.
+          Compact gets no 100dvh pin: the stage hugs the 16/9 plate so there is
+          no dead viewport space between the hero and the next section. */}
+      <div
         ref={stickyRef}
-        className={`sticky top-0 w-full h-[100dvh] overflow-hidden flex flex-col transition-colors duration-300 ${
+        className={`w-full overflow-hidden flex flex-col transition-colors duration-300 ${
+          isCompact ? 'relative' : 'sticky top-0 h-[100dvh]'
+        } ${
           isDark ? 'bg-[#09090B]' : 'bg-slate-50'
         }`}
       >
-        {/* Aspect Ratio Canvas Container */}
-        <div className={`relative w-full shrink-0 ${isCompact ? 'aspect-[16/9] max-h-[60dvh]' : 'h-full flex-1'}`}>
+        {/* Rule §4: Lock box against CLS with explicit aspect-ratio plate */}
+        <div className={`relative w-full shrink-0 ${
+          isCompact ? 'aspect-[16/9]' : 'h-full flex-1'
+        }`}>
           
-          {/* Poster still fallback adhering to Rule §10 */}
+          {/* Rule §10: Poster image under canvas for reduced motion / loading state */}
           <img
             src={variantConfig.posterSrc}
-            alt="GV Studios Frame Sequence Poster"
+            alt="GV Studios Beauty & Cosmetology"
             width="1920"
             height="1080"
             className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 z-0 ${
@@ -280,50 +310,15 @@ export default function ScrollHeroCanvas({ theme }) {
             }`}
           />
 
-          {/* Scroll-driven Canvas Sequence */}
+          {/* Frame Sequence Canvas */}
           {!prefersReducedMotion && (
             <canvas
               ref={canvasRef}
               className="absolute inset-0 w-full h-full z-10 pointer-events-none block"
             />
           )}
-
-          {/* Desktop Overlay Progress Indicator */}
-          {!isCompact && (
-            <div className="absolute bottom-6 right-8 z-20 px-3.5 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white text-xs font-mono font-bold tracking-wider">
-              {Math.min(192, Math.floor(progressRef.current * 192) + 1)} / 192 FRAMES
-            </div>
-          )}
         </div>
 
-        {/* Compact Layout Stage Filling Content Block adhering to Rule §8 */}
-        {isCompact && (
-          <section className={`flex-1 min-h-0 flex flex-col p-4 relative z-20 border-t transition-colors ${
-            isDark ? 'bg-[#09090B] border-white/10' : 'bg-slate-50 border-slate-200'
-          }`}>
-            <div className="shrink-0 flex items-center justify-between">
-              <span className={`text-xs font-mono font-bold uppercase tracking-wider ${
-                isDark ? 'text-slate-400' : 'text-slate-600'
-              }`}>
-                GV STUDIOS SEQUENCE
-              </span>
-              <span className={`text-xs font-mono font-bold ${
-                isDark ? 'text-white' : 'text-slate-900'
-              }`}>
-                {Math.min(192, Math.floor(progressRef.current * 192) + 1)} / 192
-              </span>
-            </div>
-
-            {/* Flex-grow container absorbing stage remainder (Rule §8) */}
-            <div className="flex-1 min-h-0 mt-2 relative rounded-2xl overflow-hidden border border-white/10 shadow-lg">
-              <img
-                src={variantConfig.paths[Math.floor(progressRef.current * (variantConfig.frameCount - 1))] || variantConfig.posterSrc}
-                alt="Scroll frame sequence"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </section>
-        )}
       </div>
     </section>
   );

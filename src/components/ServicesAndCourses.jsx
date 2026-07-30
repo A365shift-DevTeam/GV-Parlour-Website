@@ -221,7 +221,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
             {courses.map((course, cIdx) => (
               <article
                 key={course.id}
-                className={`relative rounded-3xl p-6 sm:p-7 border flex flex-col transition-all duration-300 group shadow-lg ${
+                className={`relative rounded-3xl p-5 sm:p-7 border flex flex-col transition-all duration-300 group shadow-lg ${
                   isDark
                     ? course.popular
                       ? 'bg-[#161620]/90 border-[#D4AF37]/50 shadow-[0_0_40px_-18px_rgba(212,175,55,0.55)]'
@@ -301,13 +301,13 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
                     }`}>
                       Additional Value Perks
                     </h5>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {course.additionalPerks.map((perk, pIdx) => (
                         <div key={pIdx} className={`px-2.5 py-1.5 rounded-lg border text-[11px] font-medium flex items-center gap-1.5 ${
                           isDark ? 'bg-black/40 border-white/10 text-slate-200' : 'bg-slate-50 border-slate-200 text-slate-800'
                         }`}>
                           <Star className={`w-3 h-3 shrink-0 ${isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'}`} />
-                          <span className="truncate">{perk}</span>
+                          <span className="sm:truncate">{perk}</span>
                         </div>
                       ))}
                     </div>
@@ -344,7 +344,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
 
           {/* ---------- RIGHT COLUMN — PARLOUR SERVICES ---------- */}
           <aside className="lg:col-span-6 lg:sticky lg:top-24 lg:self-start animate-fadeIn">
-            <div className={`rounded-3xl border p-6 sm:p-7 shadow-xl ${
+            <div className={`rounded-3xl border p-5 sm:p-7 shadow-xl ${
               isDark ? 'glass-card border-white/12' : 'bg-white/85 border-slate-200 backdrop-blur-md'
             }`}>
               <ColumnHeading
@@ -355,7 +355,12 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
                 isDark={isDark}
               />
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-5">
+              {/* Bounded so the sticky panel always fits the viewport and can
+                  actually pin; data-lenis-prevent lets it scroll natively. */}
+              <div
+                data-lenis-prevent
+                className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-5 lg:max-h-[calc(100dvh-22rem)] lg:overflow-y-auto lg:pr-1"
+              >
                 {parlourServices.map((service, index) => {
                   const IconComponent = service.icon;
                   return (
@@ -375,7 +380,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
                           {service.title}
                         </h4>
                       </div>
-                      <p className={`text-[10.5px] font-normal leading-snug line-clamp-2 ${
+                      <p className={`text-[11px] sm:text-[10.5px] font-normal leading-snug line-clamp-2 ${
                         isDark ? 'text-slate-400' : 'text-slate-600'
                       }`}>
                         {service.desc}
