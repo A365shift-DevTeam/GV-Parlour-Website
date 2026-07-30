@@ -15,6 +15,40 @@ import {
   Star
 } from 'lucide-react';
 
+/* Shared column heading — gold rule + eyebrow, used by both sides of the split.
+   Declared at module scope so it keeps its identity across renders. */
+function ColumnHeading({ icon: Icon, eyebrow, title, sub, isDark }) {
+  return (
+    <div className="space-y-2.5">
+      <div className="flex items-center gap-3">
+        <span className={`w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 ${
+          isDark
+            ? 'bg-[#D4AF37]/12 border-[#D4AF37]/35 text-[#D4AF37]'
+            : 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#8A6D1F]'
+        }`}>
+          <Icon className="w-4.5 h-4.5" />
+        </span>
+        <div>
+          <span className={`block text-[10px] font-extrabold uppercase tracking-[0.2em] ${
+            isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'
+          }`}>
+            {eyebrow}
+          </span>
+          <h3 className={`text-xl sm:text-2xl font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+            {title}
+          </h3>
+        </div>
+      </div>
+      <p className={`text-xs sm:text-sm font-normal ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+        {sub}
+      </p>
+      <div className={`h-px w-full bg-gradient-to-r to-transparent ${
+        isDark ? 'from-[#D4AF37]/50' : 'from-[#D4AF37]/70'
+      }`} />
+    </div>
+  );
+}
+
 export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
   const isDark = theme !== 'light';
 
@@ -146,40 +180,9 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
     }
   ];
 
-  /* Shared column heading — gold rule + eyebrow, used by both sides of the split */
-  const ColumnHeading = ({ icon: Icon, eyebrow, title, sub }) => (
-    <div className="space-y-2.5">
-      <div className="flex items-center gap-3">
-        <span className={`w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 ${
-          isDark
-            ? 'bg-[#D4AF37]/12 border-[#D4AF37]/35 text-[#D4AF37]'
-            : 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#8A6D1F]'
-        }`}>
-          <Icon className="w-4.5 h-4.5" />
-        </span>
-        <div>
-          <span className={`block text-[10px] font-extrabold uppercase tracking-[0.2em] ${
-            isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'
-          }`}>
-            {eyebrow}
-          </span>
-          <h3 className={`text-xl sm:text-2xl font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-            {title}
-          </h3>
-        </div>
-      </div>
-      <p className={`text-xs sm:text-sm font-normal ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-        {sub}
-      </p>
-      <div className={`h-px w-full bg-gradient-to-r to-transparent ${
-        isDark ? 'from-[#D4AF37]/50' : 'from-[#D4AF37]/70'
-      }`} />
-    </div>
-  );
-
   return (
     <section id="services-courses" className={`py-20 sm:py-28 transition-colors duration-300 relative ${
-      isDark ? 'bg-[#0E0E12]/55 text-slate-100' : 'bg-slate-100/45 text-slate-900'
+      isDark ? 'bg-[#0E0E12]/55 text-slate-100' : 'bg-[#F3EDE3]/50 text-slate-900'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 relative z-10">
 
@@ -212,6 +215,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
               eyebrow="Academy"
               title="Our Courses"
               sub="Three certified training tracks — theory plus hands-on practical, with placement support."
+              isDark={isDark}
             />
 
             {courses.map((course, cIdx) => (
@@ -348,6 +352,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
                 eyebrow="Parlour"
                 title="Our Services"
                 sub="Walk-in salon menu — skin, hair and nail care by certified professionals."
+                isDark={isDark}
               />
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-5">
@@ -432,6 +437,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
             eyebrow="Clinical"
             title="Skin Treatments"
             sub="Advanced dermatological-grade procedures performed in-studio."
+            isDark={isDark}
           />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
             {skinTreatments.map((treatment, idx) => (
@@ -471,6 +477,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
             eyebrow="Expertise"
             title="Our Specializations"
             sub="Where GV Studios goes further than a standard parlour."
+            isDark={isDark}
           />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
             {specializations.map((spec, sIdx) => (

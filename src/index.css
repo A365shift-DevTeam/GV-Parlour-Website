@@ -51,7 +51,8 @@ html::after {
 html::before {
   background-repeat: no-repeat;
   background-attachment: fixed;
-  transition: background-image 300ms ease;
+  /* No transition here: multi-layer background-image doesn't animate in any
+     engine, so the theme swap is an honest hard cut rather than a fake one. */
 }
 
 html.dark::before {

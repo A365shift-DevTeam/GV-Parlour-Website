@@ -2,14 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 
 export default function Header({ theme, onToggleTheme }) {
-  const [scrolled, setScrolled] = useState(false);
+  const [passedHeroSequence, setPassedHeroSequence] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 30);
+      const heroEl = document.querySelector('#hero');
+      if (heroEl) {
+        const heroBottom = heroEl.getBoundingClientRect().bottom;
+        const headerHeight = 80;
+        // Navigation bar remains transparent until the user scrolls past the Hero frame sequence!
+        setPassedHeroSequence(heroBottom <= headerHeight + 50);
+      } else {
+        setPassedHeroSequence(window.scrollY > 400);
+      }
     };
+
     window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // Initial check
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -29,33 +39,24 @@ export default function Header({ theme, onToggleTheme }) {
     const headerHeight = headerEl ? headerEl.getBoundingClientRect().height : 80;
     
     const targetEl = document.querySelector(targetId);
-    if (!targetEl) return;
-
-    // Drive Lenis when it's running so anchor jumps share the same easing
-    // as wheel scrolling; fall back to native smooth scroll otherwise.
-    if (window.lenis) {
-      window.lenis.scrollTo(targetEl, { offset: -headerHeight, duration: 1.4 });
-      return;
+    if (targetEl) {
+      const targetPosition = targetEl.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+      window.scrollTo({
+        top: targetPosition,
+        behavior: 'smooth'
+      });
     }
-
-    const targetPosition = targetEl.getBoundingClientRect().top + window.pageYOffset - headerHeight;
-    window.scrollTo({
-      top: targetPosition,
-      behavior: 'smooth'
-    });
   };
 
   const isDark = theme === 'dark';
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      scrolled 
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      passedHeroSequence 
         ? isDark
           ? 'bg-[#09090B]/95 backdrop-blur-md border-b border-white/10 py-3 shadow-xl'
           : 'bg-white/95 backdrop-blur-md border-b border-slate-200 py-3 shadow-md' 
-        : isDark
-          ? 'bg-gradient-to-b from-black/90 to-transparent py-4'
-          : 'bg-gradient-to-b from-white/90 to-transparent py-4'
+        : 'bg-transparent border-transparent py-5 shadow-none'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 flex items-center justify-between">
         
@@ -77,7 +78,7 @@ export default function Header({ theme, onToggleTheme }) {
               GV STUDIOS
             </span>
             <span className={`text-[10px] sm:text-xs tracking-widest uppercase font-medium mt-0.5 block ${
-              isDark ? 'text-slate-400' : 'text-slate-600'
+              isDark ? 'text-slate-300' : 'text-slate-600'
             }`}>
               Beauty & Academy
             </span>
@@ -93,7 +94,7 @@ export default function Header({ theme, onToggleTheme }) {
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href)}
                 className={`text-sm font-semibold transition-colors relative py-1 ${
-                  isDark ? 'text-slate-300 hover:text-white' : 'text-slate-700 hover:text-black'
+                  isDark ? 'text-slate-200 hover:text-white' : 'text-slate-800 hover:text-black'
                 }`}
               >
                 {link.name}
@@ -106,8 +107,8 @@ export default function Header({ theme, onToggleTheme }) {
             onClick={onToggleTheme}
             className={`p-2.5 rounded-full border transition-all flex items-center justify-center ${
               isDark
-                ? 'bg-white/10 hover:bg-white/20 border-white/20 text-amber-300'
-                : 'bg-slate-100 hover:bg-slate-200 border-slate-300 text-slate-800 shadow-sm'
+                ? 'bg-black/40 hover:bg-black/60 border-white/20 text-amber-300'
+                : 'bg-white/80 hover:bg-white border-slate-300 text-slate-800 shadow-sm'
             }`}
             title={`Switch to ${isDark ? 'Light' : 'Dark'} Mode`}
             aria-label="Toggle Theme"
@@ -122,8 +123,8 @@ export default function Header({ theme, onToggleTheme }) {
             onClick={onToggleTheme}
             className={`p-2 rounded-lg border transition-all ${
               isDark
-                ? 'bg-white/10 border-white/20 text-amber-300'
-                : 'bg-slate-100 border-slate-300 text-slate-800'
+                ? 'bg-black/40 border-white/20 text-amber-300'
+                : 'bg-white/80 border-slate-300 text-slate-800'
             }`}
             title={`Switch to ${isDark ? 'Light' : 'Dark'} Mode`}
             aria-label="Toggle Theme"
@@ -133,7 +134,7 @@ export default function Header({ theme, onToggleTheme }) {
 
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className={`p-2 rounded-lg ${isDark ? 'text-slate-300 hover:text-white' : 'text-slate-700 hover:text-black'}`}
+            className={`p-2 rounded-lg ${isDark ? 'text-slate-200 hover:text-white' : 'text-slate-800 hover:text-black'}`}
             aria-label="Toggle navigation menu"
           >
             {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
