@@ -50,7 +50,8 @@ export default function CourseCustomizerModal({ theme, isOpen, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xl flex items-center justify-center p-4 animate-fadeIn">
-      <div className={`relative w-full max-w-2xl rounded-3xl overflow-hidden border p-6 sm:p-8 shadow-2xl space-y-6 max-h-[90dvh] overflow-y-auto ${
+      {/* data-lenis-prevent: let this panel scroll natively instead of Lenis eating the wheel */}
+      <div data-lenis-prevent className={`relative w-full max-w-2xl rounded-3xl overflow-hidden border p-6 sm:p-8 shadow-2xl space-y-6 max-h-[90dvh] overflow-y-auto ${
         isDark ? 'glass-panel border-white/20 text-white' : 'bg-white border-slate-300 text-slate-900'
       }`}>
         
@@ -97,7 +98,7 @@ export default function CourseCustomizerModal({ theme, isOpen, onClose }) {
               }`}>
                 Select Modules to Include ({selectedModules.length} selected):
               </label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-56 overflow-y-auto pr-1">
+              <div data-lenis-prevent className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-56 overflow-y-auto pr-1">
                 {availableModules.map((mod) => {
                   const selected = selectedModules.includes(mod);
                   return (

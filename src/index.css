@@ -3,6 +3,11 @@
 @layer base {
   :root {
     --font-sans: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+
+    /* Brand accent thread — champagne gold / blush / orchid */
+    --gv-gold: 212 175 55;
+    --gv-blush: 224 152 152;
+    --gv-orchid: 148 118 176;
   }
 
   html.dark {
@@ -13,8 +18,13 @@
 
   html.light {
     color-scheme: light;
-    background-color: #F8FAFC;
+    /* warm ivory rather than cold slate — reads as salon, not SaaS */
+    background-color: #FAF7F2;
     color: #0F172A;
+  }
+
+  body {
+    background: transparent;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -22,6 +32,58 @@
     letter-spacing: -0.02em;
   }
 }
+
+/* ------------------------------------------------------------------
+   Site atmosphere layer
+   Painted on <html> pseudo-elements so it sits behind every section
+   and survives the theme toggle with no JSX plumbing.
+   ::before = light washes, ::after = film grain on top of them.
+   ------------------------------------------------------------------ */
+html::before,
+html::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+html::before {
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  transition: background-image 300ms ease;
+}
+
+html.dark::before {
+  background-image:
+    /* champagne key light, upper left */
+    radial-gradient(105% 75% at 8% -6%, rgb(var(--gv-gold) / 0.16), transparent 58%),
+    /* blush fill, upper right */
+    radial-gradient(85% 65% at 94% 4%, rgb(var(--gv-blush) / 0.12), transparent 60%),
+    /* orchid bounce, lower centre */
+    radial-gradient(110% 60% at 50% 104%, rgb(var(--gv-orchid) / 0.14), transparent 66%),
+    /* second gold pool, keeps the mid-page from going dead */
+    radial-gradient(55% 38% at 82% 58%, rgb(var(--gv-gold) / 0.08), transparent 70%),
+    linear-gradient(180deg, #0A0A0D 0%, #0C0B10 55%, #09090B 100%);
+}
+
+html.light::before {
+  background-image:
+    radial-gradient(105% 75% at 8% -6%, rgb(var(--gv-gold) / 0.22), transparent 58%),
+    radial-gradient(85% 65% at 94% 4%, rgb(var(--gv-blush) / 0.20), transparent 60%),
+    radial-gradient(110% 60% at 50% 104%, rgb(var(--gv-orchid) / 0.16), transparent 66%),
+    radial-gradient(55% 38% at 82% 58%, rgb(var(--gv-gold) / 0.10), transparent 70%),
+    linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #FAF7F2 100%);
+}
+
+/* Fine film grain — kills the flat "CSS gradient" look */
+html::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+html.dark::after { opacity: 0.05; }
+html.light::after { opacity: 0.035; mix-blend-mode: multiply; }
 
 /* Fluid typography utility helper */
 .fluid-hero-title {
@@ -65,6 +127,20 @@ html.light .glass-card {
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(226, 232, 240, 0.8);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+/* Entrance reveal used by the Services & Courses columns */
+@keyframes gvFadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.animate-fadeIn {
+  animation: gvFadeUp 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fadeIn { animation: none; }
 }
 
 /* Custom Scrollbar */

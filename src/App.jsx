@@ -7,8 +7,11 @@ import FounderAndCertificates from './components/FounderAndCertificates';
 import ContactUs from './components/ContactUs';
 import Footer from './components/Footer';
 import CourseCustomizerModal from './components/CourseCustomizerModal';
+import useSmoothScroll from './hooks/useSmoothScroll';
 
 export default function App() {
+  const lenisRef = useSmoothScroll();
+
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('gv_theme') || 'dark';
@@ -30,13 +33,21 @@ export default function App() {
     localStorage.setItem('gv_theme', theme);
   }, [theme]);
 
+  // Freeze the page behind the customizer so the modal can't scroll the site.
+  useEffect(() => {
+    const lenis = lenisRef.current;
+    if (!lenis) return;
+    if (customizerOpen) lenis.stop();
+    else lenis.start();
+  }, [customizerOpen, lenisRef]);
+
   const toggleTheme = () => {
     setTheme(prev => prev === 'dark' ? 'light' : 'dark');
   };
 
   return (
-    <div className={`min-h-screen font-sans selection:bg-slate-300 selection:text-black transition-colors duration-300 ${
-      theme === 'light' ? 'bg-slate-50 text-slate-900' : 'bg-[#09090B] text-slate-100'
+    <div className={`min-h-screen font-sans selection:bg-slate-300 selection:text-black transition-colors duration-300 bg-transparent ${
+      theme === 'light' ? 'text-slate-900' : 'text-slate-100'
     }`}>
       
       {/* Global Header with Theme Toggle */}

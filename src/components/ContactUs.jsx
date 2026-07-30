@@ -68,7 +68,7 @@ export default function ContactUs({ theme }) {
 
   return (
     <section id="contact" className={`py-20 sm:py-28 transition-colors duration-300 relative ${
-      isDark ? 'bg-[#09090B] text-slate-100' : 'bg-white text-slate-900'
+      isDark ? 'bg-[#09090B]/40 text-slate-100' : 'bg-white/40 text-slate-900'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 relative z-10">
         

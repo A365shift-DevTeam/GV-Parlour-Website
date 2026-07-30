@@ -7,7 +7,7 @@ export default function FounderAndCertificates({ theme }) {
 
   return (
     <section id="founder" className={`py-20 sm:py-28 transition-colors duration-300 relative ${
-      isDark ? 'bg-[#0E0E12] text-slate-100' : 'bg-slate-100 text-slate-900'
+      isDark ? 'bg-[#0E0E12]/70 text-slate-100' : 'bg-slate-100/55 text-slate-900'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 relative z-10">
         

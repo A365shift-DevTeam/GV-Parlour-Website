@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { 
-  GraduationCap, 
-  Sparkles, 
-  Clock, 
-  CheckCircle2, 
-  Scissors, 
-  Heart, 
-  Award, 
-  Zap, 
-  ChevronRight, 
+import React from 'react';
+import {
+  GraduationCap,
+  Sparkles,
+  Clock,
+  CheckCircle2,
+  Scissors,
+  Heart,
+  Award,
+  Zap,
+  ChevronRight,
   BookOpen,
   UserCheck,
   ShieldCheck,
@@ -16,7 +16,6 @@ import {
 } from 'lucide-react';
 
 export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
-  const [activeTab, setActiveTab] = useState('courses');
   const isDark = theme !== 'light';
 
   const courses = [
@@ -147,16 +146,49 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
     }
   ];
 
+  /* Shared column heading — gold rule + eyebrow, used by both sides of the split */
+  const ColumnHeading = ({ icon: Icon, eyebrow, title, sub }) => (
+    <div className="space-y-2.5">
+      <div className="flex items-center gap-3">
+        <span className={`w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 ${
+          isDark
+            ? 'bg-[#D4AF37]/12 border-[#D4AF37]/35 text-[#D4AF37]'
+            : 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#8A6D1F]'
+        }`}>
+          <Icon className="w-4.5 h-4.5" />
+        </span>
+        <div>
+          <span className={`block text-[10px] font-extrabold uppercase tracking-[0.2em] ${
+            isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'
+          }`}>
+            {eyebrow}
+          </span>
+          <h3 className={`text-xl sm:text-2xl font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+            {title}
+          </h3>
+        </div>
+      </div>
+      <p className={`text-xs sm:text-sm font-normal ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+        {sub}
+      </p>
+      <div className={`h-px w-full bg-gradient-to-r to-transparent ${
+        isDark ? 'from-[#D4AF37]/50' : 'from-[#D4AF37]/70'
+      }`} />
+    </div>
+  );
+
   return (
     <section id="services-courses" className={`py-20 sm:py-28 transition-colors duration-300 relative ${
-      isDark ? 'bg-[#0E0E12] text-slate-100' : 'bg-slate-100 text-slate-900'
+      isDark ? 'bg-[#0E0E12]/55 text-slate-100' : 'bg-slate-100/45 text-slate-900'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 relative z-10">
-        
+
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-14">
-          <div className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-bold uppercase tracking-wider ${
-            isDark ? 'bg-white/10 border-white/20 text-white' : 'bg-slate-200 border-slate-300 text-slate-800'
+          <div className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-bold uppercase tracking-wider backdrop-blur-sm ${
+            isDark
+              ? 'bg-[#D4AF37]/10 border-[#D4AF37]/30 text-[#E7C960]'
+              : 'bg-white/70 border-[#D4AF37]/40 text-[#8A6D1F]'
           }`}>
             <GraduationCap className="w-4 h-4" /> Professional Beauty Studio & Academy
           </div>
@@ -166,244 +198,263 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
           </h2>
 
           <p className={`text-sm sm:text-base font-normal ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-            Master the art of cosmetology with hands-on practical training or indulge in our parlour skin, hair, and nail services.
+            Master the art of cosmetology with hands-on practical training on the left, or browse our parlour skin, hair, and nail services on the right.
           </p>
         </div>
 
-        {/* Tab Navigation Switch */}
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-12">
-          {[
-            { id: 'courses', label: 'Academy Courses', icon: GraduationCap },
-            { id: 'services', label: 'Parlour Services', icon: Scissors },
-            { id: 'skin', label: 'Skin Treatments', icon: Sparkles },
-            { id: 'specialization', label: 'Our Specializations', icon: Award },
-          ].map((tab) => {
-            const Icon = tab.icon;
-            const active = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`px-5 py-3 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
-                  active 
-                    ? isDark ? 'bg-white text-black shadow-lg scale-105' : 'bg-slate-900 text-white shadow-md scale-105'
-                    : isDark ? 'bg-[#181820] text-slate-300 hover:text-white border border-white/10' : 'bg-white text-slate-700 hover:text-black border border-slate-200'
+        {/* ============ SPLIT: COURSES (LEFT) · SERVICES (RIGHT) ============ */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+
+          {/* ---------- LEFT COLUMN — ACADEMY COURSES ---------- */}
+          <div className="lg:col-span-6 space-y-6 animate-fadeIn">
+            <ColumnHeading
+              icon={GraduationCap}
+              eyebrow="Academy"
+              title="Our Courses"
+              sub="Three certified training tracks — theory plus hands-on practical, with placement support."
+            />
+
+            {courses.map((course, cIdx) => (
+              <article
+                key={course.id}
+                className={`relative rounded-3xl p-6 sm:p-7 border flex flex-col transition-all duration-300 group shadow-lg ${
+                  isDark
+                    ? course.popular
+                      ? 'bg-[#161620]/90 border-[#D4AF37]/50 shadow-[0_0_40px_-18px_rgba(212,175,55,0.55)]'
+                      : 'bg-[#121218]/85 border-white/10 hover:border-white/30'
+                    : course.popular
+                      ? 'bg-white/95 border-[#D4AF37] shadow-xl'
+                      : 'bg-white/85 border-slate-200 hover:border-slate-300'
                 }`}
               >
-                <Icon className="w-4 h-4" />
-                {tab.label}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* TAB 1: ACADEMY COURSES */}
-        {activeTab === 'courses' && (
-          <div className="space-y-10 animate-fadeIn">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {courses.map((course) => (
-                <div 
-                  key={course.id}
-                  className={`relative rounded-3xl p-7 sm:p-8 border flex flex-col justify-between transition-all duration-300 group shadow-lg ${
-                    isDark 
-                      ? course.popular ? 'bg-[#161620] border-white' : 'bg-[#121218] border-white/10 hover:border-white/40'
-                      : course.popular ? 'bg-white border-slate-900 shadow-xl' : 'bg-white border-slate-200 hover:border-slate-400'
-                  }`}
-                >
-                  {course.popular && (
-                    <div className={`absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-widest shadow-md ${
-                      isDark ? 'bg-white text-black' : 'bg-slate-900 text-white'
-                    }`}>
-                      {course.badge}
-                    </div>
-                  )}
-
-                  <div className="space-y-6">
-                    <div className={`flex items-center justify-between border-b pb-4 ${
-                      isDark ? 'border-white/10' : 'border-slate-200'
-                    }`}>
-                      <div>
-                        <span className={`text-xs font-bold tracking-wider uppercase block ${
-                          isDark ? 'text-slate-400' : 'text-slate-500'
-                        }`}>
-                          {course.badge}
-                        </span>
-                        <h3 className={`text-xl sm:text-2xl font-bold mt-1 ${
-                          isDark ? 'text-white' : 'text-slate-900'
-                        }`}>
-                          {course.title}
-                        </h3>
-                      </div>
-                      <div className={`px-3.5 py-1.5 rounded-full border text-xs font-bold flex items-center gap-1.5 shrink-0 ${
-                        isDark ? 'bg-black/60 border-white/20 text-white' : 'bg-slate-100 border-slate-300 text-slate-800'
-                      }`}>
-                        <Clock className="w-3.5 h-3.5" />
-                        {course.duration}
-                      </div>
-                    </div>
-
-                    <p className={`text-xs sm:text-sm leading-relaxed font-normal ${
-                      isDark ? 'text-slate-300' : 'text-slate-600'
-                    }`}>
-                      {course.description}
-                    </p>
-
-                    <div>
-                      <h4 className={`text-xs font-bold uppercase tracking-wider mb-3 ${
-                        isDark ? 'text-white' : 'text-slate-900'
-                      }`}>
-                        Curriculum Modules:
-                      </h4>
-                      <ul className="space-y-2.5">
-                        {course.modules.map((mod, idx) => (
-                          <li key={idx} className={`flex items-start gap-2 text-xs sm:text-sm ${
-                            isDark ? 'text-slate-200' : 'text-slate-700'
-                          }`}>
-                            <CheckCircle2 className={`w-4 h-4 shrink-0 mt-0.5 ${
-                              isDark ? 'text-white' : 'text-slate-900'
-                            }`} />
-                            <span>{mod}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {course.additionalPerks && (
-                      <div className={`pt-3 border-t ${isDark ? 'border-white/10' : 'border-slate-200'}`}>
-                        <h4 className={`text-xs font-bold uppercase tracking-wider mb-2 ${
-                          isDark ? 'text-slate-300' : 'text-slate-700'
-                        }`}>
-                          Additional Value Perks:
-                        </h4>
-                        <div className="grid grid-cols-2 gap-2">
-                          {course.additionalPerks.map((perk, pIdx) => (
-                            <div key={pIdx} className={`px-2.5 py-1.5 rounded-lg border text-[11px] font-medium flex items-center gap-1 ${
-                              isDark ? 'bg-black/40 border-white/10 text-slate-200' : 'bg-slate-100 border-slate-200 text-slate-800'
-                            }`}>
-                              <Star className={`w-3 h-3 shrink-0 ${isDark ? 'text-white' : 'text-slate-800'}`} />
-                              <span className="truncate">{perk}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
+                {course.popular && (
+                  <div className="absolute -top-3 left-7 px-3.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-[0.15em] shadow-md bg-[#D4AF37] text-black">
+                    {course.badge}
                   </div>
+                )}
 
-                  <div className={`pt-6 mt-6 border-t space-y-4 ${isDark ? 'border-white/10' : 'border-slate-200'}`}>
-                    <div className={`flex items-center justify-between text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                      <span className="flex items-center gap-1 font-medium">
-                        <UserCheck className="w-3.5 h-3.5 text-emerald-500" />
-                        {course.trainingMode}
-                      </span>
-                    </div>
-
-                    <a
-                      href="#contact"
-                      className={`w-full py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-md ${
-                        course.popular
-                          ? isDark ? 'text-black bg-white hover:bg-slate-200' : 'text-white bg-slate-900 hover:bg-black'
-                          : isDark ? 'bg-white/10 text-white hover:bg-white/20 border border-white/20' : 'bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-300'
-                      }`}
-                    >
-                      Enroll In {course.duration} Course
-                      <ChevronRight className="w-4 h-4" />
-                    </a>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Custom Course Banner */}
-            <div className={`rounded-3xl p-6 sm:p-8 border flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl ${
-              isDark ? 'glass-card border-white/20' : 'bg-white border-slate-200 shadow-xl'
-            }`}>
-              <div className="flex items-center gap-4 text-left">
-                <div className={`w-14 h-14 rounded-2xl shrink-0 flex items-center justify-center shadow-lg ${
-                  isDark ? 'bg-white text-black' : 'bg-slate-900 text-white'
+                {/* Card header: index numeral + title + duration */}
+                <div className={`flex items-start justify-between gap-4 border-b pb-4 ${
+                  isDark ? 'border-white/10' : 'border-slate-200'
                 }`}>
-                  <BookOpen className="w-7 h-7" />
+                  <div className="flex items-start gap-4 min-w-0">
+                    <span className={`text-3xl sm:text-4xl font-extrabold leading-none tabular-nums shrink-0 ${
+                      isDark ? 'text-white/15' : 'text-slate-900/15'
+                    }`}>
+                      0{cIdx + 1}
+                    </span>
+                    <div className="min-w-0">
+                      <span className={`text-[10px] font-bold tracking-[0.15em] uppercase block ${
+                        isDark ? 'text-slate-400' : 'text-slate-500'
+                      }`}>
+                        {course.badge}
+                      </span>
+                      <h4 className={`text-lg sm:text-xl font-bold mt-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                        {course.title}
+                      </h4>
+                    </div>
+                  </div>
+
+                  <div className={`px-3 py-1.5 rounded-full border text-[11px] font-bold flex items-center gap-1.5 shrink-0 ${
+                    isDark ? 'bg-black/50 border-[#D4AF37]/35 text-[#E7C960]' : 'bg-[#D4AF37]/10 border-[#D4AF37]/40 text-[#8A6D1F]'
+                  }`}>
+                    <Clock className="w-3.5 h-3.5" />
+                    {course.duration}
+                  </div>
                 </div>
-                <div>
-                  <span className={`text-xs font-bold uppercase tracking-widest ${
+
+                <p className={`text-xs sm:text-sm leading-relaxed font-normal mt-4 ${
+                  isDark ? 'text-slate-300' : 'text-slate-600'
+                }`}>
+                  {course.description}
+                </p>
+
+                {/* Modules — two columns so stacked cards stay compact */}
+                <div className="mt-5">
+                  <h5 className={`text-[10px] font-bold uppercase tracking-[0.15em] mb-3 ${
+                    isDark ? 'text-white' : 'text-slate-900'
+                  }`}>
+                    Curriculum Modules
+                  </h5>
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-2.5">
+                    {course.modules.map((mod, idx) => (
+                      <li key={idx} className={`flex items-start gap-2 text-xs ${
+                        isDark ? 'text-slate-200' : 'text-slate-700'
+                      }`}>
+                        <CheckCircle2 className={`w-3.5 h-3.5 shrink-0 mt-0.5 ${
+                          isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'
+                        }`} />
+                        <span>{mod}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {course.additionalPerks && (
+                  <div className={`mt-5 pt-4 border-t ${isDark ? 'border-white/10' : 'border-slate-200'}`}>
+                    <h5 className={`text-[10px] font-bold uppercase tracking-[0.15em] mb-2.5 ${
+                      isDark ? 'text-slate-300' : 'text-slate-700'
+                    }`}>
+                      Additional Value Perks
+                    </h5>
+                    <div className="grid grid-cols-2 gap-2">
+                      {course.additionalPerks.map((perk, pIdx) => (
+                        <div key={pIdx} className={`px-2.5 py-1.5 rounded-lg border text-[11px] font-medium flex items-center gap-1.5 ${
+                          isDark ? 'bg-black/40 border-white/10 text-slate-200' : 'bg-slate-50 border-slate-200 text-slate-800'
+                        }`}>
+                          <Star className={`w-3 h-3 shrink-0 ${isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'}`} />
+                          <span className="truncate">{perk}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className={`pt-5 mt-5 border-t flex flex-col sm:flex-row sm:items-center gap-4 ${
+                  isDark ? 'border-white/10' : 'border-slate-200'
+                }`}>
+                  <span className={`flex items-center gap-1.5 text-xs font-medium flex-1 ${
                     isDark ? 'text-slate-400' : 'text-slate-500'
                   }`}>
-                    Tailored Beauty Education
+                    <UserCheck className="w-3.5 h-3.5 text-emerald-500" />
+                    {course.trainingMode}
                   </span>
-                  <h3 className={`text-lg sm:text-xl font-bold mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                    Need a Custom Course Schedule or Modules?
-                  </h3>
-                  <p className={`text-xs sm:text-sm font-normal mt-1 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-                    Note: Courses can also be customized according to your specific needs, timing preferences, and budget.
-                  </p>
-                </div>
-              </div>
 
-              <button
-                onClick={onOpenCustomizer}
-                className={`px-7 py-3.5 text-xs font-bold uppercase tracking-wider rounded-full transition-all shadow-lg shrink-0 flex items-center gap-2 ${
-                  isDark ? 'text-black bg-white hover:bg-slate-200' : 'text-white bg-slate-900 hover:bg-black'
-                }`}
-              >
-                <Sparkles className="w-4 h-4" />
-                Customize Your Course
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* TAB 2: PARLOUR SERVICES */}
-        {activeTab === 'services' && (
-          <div className="space-y-8 animate-fadeIn">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-              {parlourServices.map((service, index) => {
-                const IconComponent = service.icon;
-                return (
-                  <div
-                    key={index}
-                    className={`p-6 rounded-2xl border transition-all duration-300 group hover:-translate-y-1 ${
-                      isDark ? 'glass-card border-white/10 hover:border-white/40' : 'bg-white border-slate-200 hover:border-slate-400 shadow-sm'
+                  <a
+                    href="#contact"
+                    className={`px-6 py-3 rounded-xl font-bold text-[11px] uppercase tracking-[0.12em] flex items-center justify-center gap-2 transition-all shadow-md shrink-0 ${
+                      course.popular
+                        ? 'bg-[#D4AF37] text-black hover:bg-[#E7C960]'
+                        : isDark
+                          ? 'bg-white/10 text-white hover:bg-white/20 border border-white/20'
+                          : 'bg-slate-900 text-white hover:bg-black'
                     }`}
                   >
-                    <div className={`w-10 h-10 rounded-xl border flex items-center justify-center mb-4 group-hover:scale-110 transition-transform ${
-                      isDark ? 'bg-white/10 border-white/20 text-white' : 'bg-slate-100 border-slate-300 text-slate-900'
-                    }`}>
-                      <IconComponent className="w-5 h-5" />
+                    Enroll Now
+                    <ChevronRight className="w-4 h-4" />
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          {/* ---------- RIGHT COLUMN — PARLOUR SERVICES ---------- */}
+          <aside className="lg:col-span-6 lg:sticky lg:top-24 lg:self-start animate-fadeIn">
+            <div className={`rounded-3xl border p-6 sm:p-7 shadow-xl ${
+              isDark ? 'glass-card border-white/12' : 'bg-white/85 border-slate-200 backdrop-blur-md'
+            }`}>
+              <ColumnHeading
+                icon={Scissors}
+                eyebrow="Parlour"
+                title="Our Services"
+                sub="Walk-in salon menu — skin, hair and nail care by certified professionals."
+              />
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-5">
+                {parlourServices.map((service, index) => {
+                  const IconComponent = service.icon;
+                  return (
+                    <div
+                      key={index}
+                      className={`p-3.5 rounded-xl border transition-all duration-300 group hover:-translate-y-0.5 ${
+                        isDark
+                          ? 'bg-black/25 border-white/10 hover:border-[#D4AF37]/45'
+                          : 'bg-slate-50/80 border-slate-200 hover:border-[#D4AF37]/60'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <IconComponent className={`w-4 h-4 shrink-0 transition-transform group-hover:scale-110 ${
+                          isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'
+                        }`} />
+                        <h4 className={`text-[13px] font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                          {service.title}
+                        </h4>
+                      </div>
+                      <p className={`text-[10.5px] font-normal leading-snug line-clamp-2 ${
+                        isDark ? 'text-slate-400' : 'text-slate-600'
+                      }`}>
+                        {service.desc}
+                      </p>
                     </div>
-                    <h3 className={`text-base font-bold transition-colors ${isDark ? 'text-white group-hover:text-slate-200' : 'text-slate-900 group-hover:text-slate-700'}`}>
-                      {service.title}
-                    </h3>
-                    <p className={`text-xs font-normal mt-1.5 leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-                      {service.desc}
-                    </p>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
+
+              <a
+                href="#contact"
+                className={`mt-5 w-full py-3.5 rounded-xl font-bold text-[11px] uppercase tracking-[0.12em] flex items-center justify-center gap-2 transition-all shadow-md ${
+                  isDark ? 'bg-white text-black hover:bg-slate-200' : 'bg-slate-900 text-white hover:bg-black'
+                }`}
+              >
+                Book a Service
+                <ChevronRight className="w-4 h-4" />
+              </a>
+            </div>
+          </aside>
+        </div>
+
+        {/* ---------- Custom Course Banner (full width, below the split) ---------- */}
+        <div className={`mt-12 rounded-3xl p-6 sm:p-8 border flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl ${
+          isDark ? 'glass-card border-[#D4AF37]/30' : 'bg-white/90 border-[#D4AF37]/40 backdrop-blur-md'
+        }`}>
+          <div className="flex items-center gap-4 text-left">
+            <div className="w-14 h-14 rounded-2xl shrink-0 flex items-center justify-center shadow-lg bg-[#D4AF37] text-black">
+              <BookOpen className="w-7 h-7" />
+            </div>
+            <div>
+              <span className={`text-[10px] font-bold uppercase tracking-[0.2em] ${
+                isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'
+              }`}>
+                Tailored Beauty Education
+              </span>
+              <h3 className={`text-lg sm:text-xl font-bold mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                Need a Custom Course Schedule or Modules?
+              </h3>
+              <p className={`text-xs sm:text-sm font-normal mt-1 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                Note: Courses can also be customized according to your specific needs, timing preferences, and budget.
+              </p>
             </div>
           </div>
-        )}
 
-        {/* TAB 3: SKIN TREATMENTS */}
-        {activeTab === 'skin' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-fadeIn">
+          <button
+            onClick={onOpenCustomizer}
+            className="px-7 py-3.5 text-[11px] font-bold uppercase tracking-[0.12em] rounded-full transition-all shadow-lg shrink-0 flex items-center gap-2 bg-[#D4AF37] text-black hover:bg-[#E7C960]"
+          >
+            <Sparkles className="w-4 h-4" />
+            Customize Your Course
+          </button>
+        </div>
+
+        {/* ---------- Skin Treatments (full width) ---------- */}
+        <div className="mt-16">
+          <ColumnHeading
+            icon={Sparkles}
+            eyebrow="Clinical"
+            title="Skin Treatments"
+            sub="Advanced dermatological-grade procedures performed in-studio."
+          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
             {skinTreatments.map((treatment, idx) => (
               <div
                 key={idx}
-                className={`p-8 rounded-3xl border transition-all duration-300 flex items-start gap-5 shadow-xl group ${
-                  isDark ? 'glass-card border-white/15 hover:border-white/40' : 'bg-white border-slate-200 hover:border-slate-400'
+                className={`p-7 rounded-3xl border transition-all duration-300 flex items-start gap-5 shadow-xl ${
+                  isDark ? 'glass-card border-white/12 hover:border-[#D4AF37]/45' : 'bg-white/85 border-slate-200 hover:border-[#D4AF37]/60 backdrop-blur-md'
                 }`}
               >
                 <div className={`text-3xl p-3.5 rounded-2xl border shrink-0 ${
-                  isDark ? 'bg-white/10 border-white/20 text-white' : 'bg-slate-100 border-slate-300 text-slate-900'
+                  isDark ? 'bg-[#D4AF37]/10 border-[#D4AF37]/30' : 'bg-[#D4AF37]/10 border-[#D4AF37]/30'
                 }`}>
                   {treatment.icon}
                 </div>
                 <div className="space-y-2">
-                  <span className={`text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                  <span className={`text-[10px] font-bold uppercase tracking-[0.15em] ${
+                    isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'
+                  }`}>
                     Clinical Skin Care
                   </span>
-                  <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  <h4 className={`text-lg sm:text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                     {treatment.title}
-                  </h3>
+                  </h4>
                   <p className={`text-xs sm:text-sm leading-relaxed font-normal ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
                     {treatment.desc}
                   </p>
@@ -411,16 +462,22 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
               </div>
             ))}
           </div>
-        )}
+        </div>
 
-        {/* TAB 4: SPECIALIZATION */}
-        {activeTab === 'specialization' && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 animate-fadeIn">
+        {/* ---------- Specializations (full width) ---------- */}
+        <div className="mt-16">
+          <ColumnHeading
+            icon={Award}
+            eyebrow="Expertise"
+            title="Our Specializations"
+            sub="Where GV Studios goes further than a standard parlour."
+          />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
             {specializations.map((spec, sIdx) => (
               <div
                 key={sIdx}
                 className={`rounded-3xl overflow-hidden border transition-all duration-300 group ${
-                  isDark ? 'glass-card border-white/10 hover:border-white/40' : 'bg-white border-slate-200 hover:border-slate-400 shadow-md'
+                  isDark ? 'glass-card border-white/12 hover:border-[#D4AF37]/45' : 'bg-white/85 border-slate-200 hover:border-[#D4AF37]/60 backdrop-blur-md shadow-md'
                 }`}
               >
                 <div className="h-48 overflow-hidden relative">
@@ -429,19 +486,16 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
                     alt={spec.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className={`absolute inset-0 bg-gradient-to-t ${
-                    isDark ? 'from-[#0E0E12]' : 'from-white'
-                  } via-transparent to-transparent`} />
                 </div>
                 <div className="p-6 space-y-3">
-                  <span className={`px-3 py-1 rounded-full border text-[11px] font-bold uppercase tracking-wider inline-block ${
-                    isDark ? 'bg-white/10 border-white/20 text-white' : 'bg-slate-100 border-slate-300 text-slate-800'
+                  <span className={`px-3 py-1 rounded-full border text-[10px] font-bold uppercase tracking-[0.15em] inline-block ${
+                    isDark ? 'bg-[#D4AF37]/10 border-[#D4AF37]/30 text-[#E7C960]' : 'bg-[#D4AF37]/10 border-[#D4AF37]/40 text-[#8A6D1F]'
                   }`}>
                     {spec.role}
                   </span>
-                  <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  <h4 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                     {spec.title}
-                  </h3>
+                  </h4>
                   <p className={`text-xs font-normal leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
                     {spec.desc}
                   </p>
@@ -449,7 +503,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
               </div>
             ))}
           </div>
-        )}
+        </div>
 
       </div>
     </section>
