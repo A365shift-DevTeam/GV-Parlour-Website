@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Sparkles, BookOpen, Sun, Moon } from 'lucide-react';
+import { Menu, X, Sun, Moon } from 'lucide-react';
 
-export default function Header({ theme, onToggleTheme, onOpenCustomizer }) {
+export default function Header({ theme, onToggleTheme }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -77,25 +77,23 @@ export default function Header({ theme, onToggleTheme, onOpenCustomizer }) {
           </div>
         </a>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              onClick={(e) => handleNavClick(e, link.href)}
-              className={`text-sm font-semibold transition-colors relative py-1 ${
-                isDark ? 'text-slate-300 hover:text-white' : 'text-slate-700 hover:text-black'
-              }`}
-            >
-              {link.name}
-            </a>
-          ))}
-        </nav>
+        {/* Desktop Navigation Links & Theme Toggle */}
+        <div className="hidden lg:flex items-center gap-8">
+          <nav className="flex items-center gap-8">
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                onClick={(e) => handleNavClick(e, link.href)}
+                className={`text-sm font-semibold transition-colors relative py-1 ${
+                  isDark ? 'text-slate-300 hover:text-white' : 'text-slate-700 hover:text-black'
+                }`}
+              >
+                {link.name}
+              </a>
+            ))}
+          </nav>
 
-        {/* Action CTAs & Theme Toggle Button */}
-        <div className="hidden sm:flex items-center gap-3">
-          
           {/* Theme Toggle Button */}
           <button
             onClick={onToggleTheme}
@@ -109,34 +107,9 @@ export default function Header({ theme, onToggleTheme, onOpenCustomizer }) {
           >
             {isDark ? <Sun className="w-4 h-4 text-amber-300" /> : <Moon className="w-4 h-4 text-slate-800" />}
           </button>
-
-          <button
-            onClick={onOpenCustomizer}
-            className={`px-4 py-2 text-xs font-bold rounded-full border transition-all flex items-center gap-1.5 ${
-              isDark 
-                ? 'text-white bg-white/10 hover:bg-white/20 border-white/20'
-                : 'text-slate-800 bg-slate-100 hover:bg-slate-200 border-slate-300'
-            }`}
-          >
-            <BookOpen className="w-3.5 h-3.5" />
-            Customize Course
-          </button>
-
-          <a
-            href="#contact"
-            onClick={(e) => handleNavClick(e, '#contact')}
-            className={`px-5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-full transition-all shadow-md flex items-center gap-1.5 ${
-              isDark
-                ? 'text-black bg-white hover:bg-slate-200'
-                : 'text-white bg-slate-900 hover:bg-black'
-            }`}
-          >
-            <Sparkles className="w-3.5 h-3.5" />
-            Book Now
-          </a>
         </div>
 
-        {/* Mobile Controls (Theme Toggle & Hamburger) */}
+        {/* Mobile Controls */}
         <div className="flex items-center gap-2 lg:hidden">
           <button
             onClick={onToggleTheme}
@@ -179,29 +152,6 @@ export default function Header({ theme, onToggleTheme, onOpenCustomizer }) {
                 {link.name}
               </a>
             ))}
-
-            <div className="pt-4 space-y-3">
-              <button
-                onClick={() => { setMobileOpen(false); onOpenCustomizer(); }}
-                className={`w-full py-3 text-xs font-bold uppercase tracking-wider rounded-xl border flex items-center justify-center gap-2 ${
-                  isDark ? 'text-white bg-white/10 border-white/20' : 'text-slate-800 bg-slate-100 border-slate-300'
-                }`}
-              >
-                <BookOpen className="w-4 h-4" />
-                Customize Course Plan
-              </button>
-
-              <a
-                href="#contact"
-                onClick={(e) => handleNavClick(e, '#contact')}
-                className={`w-full py-3 text-xs font-bold uppercase tracking-wider rounded-xl flex items-center justify-center gap-2 shadow-lg ${
-                  isDark ? 'text-black bg-white' : 'text-white bg-slate-900'
-                }`}
-              >
-                <Sparkles className="w-4 h-4" />
-                Book Appointment
-              </a>
-            </div>
           </div>
         </div>
       )}
