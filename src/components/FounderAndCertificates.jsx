@@ -1,9 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Award, CheckCircle2, ShieldCheck, Maximize2, ExternalLink } from 'lucide-react';
 
 export default function FounderAndCertificates({ theme }) {
   const [certModalOpen, setCertModalOpen] = useState(false);
   const isDark = theme !== 'light';
+
+  // Stop Lenis smooth scroll while certificate modal is open
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (certModalOpen && window.lenis) {
+      window.lenis.stop();
+    } else if (window.lenis) {
+      window.lenis.start();
+    }
+  }, [certModalOpen]);
+
+  // ESC key listener to close modal
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setCertModalOpen(false);
+      }
+    };
+    if (certModalOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [certModalOpen]);
 
   return (
     <section id="founder" className={`py-20 sm:py-28 transition-colors duration-300 relative ${
@@ -160,36 +184,52 @@ export default function FounderAndCertificates({ theme }) {
 
         </div>
 
-        {/* Certificate Modal Viewer */}
-        {certModalOpen && (
-          <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl flex items-center justify-center p-4 animate-fadeIn">
-            <div className="relative w-full max-w-4xl glass-panel rounded-3xl overflow-hidden border border-white/20 p-4 sm:p-8">
-              
-              <button
-                onClick={() => setCertModalOpen(false)}
-                className="absolute top-4 right-4 z-10 px-4 py-2 rounded-full bg-black/80 text-white hover:text-slate-300 border border-white/20 text-xs font-bold"
-              >
-                Close (ESC)
-              </button>
+        {/* Certificate Modal Viewer (Portal to body for z-index & backdrop isolation) */}
+        {certModalOpen && createPortal(
+          <div 
+            onClick={() => setCertModalOpen(false)}
+            className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-xl flex items-center justify-center p-4 sm:p-6 animate-fadeIn"
+          >
+            <div 
+              onClick={(e) => e.stopPropagation()}
+              className={`relative w-full max-w-4xl rounded-3xl overflow-hidden border p-5 sm:p-8 shadow-2xl space-y-4 max-h-[92dvh] flex flex-col ${
+                isDark ? 'glass-panel border-[#D4AF37]/40 text-white' : 'bg-white border-slate-300 text-slate-900'
+              }`}
+            >
+              <div className="flex items-center justify-between gap-4 border-b pb-4 border-[#D4AF37]/30">
+                <div>
+                  <span className={`text-[10px] font-extrabold uppercase tracking-widest block ${
+                    isDark ? 'text-[#D4AF37]' : 'text-slate-500'
+                  }`}>
+                    Verified Credential
+                  </span>
+                  <h3 className={`text-lg sm:text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    Prime Fashion Week & Lakme Academy Recognition
+                  </h3>
+                </div>
 
-              <div className="text-center mb-4 space-y-1">
-                <span className="text-xs font-bold uppercase tracking-widest text-slate-300">
-                  Verified Credential
-                </span>
-                <h3 className="text-xl sm:text-2xl font-bold text-white">
-                  Prime Fashion Week & Lakme Academy Recognition
-                </h3>
+                <button
+                  onClick={() => setCertModalOpen(false)}
+                  className={`px-4 py-2 rounded-full border transition-all text-xs font-bold shrink-0 ${
+                    isDark
+                      ? 'bg-black/60 text-[#E7C960] hover:text-white border-[#D4AF37]/40'
+                      : 'bg-slate-100 text-slate-800 hover:bg-slate-200 border-slate-300'
+                  }`}
+                >
+                  Close (ESC)
+                </button>
               </div>
 
-              <div className="rounded-2xl overflow-hidden border border-white/20 shadow-2xl bg-black max-h-[75dvh] flex items-center justify-center">
+              <div className="rounded-2xl overflow-hidden border border-[#D4AF37]/30 shadow-2xl bg-black flex-1 min-h-0 flex items-center justify-center p-2">
                 <img
                   src="/assets/certificate.png"
                   alt="Full Certificate of Recognition - Galla Vidya"
-                  className="max-h-[75dvh] w-auto object-contain"
+                  className="max-h-[72dvh] w-auto max-w-full object-contain rounded-xl"
                 />
               </div>
             </div>
-          </div>
+          </div>,
+          document.body
         )}
 
       </div>

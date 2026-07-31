@@ -375,13 +375,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
 
                   <a
                     href="#contact"
-                    className={`w-full py-3 rounded-xl font-bold text-[11px] uppercase tracking-[0.12em] flex items-center justify-center gap-2 transition-all shadow-md ${
-                      course.popular
-                        ? 'bg-[#D4AF37] text-black hover:bg-[#E7C960]'
-                        : isDark
-                          ? 'bg-white/10 text-white hover:bg-white/20 border border-white/20'
-                          : 'bg-slate-900 text-white hover:bg-black'
-                    }`}
+                    className="w-full py-3 rounded-xl font-bold text-[11px] uppercase tracking-[0.12em] flex items-center justify-center gap-2 transition-all shadow-md bg-[#D4AF37] text-black hover:bg-[#E7C960] hover:shadow-lg"
                   >
                     Enroll Now
                     <ChevronRight className="w-4 h-4" />
@@ -428,7 +422,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
           <ColumnHeading
             icon={Scissors}
             eyebrow="Parlour"
-            title="Our Categorized Services"
+            title="Our Services"
             sub="Explore our complete menu of skin, hair, nail, and grooming services categorized for your convenience."
             isDark={isDark}
           />
@@ -544,38 +538,28 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
             isDark={isDark}
           />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-            {skinTreatments.map((treatment, idx) => {
-              const TreatmentIcon = treatment.icon;
-              return (
-                <div
-                  key={idx}
-                  className={`p-7 rounded-3xl border transition-all duration-300 flex items-start gap-5 shadow-xl ${
-                    isDark ? 'glass-card border-white/12 hover:border-[#D4AF37]/45' : 'bg-white/85 border-slate-200 hover:border-[#D4AF37]/60 backdrop-blur-md'
-                  }`}
-                >
-                  <div className={`p-3.5 rounded-2xl border shrink-0 flex items-center justify-center ${
-                    isDark
-                      ? 'bg-[#D4AF37]/12 border-[#D4AF37]/35 text-[#D4AF37]'
-                      : 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#8A6D1F]'
+            {skinTreatments.map((treatment, idx) => (
+              <div
+                key={idx}
+                className={`p-7 rounded-3xl border transition-all duration-300 shadow-xl ${
+                  isDark ? 'glass-card border-[#D4AF37]/30 hover:border-[#D4AF37]/60' : 'bg-white/85 border-slate-200 hover:border-[#D4AF37]/60 backdrop-blur-md'
+                }`}
+              >
+                <div className="space-y-2">
+                  <span className={`text-[10px] font-bold uppercase tracking-[0.15em] ${
+                    isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'
                   }`}>
-                    <TreatmentIcon className="w-6 h-6" />
-                  </div>
-                  <div className="space-y-2">
-                    <span className={`text-[10px] font-bold uppercase tracking-[0.15em] ${
-                      isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'
-                    }`}>
-                      Clinical Skin Care
-                    </span>
-                    <h4 className={`text-lg sm:text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                      {treatment.title}
-                    </h4>
-                    <p className={`text-xs sm:text-sm leading-relaxed font-normal ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-                      {treatment.desc}
-                    </p>
-                  </div>
+                    Clinical Skin Care
+                  </span>
+                  <h4 className={`text-lg sm:text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    {treatment.title}
+                  </h4>
+                  <p className={`text-xs sm:text-sm leading-relaxed font-normal ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                    {treatment.desc}
+                  </p>
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
         </div>
 

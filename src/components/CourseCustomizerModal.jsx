@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Check, Send } from 'lucide-react';
 
 export default function CourseCustomizerModal({ theme, isOpen, onClose }) {
@@ -16,19 +17,19 @@ export default function CourseCustomizerModal({ theme, isOpen, onClose }) {
 
   const availableModules = [
     'Personal Grooming',
-    'Threading Techniques',
-    'Manicure & Pedicure',
+    'Threading',
+    'Waxing',
+    'Facial Cleansing & Cleanup',
+    'Hair Cut & Hair Styling',
     'Hair Wash & Conditioning',
-    'Hair Cut – Basic to 6 Types',
-    'Nail Polish & 3D Gel Polish',
-    'Artificial Nail Fixing',
-    'Head Spa & Scalp Therapy',
-    'Facial & Skin Rejuvenation',
-    'Luxury Spa Treatments',
-    'Hydrafacial Clinical Training',
-    'Advanced Skin Care (Acne/Anti-Ageing)',
-    'Spoken English & Personality Dev.',
-    'Salon Marketing & Placement Support'
+    'Hair Colouring',
+    'Hair Spa & Oil Massage',
+    'Keratin Hair Treatments',
+    'Dandruff & Hair Fall Treatment',
+    'Gel Nail Polish & Extensions',
+    'Manicure & Pedicure',
+    'Client Consultation Basics',
+    'Parlour Management'
   ];
 
   const toggleModule = (mod) => {
@@ -48,12 +49,19 @@ export default function CourseCustomizerModal({ theme, isOpen, onClose }) {
     }, 3000);
   };
 
-  return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xl flex items-center justify-center p-4 animate-fadeIn">
+  return createPortal(
+    <div 
+      onClick={onClose}
+      className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-xl flex items-center justify-center p-4 animate-fadeIn"
+    >
       {/* data-lenis-prevent: let this panel scroll natively instead of Lenis eating the wheel */}
-      <div data-lenis-prevent className={`relative w-full max-w-2xl rounded-3xl overflow-hidden border p-6 sm:p-8 shadow-2xl space-y-6 max-h-[90dvh] overflow-y-auto ${
-        isDark ? 'glass-panel border-[#D4AF37]/40 text-white' : 'bg-white border-slate-300 text-slate-900'
-      }`}>
+      <div 
+        onClick={(e) => e.stopPropagation()}
+        data-lenis-prevent 
+        className={`relative w-full max-w-2xl rounded-3xl overflow-hidden border p-6 sm:p-8 shadow-2xl space-y-6 max-h-[90dvh] overflow-y-auto ${
+          isDark ? 'glass-panel border-[#D4AF37]/40 text-white' : 'bg-white border-slate-300 text-slate-900'
+        }`}
+      >
         
         <button
           onClick={onClose}
@@ -165,9 +173,7 @@ export default function CourseCustomizerModal({ theme, isOpen, onClose }) {
 
             <button
               type="submit"
-              className={`w-full py-3.5 text-xs font-bold uppercase tracking-widest rounded-xl shadow-lg flex items-center justify-center gap-2 transition-all ${
-                isDark ? 'text-black bg-[#D4AF37] hover:bg-[#E7C960] shadow-[0_0_20px_rgba(212,175,55,0.3)]' : 'text-white bg-slate-900 hover:bg-black'
-              }`}
+              className="w-full py-3.5 text-xs font-bold uppercase tracking-widest rounded-xl shadow-lg flex items-center justify-center gap-2 transition-all bg-[#D4AF37] hover:bg-[#E7C960] text-black hover:shadow-xl"
             >
               <Send className="w-4 h-4" />
               Request Custom Course Quote
@@ -177,6 +183,7 @@ export default function CourseCustomizerModal({ theme, isOpen, onClose }) {
         )}
 
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

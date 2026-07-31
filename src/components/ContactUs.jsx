@@ -142,13 +142,9 @@ export default function ContactUs({ theme }) {
 
               <button
                 onClick={handleWhatsAppDirect}
-                className={`w-full py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-all ${
-                  isDark
-                    ? 'bg-[#D4AF37] hover:bg-[#E7C960] text-black shadow-[0_0_20px_rgba(212,175,55,0.25)]'
-                    : 'bg-emerald-600 hover:bg-emerald-700 text-white'
-                }`}
+                className="w-full py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-all bg-[#D4AF37] hover:bg-[#E7C960] text-black hover:shadow-xl"
               >
-                <MessageSquare className={`w-4 h-4 ${isDark ? 'fill-black text-black' : 'fill-white text-white'}`} />
+                <MessageSquare className="w-4 h-4 fill-black text-black" />
                 Instant WhatsApp Inquiry
               </button>
             </div>
@@ -270,9 +266,7 @@ export default function ContactUs({ theme }) {
 
                   <button
                     type="submit"
-                    className={`w-full py-4 text-xs font-bold uppercase tracking-widest rounded-xl shadow-lg flex items-center justify-center gap-2 transition-all ${
-                      isDark ? 'text-black bg-[#D4AF37] hover:bg-[#E7C960] shadow-[0_0_20px_rgba(212,175,55,0.25)]' : 'text-white bg-slate-900 hover:bg-black'
-                    }`}
+                    className="w-full py-4 text-xs font-bold uppercase tracking-widest rounded-xl shadow-lg flex items-center justify-center gap-2 transition-all bg-[#D4AF37] hover:bg-[#E7C960] text-black hover:shadow-xl"
                   >
                     <Send className="w-4 h-4" />
                     Submit Enrollment Request
