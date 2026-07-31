@@ -83,7 +83,7 @@ export default function FounderAndCertificates({ theme }) {
               </h2>
 
               <p className={`text-sm sm:text-base font-normal leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                With a passion for transforming lives through beauty and empowering aspiring artists through hands-on education, Galla Vidya founded <strong className={isDark ? 'text-[#E7C960]' : 'text-slate-900'}>GV Studios</strong> to bring high quality beauty treatments and practical cosmetology training under one roof.
+                With a passion for transforming lives through beauty and empowering aspiring artists through hands-on education, Galla Vidya founded <strong className={isDark ? 'text-[#E7C960]' : 'text-slate-900'}>GV Studio</strong> to bring high quality beauty treatments and practical cosmetology training under one roof.
               </p>
             </div>
 

@@ -302,7 +302,7 @@ export default function ScrollHeroCanvas({ theme }) {
           {/* Rule §10: Poster image under canvas for reduced motion / loading state */}
           <img
             src={variantConfig.posterSrc}
-            alt="GV Studios Beauty & Cosmetology"
+            alt="GV Studio Beauty & Cosmetology"
             width="1920"
             height="1080"
             className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 z-0 ${

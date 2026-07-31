@@ -74,15 +74,15 @@ export default function Header({ theme, onToggleTheme }) {
           }`}>
             <img 
               src="/assets/logo_dark.webp" 
-              alt="GV Studios Logo" 
-              className="w-full h-full object-contain"
+              alt="GV Studio Logo" 
+              className="w-full h-full object-cover rounded-full scale-[1.04]"
             />
           </div>
           <div>
             <span className={`font-bold text-lg sm:text-xl tracking-tight block leading-none ${
               isDark ? 'text-white' : 'text-slate-900'
             }`}>
-              GV STUDIOS
+              GV STUDIO
             </span>
             <span className={`text-[10px] sm:text-xs tracking-widest uppercase font-medium mt-0.5 block ${
               isDark ? 'text-[#D4AF37]' : 'text-slate-600'

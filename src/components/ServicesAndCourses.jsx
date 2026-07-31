@@ -690,7 +690,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
           <ColumnHeading
             eyebrow="Expertise"
             title="Our Specializations"
-            sub="Where GV Studios goes further than a standard parlour."
+            sub="Where GV Studio goes further than a standard parlour."
             isDark={isDark}
           />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">

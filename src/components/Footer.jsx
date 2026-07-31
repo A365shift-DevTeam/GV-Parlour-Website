@@ -15,10 +15,18 @@ export default function Footer({ theme }) {
         }`}>
           {/* Logo Brand */}
           <div className="flex items-center gap-3">
-            <img src="/assets/logo_dark.webp" alt="GV Studios" className="w-10 h-10 object-contain" />
+            <div className={`relative w-10 h-10 rounded-full overflow-hidden p-0.5 border transition-colors shadow-md ${
+              isDark ? 'border-[#D4AF37]/60' : 'border-slate-300'
+            }`}>
+              <img 
+                src="/assets/logo_dark.webp" 
+                alt="GV Studio Logo" 
+                className="w-full h-full object-cover rounded-full scale-[1.04]" 
+              />
+            </div>
             <div>
               <span className="text-lg font-bold text-white block leading-none">
-                GV STUDIOS
+                GV STUDIO
               </span>
               <span className={`text-[10px] tracking-widest uppercase mt-0.5 block ${
                 isDark ? 'text-[#D4AF37]' : 'text-slate-400'
@@ -109,7 +117,7 @@ export default function Footer({ theme }) {
         <div className={`pt-6 border-t flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500 gap-3 ${
           isDark ? 'border-[#D4AF37]/20' : 'border-white/5'
         }`}>
-          <p>© {new Date().getFullYear()} GV Studios Beauty & Academy. All Rights Reserved.</p>
+          <p>© {new Date().getFullYear()} GV Studio Beauty & Academy. All Rights Reserved.</p>
           <p className="flex items-center gap-1">
             Crafted with <Heart className={`w-3 h-3 ${isDark ? 'text-[#D4AF37] fill-[#D4AF37]' : 'text-white fill-white'}`} /> for Galla Vidya Beauty Studio
           </p>

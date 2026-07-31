@@ -41,7 +41,7 @@ export default function ContactUs({ theme }) {
   // button useful instead of leaving it dead.
   const handleWhatsAppFallback = () => {
     const text = encodeURIComponent(
-      `Hello GV Studios! I am interested in booking a course/service.\nName: ${formData.name || 'Client'}\nInterest: ${formData.interest}`
+      `Hello GV Studio! I am interested in booking a course/service.\nName: ${formData.name || 'Client'}\nInterest: ${formData.interest}`
     );
     window.open(`https://wa.me/?text=${text}`, '_blank');
   };
@@ -61,7 +61,7 @@ export default function ContactUs({ theme }) {
           </div>
 
           <h2 className={`fluid-section-title font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-            Connect With <span className="gold-gradient-text">GV Studios</span>
+            Connect With <span className="gold-gradient-text">GV Studio</span>
           </h2>
 
           <p className={`text-sm sm:text-base font-normal ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
@@ -125,7 +125,7 @@ export default function ContactUs({ theme }) {
                 <div>
                   <span className={`text-[11px] font-bold uppercase block ${isDark ? 'text-[#D4AF37]' : 'text-slate-500'}`}>Studio Location</span>
                   <p className={`font-normal leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                    GV Studios Beauty & Academy, Main Road, Premier Complex, City Center.
+                    GV Studio Beauty & Academy, Main Road, Premier Complex, City Center.
                   </p>
                 </div>
               </div>
