@@ -19,6 +19,7 @@ import {
   Eye,
   X
 } from 'lucide-react';
+import openChatbot from '../utils/openChatbot';
 
 /* Shared column heading — gold rule + eyebrow */
 function ColumnHeading({ eyebrow, title, sub, isDark }) {
@@ -543,6 +544,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
 
                   <a
                     href="#contact"
+                    onClick={openChatbot}
                     className="w-full py-3 rounded-xl font-bold text-[11px] uppercase tracking-[0.12em] flex items-center justify-center gap-2 transition-all shadow-md bg-[#D4AF37] text-black hover:bg-[#E7C960] hover:shadow-lg"
                   >
                     Enroll Now
@@ -671,6 +673,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
                   <div className="p-6 pt-0">
                     <a
                       href="#contact"
+                      onClick={openChatbot}
                       className="w-full py-3 rounded-xl font-bold text-[11px] uppercase tracking-[0.12em] flex items-center justify-center gap-2 transition-all shadow-md bg-[#D4AF37] text-black hover:bg-[#E7C960] hover:shadow-lg"
                     >
                       Book Service
@@ -682,12 +685,9 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
           </div>
         </div>
 
-
-
         {/* ---------- Specializations ---------- */}
         <div className="mt-20">
           <ColumnHeading
-            icon={Award}
             eyebrow="Expertise"
             title="Our Specializations"
             sub="Where GV Studios goes further than a standard parlour."
@@ -697,28 +697,21 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
             {specializations.map((spec, sIdx) => (
               <div
                 key={sIdx}
-                className={`rounded-3xl overflow-hidden border transition-all duration-300 group ${isDark ? 'glass-card border-white/12 hover:border-[#D4AF37]/45' : 'bg-white/85 border-slate-200 hover:border-[#D4AF37]/60 backdrop-blur-md shadow-md'
-                  }`}
+                className={`rounded-3xl border p-7 transition-all duration-300 group space-y-3.5 shadow-xl ${
+                  isDark ? 'glass-card border-white/12 hover:border-[#D4AF37]/45' : 'bg-white/85 border-slate-200 hover:border-[#D4AF37]/60 backdrop-blur-md'
+                }`}
               >
-                <div className="h-48 overflow-hidden relative">
-                  <img
-                    src={spec.image}
-                    alt={spec.title}
-                    className={`w-full h-full object-cover ${spec.objectPos || 'object-top'} group-hover:scale-105 transition-transform duration-500`}
-                  />
-                </div>
-                <div className="p-6 space-y-3">
-                  <span className={`px-3 py-1 rounded-full border text-[10px] font-bold uppercase tracking-[0.15em] inline-block ${isDark ? 'bg-[#D4AF37]/10 border-[#D4AF37]/30 text-[#E7C960]' : 'bg-[#D4AF37]/10 border-[#D4AF37]/40 text-[#8A6D1F]'
-                    }`}>
-                    {spec.role}
-                  </span>
-                  <h4 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                    {spec.title}
-                  </h4>
-                  <p className={`text-xs font-normal leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-                    {spec.desc}
-                  </p>
-                </div>
+                <span className={`px-3 py-1 rounded-full border text-[10px] font-bold uppercase tracking-[0.15em] inline-block ${
+                  isDark ? 'bg-[#D4AF37]/10 border-[#D4AF37]/30 text-[#E7C960]' : 'bg-[#D4AF37]/10 border-[#D4AF37]/40 text-[#8A6D1F]'
+                }`}>
+                  {spec.role}
+                </span>
+                <h4 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  {spec.title}
+                </h4>
+                <p className={`text-xs font-normal leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                  {spec.desc}
+                </p>
               </div>
             ))}
           </div>

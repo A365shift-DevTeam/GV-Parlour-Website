@@ -148,7 +148,7 @@ export default function ContactUs({ theme }) {
                 className="w-full py-4 rounded-2xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2.5 shadow-lg transition-all bg-[#D4AF37] hover:bg-[#E7C960] text-black hover:shadow-xl hover:scale-[1.01]"
               >
                 <MessageSquare className="w-4 h-4 fill-black text-black" />
-                Instant WhatsApp Inquiry & Booking
+                Inquiry & Booking
               </button>
             </div>
           </div>
