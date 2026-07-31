@@ -70,17 +70,17 @@ export default function FounderAndCertificates({ theme }) {
           <div className="lg:col-span-7 space-y-8">
             <div className="space-y-4">
               <div className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-bold uppercase tracking-wider ${
-                isDark ? 'bg-white/10 border-white/20 text-white' : 'bg-slate-200 border-slate-300 text-slate-800'
+                isDark ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#E7C960]' : 'bg-slate-200 border-slate-300 text-slate-800'
               }`}>
                 <Award className="w-4 h-4" /> Founder & Master Credential
               </div>
 
               <h2 className={`fluid-section-title font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                Meet <span className={isDark ? 'text-slate-300' : 'text-slate-600'}>Galla Vidya</span>
+                Meet <span className={isDark ? 'gold-gradient-text' : 'text-slate-600'}>Galla Vidya</span>
               </h2>
 
               <p className={`text-sm sm:text-base font-normal leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                With a passion for transforming lives through beauty and empowering aspiring artists through hands-on education, Galla Vidya founded <strong className={isDark ? 'text-white' : 'text-slate-900'}>GV Studios</strong> to bring high quality beauty treatments and practical cosmetology training under one roof.
+                With a passion for transforming lives through beauty and empowering aspiring artists through hands-on education, Galla Vidya founded <strong className={isDark ? 'text-[#E7C960]' : 'text-slate-900'}>GV Studios</strong> to bring high quality beauty treatments and practical cosmetology training under one roof.
               </p>
             </div>
 
@@ -91,10 +91,10 @@ export default function FounderAndCertificates({ theme }) {
                 { title: 'Nail Technician', desc: 'Artistic temporary & gel nail extensions.' },
               ].map((spec, i) => (
                 <div key={i} className={`p-4 rounded-2xl border space-y-1 shadow-sm ${
-                  isDark ? 'glass-card border-white/15' : 'bg-white border-slate-200'
+                  isDark ? 'glass-card border-[#D4AF37]/30' : 'bg-white border-slate-200'
                 }`}>
                   <div className={`flex items-center gap-1.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                    <CheckCircle2 className="w-4 h-4" />
+                    <CheckCircle2 className={`w-4 h-4 ${isDark ? 'text-[#D4AF37]' : 'text-slate-900'}`} />
                     <h4 className="text-xs font-bold uppercase tracking-wider">
                       {spec.title}
                     </h4>
@@ -108,13 +108,15 @@ export default function FounderAndCertificates({ theme }) {
 
             {/* Certificate Highlight Card */}
             <div className={`p-6 rounded-3xl border shadow-xl relative overflow-hidden group ${
-              isDark ? 'glass-card border-white/20' : 'bg-white border-slate-200'
+              isDark ? 'glass-card border-[#D4AF37]/40 shadow-[0_0_30px_-5px_rgba(212,175,55,0.2)]' : 'bg-white border-slate-200'
             }`}>
               <div className="flex flex-col sm:flex-row items-center gap-6">
                 
                 <div 
                   onClick={() => setCertModalOpen(true)}
-                  className="w-full sm:w-44 aspect-[4/3] rounded-2xl overflow-hidden relative cursor-pointer border border-slate-300 shadow-md group-hover:scale-105 transition-transform shrink-0"
+                  className={`w-full sm:w-44 aspect-[4/3] rounded-2xl overflow-hidden relative cursor-pointer border shadow-md group-hover:scale-105 transition-transform shrink-0 ${
+                    isDark ? 'border-[#D4AF37]/50' : 'border-slate-300'
+                  }`}
                 >
                   <img
                     src="/assets/certificate.png"
@@ -128,7 +130,7 @@ export default function FounderAndCertificates({ theme }) {
 
                 <div className="space-y-2 text-center sm:text-left flex-1">
                   <div className={`inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-widest ${
-                    isDark ? 'text-slate-300' : 'text-slate-600'
+                    isDark ? 'text-[#E7C960]' : 'text-slate-600'
                   }`}>
                     <ShieldCheck className="w-3.5 h-3.5" />
                     Official Recognition Award
@@ -139,13 +141,13 @@ export default function FounderAndCertificates({ theme }) {
                   </h3>
 
                   <p className={`text-xs font-normal leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-                    Awarded to <strong>Galla Vidya</strong> as <span className="font-semibold">Hair & Makeup Partner from Lakme Academy</span> at Prime Fashion Week.
+                    Awarded to <strong className={isDark ? 'text-white' : ''}>Galla Vidya</strong> as <span className={`font-semibold ${isDark ? 'text-[#E7C960]' : ''}`}>Hair & Makeup Partner from Lakme Academy</span> at Prime Fashion Week.
                   </p>
 
                   <button
                     onClick={() => setCertModalOpen(true)}
                     className={`inline-flex items-center gap-1.5 text-xs font-bold hover:underline pt-1 ${
-                      isDark ? 'text-white' : 'text-slate-900'
+                      isDark ? 'text-[#E7C960]' : 'text-slate-900'
                     }`}
                   >
                     View Official Certificate <ExternalLink className="w-3.5 h-3.5" />

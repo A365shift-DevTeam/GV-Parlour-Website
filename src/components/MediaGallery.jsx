@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Play, Image as ImageIcon, Sparkles, X, Eye, Video } from 'lucide-react';
+import { Play, Image as ImageIcon, X, Eye, Video } from 'lucide-react';
 
 export default function MediaGallery({ theme }) {
   const [activeMedia, setActiveMedia] = useState(null);
@@ -75,13 +75,13 @@ export default function MediaGallery({ theme }) {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
           <div className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-bold uppercase tracking-wider ${
-            isDark ? 'bg-white/10 border-white/20 text-white' : 'bg-slate-100 border-slate-300 text-slate-800'
+            isDark ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#E7C960]' : 'bg-slate-100 border-slate-300 text-slate-800'
           }`}>
-            <Sparkles className="w-3.5 h-3.5" /> Studio Portfolio & Live Reels
+            <Video className="w-3.5 h-3.5" /> Studio Portfolio & Live Reels
           </div>
 
           <h2 className={`fluid-section-title font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-            Our Work: <span className={isDark ? 'text-slate-300' : 'text-slate-600'}>Images & Video Reels</span>
+            Our Work: <span className={isDark ? 'gold-gradient-text' : 'text-slate-600'}>Images & Video Reels</span>
           </h2>
 
           <p className={`text-sm sm:text-base font-normal ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
@@ -95,11 +95,11 @@ export default function MediaGallery({ theme }) {
           {/* LEFT SIDE: IMAGES (6 cols) */}
           <div className="lg:col-span-6 space-y-6">
             <div className={`flex items-center justify-between border-b pb-4 ${
-              isDark ? 'border-white/15' : 'border-slate-200'
+              isDark ? 'border-[#D4AF37]/30' : 'border-slate-200'
             }`}>
               <div className="flex items-center gap-2.5">
                 <div className={`w-9 h-9 rounded-xl border flex items-center justify-center ${
-                  isDark ? 'bg-white/10 border-white/20 text-white' : 'bg-slate-100 border-slate-300 text-slate-900'
+                  isDark ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#E7C960]' : 'bg-slate-100 border-slate-300 text-slate-900'
                 }`}>
                   <ImageIcon className="w-5 h-5" />
                 </div>
@@ -109,7 +109,7 @@ export default function MediaGallery({ theme }) {
                 </div>
               </div>
               <span className={`text-xs font-bold px-3 py-1 rounded-full border ${
-                isDark ? 'text-white bg-white/10 border-white/20' : 'text-slate-800 bg-slate-100 border-slate-300'
+                isDark ? 'text-[#E7C960] bg-[#D4AF37]/15 border-[#D4AF37]/40' : 'text-slate-800 bg-slate-100 border-slate-300'
               }`}>
                 {imagesList.length} Photos
               </span>
@@ -121,7 +121,7 @@ export default function MediaGallery({ theme }) {
                   key={img.id}
                   onClick={() => setActiveMedia({ type: 'image', ...img })}
                   className={`group relative rounded-2xl overflow-hidden border transition-all duration-300 cursor-pointer shadow-md hover:-translate-y-1 ${
-                    isDark ? 'glass-card border-white/10 hover:border-white/40' : 'bg-slate-50 border-slate-200 hover:border-slate-400'
+                    isDark ? 'glass-card border-[#D4AF37]/25 hover:border-[#D4AF37]/60' : 'bg-slate-50 border-slate-200 hover:border-slate-400'
                   }`}
                 >
                   <div className="aspect-[4/3] overflow-hidden relative">
@@ -132,18 +132,18 @@ export default function MediaGallery({ theme }) {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                     
-                    <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-white/20 text-white text-[10px] font-bold uppercase tracking-wider">
+                    <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-[#D4AF37]/40 text-[#E7C960] text-[10px] font-bold uppercase tracking-wider">
                       {img.badge}
                     </span>
 
-                    <div className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/60 border border-white/20 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Eye className="w-4 h-4 text-white" />
+                    <div className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/60 border border-[#D4AF37]/40 flex items-center justify-center text-[#E7C960] opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Eye className="w-4 h-4 text-[#E7C960]" />
                     </div>
                   </div>
 
                   <div className="p-4 space-y-1">
                     <h4 className={`text-sm font-bold transition-colors ${
-                      isDark ? 'text-white group-hover:text-slate-200' : 'text-slate-900 group-hover:text-slate-700'
+                      isDark ? 'text-white group-hover:text-[#E7C960]' : 'text-slate-900 group-hover:text-slate-700'
                     }`}>
                       {img.title}
                     </h4>
@@ -159,21 +159,21 @@ export default function MediaGallery({ theme }) {
           {/* RIGHT SIDE: VIDEOS & REELS (6 cols) */}
           <div className="lg:col-span-6 space-y-6">
             <div className={`flex items-center justify-between border-b pb-4 ${
-              isDark ? 'border-white/15' : 'border-slate-200'
+              isDark ? 'border-[#D4AF37]/30' : 'border-slate-200'
             }`}>
               <div className="flex items-center gap-2.5">
                 <div className={`w-9 h-9 rounded-xl border flex items-center justify-center ${
-                  isDark ? 'bg-white/10 border-white/20 text-white' : 'bg-slate-100 border-slate-300 text-slate-900'
+                  isDark ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#E7C960]' : 'bg-slate-100 border-slate-300 text-slate-900'
                 }`}>
                   <Video className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Video Reels & Demos</h3>
-                  <span className={`text-xs font-normal ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Live procedure walkthroughs</span>
+                  <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Video Reels & Walkthroughs</h3>
+                  <span className={`text-xs font-normal ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Watch procedures & student sessions</span>
                 </div>
               </div>
               <span className={`text-xs font-bold px-3 py-1 rounded-full border ${
-                isDark ? 'text-white bg-white/10 border-white/20' : 'text-slate-800 bg-slate-100 border-slate-300'
+                isDark ? 'text-[#E7C960] bg-[#D4AF37]/15 border-[#D4AF37]/40' : 'text-slate-800 bg-slate-100 border-slate-300'
               }`}>
                 {videosList.length} Reels
               </span>
@@ -185,18 +185,18 @@ export default function MediaGallery({ theme }) {
                   key={vid.id}
                   onClick={() => setActiveMedia({ type: 'video', src: vid.videoUrl, title: vid.title, subtitle: vid.subtitle, badge: vid.badge })}
                   className={`p-4 rounded-2xl border transition-all duration-300 cursor-pointer shadow-md flex items-center gap-4 group hover:-translate-y-0.5 ${
-                    isDark ? 'glass-card border-white/10 hover:border-white/40' : 'bg-slate-50 border-slate-200 hover:border-slate-400'
+                    isDark ? 'glass-card border-[#D4AF37]/25 hover:border-[#D4AF37]/60' : 'bg-slate-50 border-slate-200 hover:border-slate-400'
                   }`}
                 >
-                  <div className="w-28 sm:w-36 aspect-[16/10] rounded-xl overflow-hidden relative shrink-0 border border-white/10">
+                  <div className="w-28 sm:w-36 aspect-[16/10] rounded-xl overflow-hidden relative shrink-0 border border-[#D4AF37]/30">
                     <img
                       src={vid.poster}
                       alt={vid.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                      <div className="w-10 h-10 rounded-full bg-white text-black p-0.5 shadow-lg group-hover:scale-110 transition-transform">
-                        <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
+                      <div className="w-10 h-10 rounded-full bg-[#D4AF37] text-black p-0.5 shadow-lg group-hover:scale-110 transition-transform">
+                        <div className="w-full h-full bg-[#D4AF37] rounded-full flex items-center justify-center">
                           <Play className="w-4 h-4 text-black fill-black ml-0.5" />
                         </div>
                       </div>
@@ -206,7 +206,7 @@ export default function MediaGallery({ theme }) {
                   <div className="space-y-1.5 flex-1 min-w-0">
                     <div className="flex items-center justify-between">
                       <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
-                        isDark ? 'bg-white/10 text-white border-white/20' : 'bg-slate-200 text-slate-800 border-slate-300'
+                        isDark ? 'bg-[#D4AF37]/15 text-[#E7C960] border-[#D4AF37]/40' : 'bg-slate-200 text-slate-800 border-slate-300'
                       }`}>
                         {vid.badge}
                       </span>
@@ -214,7 +214,7 @@ export default function MediaGallery({ theme }) {
                     </div>
 
                     <h4 className={`text-sm font-bold truncate transition-colors ${
-                      isDark ? 'text-white group-hover:text-slate-200' : 'text-slate-900 group-hover:text-slate-700'
+                      isDark ? 'text-white group-hover:text-[#E7C960]' : 'text-slate-900 group-hover:text-slate-700'
                     }`}>
                       {vid.title}
                     </h4>

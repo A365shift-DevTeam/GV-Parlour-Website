@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Check, Sparkles, Send } from 'lucide-react';
+import { X, Check, Send } from 'lucide-react';
 
 export default function CourseCustomizerModal({ theme, isOpen, onClose }) {
   const [selectedModules, setSelectedModules] = useState([
@@ -52,13 +52,13 @@ export default function CourseCustomizerModal({ theme, isOpen, onClose }) {
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xl flex items-center justify-center p-4 animate-fadeIn">
       {/* data-lenis-prevent: let this panel scroll natively instead of Lenis eating the wheel */}
       <div data-lenis-prevent className={`relative w-full max-w-2xl rounded-3xl overflow-hidden border p-6 sm:p-8 shadow-2xl space-y-6 max-h-[90dvh] overflow-y-auto ${
-        isDark ? 'glass-panel border-white/20 text-white' : 'bg-white border-slate-300 text-slate-900'
+        isDark ? 'glass-panel border-[#D4AF37]/40 text-white' : 'bg-white border-slate-300 text-slate-900'
       }`}>
         
         <button
           onClick={onClose}
           className={`absolute top-5 right-5 p-2 rounded-full border transition-all ${
-            isDark ? 'bg-black/60 text-slate-300 hover:text-white border-white/10' : 'bg-slate-100 text-slate-700 hover:text-black border-slate-300'
+            isDark ? 'bg-black/60 text-[#E7C960] hover:text-white border-[#D4AF37]/30' : 'bg-slate-100 text-slate-700 hover:text-black border-slate-300'
           }`}
         >
           <X className="w-5 h-5" />
@@ -66,9 +66,9 @@ export default function CourseCustomizerModal({ theme, isOpen, onClose }) {
 
         <div className="space-y-2">
           <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-bold uppercase tracking-wider ${
-            isDark ? 'bg-white/10 border-white/20 text-white' : 'bg-slate-100 border-slate-300 text-slate-800'
+            isDark ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#E7C960]' : 'bg-slate-100 border-slate-300 text-slate-800'
           }`}>
-            <Sparkles className="w-3.5 h-3.5" /> Interactive Course Builder
+            <Check className="w-3.5 h-3.5" /> Interactive Course Builder
           </div>
 
           <h3 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
@@ -81,22 +81,22 @@ export default function CourseCustomizerModal({ theme, isOpen, onClose }) {
 
         {submitted ? (
           <div className={`py-10 text-center space-y-3 rounded-2xl border ${
-            isDark ? 'bg-white/10 border-white/20 text-white' : 'bg-slate-100 border-slate-300 text-slate-900'
+            isDark ? 'bg-[#D4AF37]/15 border-[#D4AF37]/30 text-white' : 'bg-slate-100 border-slate-300 text-slate-900'
           }`}>
-            <Check className="w-12 h-12 text-emerald-500 mx-auto" />
-            <h4 className="text-xl font-bold">Custom Syllabus Submitted!</h4>
-            <p className="text-xs">
-              Galla Vidya will review your chosen modules and send you a custom schedule and quote via phone/email.
+            <Check className="w-12 h-12 mx-auto text-[#E7C960]" />
+            <h4 className="text-xl font-bold">Custom Syllabus Requested!</h4>
+            <p className="text-xs max-w-md mx-auto text-slate-300">
+              Your customized module list has been sent to Galla Vidya. Our academy counselor will contact you shortly with your syllabus and pricing details.
             </p>
           </div>
         ) : (
           <form onSubmit={handleCustomSubmit} className="space-y-6">
             
-            <div>
-              <label className={`text-xs font-bold uppercase tracking-wider block mb-3 ${
-                isDark ? 'text-slate-300' : 'text-slate-700'
+            <div className="space-y-3">
+              <label className={`text-xs font-bold uppercase tracking-wider block ${
+                isDark ? 'text-[#E7C960]' : 'text-slate-700'
               }`}>
-                Select Modules to Include ({selectedModules.length} selected):
+                Select Training Modules (Click to Add / Remove)
               </label>
               <div data-lenis-prevent className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-56 overflow-y-auto pr-1">
                 {availableModules.map((mod) => {
@@ -107,8 +107,8 @@ export default function CourseCustomizerModal({ theme, isOpen, onClose }) {
                       onClick={() => toggleModule(mod)}
                       className={`p-3 rounded-xl text-xs font-medium cursor-pointer border transition-all flex items-center justify-between ${
                         selected 
-                          ? isDark ? 'bg-white text-black border-white shadow-sm' : 'bg-slate-900 text-white border-slate-900'
-                          : isDark ? 'bg-black/40 border-white/10 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'
+                          ? isDark ? 'bg-[#D4AF37] text-black border-[#D4AF37] shadow-sm font-bold' : 'bg-slate-900 text-white border-slate-900'
+                          : isDark ? 'bg-black/40 border-[#D4AF37]/25 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'
                       }`}
                     >
                       <span>{mod}</span>
@@ -126,7 +126,7 @@ export default function CourseCustomizerModal({ theme, isOpen, onClose }) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className={`text-xs font-bold uppercase tracking-wider block mb-1.5 ${
-                  isDark ? 'text-slate-300' : 'text-slate-700'
+                  isDark ? 'text-[#E7C960]' : 'text-slate-700'
                 }`}>
                   Preferred Duration
                 </label>
@@ -134,7 +134,7 @@ export default function CourseCustomizerModal({ theme, isOpen, onClose }) {
                   value={duration}
                   onChange={(e) => setDuration(e.target.value)}
                   className={`w-full px-4 py-2.5 rounded-xl border text-xs focus:outline-none ${
-                    isDark ? 'bg-[#161620] border-white/15 text-white' : 'bg-white border-slate-300 text-slate-900'
+                    isDark ? 'bg-[#16140E] border-[#D4AF37]/30 text-white' : 'bg-white border-slate-300 text-slate-900'
                   }`}
                 >
                   <option value="1 Week Fast-Track">1 Week Fast-Track</option>
@@ -148,7 +148,7 @@ export default function CourseCustomizerModal({ theme, isOpen, onClose }) {
 
               <div>
                 <label className={`text-xs font-bold uppercase tracking-wider block mb-1.5 ${
-                  isDark ? 'text-slate-300' : 'text-slate-700'
+                  isDark ? 'text-[#E7C960]' : 'text-slate-700'
                 }`}>
                   Your Phone / WhatsApp
                 </label>
@@ -157,7 +157,7 @@ export default function CourseCustomizerModal({ theme, isOpen, onClose }) {
                   required
                   placeholder="Enter phone number"
                   className={`w-full px-4 py-2.5 rounded-xl border text-xs focus:outline-none ${
-                    isDark ? 'bg-black/60 border-white/15 text-white' : 'bg-white border-slate-300 text-slate-900'
+                    isDark ? 'bg-[#0E0C09] border-[#D4AF37]/30 text-white' : 'bg-white border-slate-300 text-slate-900'
                   }`}
                 />
               </div>
@@ -166,7 +166,7 @@ export default function CourseCustomizerModal({ theme, isOpen, onClose }) {
             <button
               type="submit"
               className={`w-full py-3.5 text-xs font-bold uppercase tracking-widest rounded-xl shadow-lg flex items-center justify-center gap-2 transition-all ${
-                isDark ? 'text-black bg-white hover:bg-slate-200' : 'text-white bg-slate-900 hover:bg-black'
+                isDark ? 'text-black bg-[#D4AF37] hover:bg-[#E7C960] shadow-[0_0_20px_rgba(212,175,55,0.3)]' : 'text-white bg-slate-900 hover:bg-black'
               }`}
             >
               <Send className="w-4 h-4" />

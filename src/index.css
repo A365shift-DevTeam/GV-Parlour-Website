@@ -4,21 +4,23 @@
   :root {
     --font-sans: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
 
-    /* Brand accent thread — champagne gold / blush / orchid */
+    /* Brand accent thread — luxury metallic gold / champagne */
     --gv-gold: 212 175 55;
+    --gv-gold-light: 231 201 96;
+    --gv-gold-dark: 170 119 28;
     --gv-blush: 224 152 152;
     --gv-orchid: 148 118 176;
   }
 
   html.dark {
     color-scheme: dark;
-    background-color: #09090B;
-    color: #F4F4F5;
+    background-color: #0A0907;
+    color: #F7F3E9;
   }
 
   html.light {
     color-scheme: light;
-    /* warm ivory rather than cold slate — reads as salon, not SaaS */
+    /* warm ivory rather than cold slate */
     background-color: #FAF7F2;
     color: #0F172A;
   }
@@ -37,7 +39,6 @@
    Site atmosphere layer
    Painted on <html> pseudo-elements so it sits behind every section
    and survives the theme toggle with no JSX plumbing.
-   ::before = light washes, ::after = film grain on top of them.
    ------------------------------------------------------------------ */
 html::before,
 html::after {
@@ -51,21 +52,19 @@ html::after {
 html::before {
   background-repeat: no-repeat;
   background-attachment: fixed;
-  /* No transition here: multi-layer background-image doesn't animate in any
-     engine, so the theme swap is an honest hard cut rather than a fake one. */
 }
 
 html.dark::before {
   background-image:
-    /* champagne key light, upper left */
-    radial-gradient(105% 75% at 8% -6%, rgb(var(--gv-gold) / 0.16), transparent 58%),
-    /* blush fill, upper right */
-    radial-gradient(85% 65% at 94% 4%, rgb(var(--gv-blush) / 0.12), transparent 60%),
-    /* orchid bounce, lower centre */
-    radial-gradient(110% 60% at 50% 104%, rgb(var(--gv-orchid) / 0.14), transparent 66%),
-    /* second gold pool, keeps the mid-page from going dead */
-    radial-gradient(55% 38% at 82% 58%, rgb(var(--gv-gold) / 0.08), transparent 70%),
-    linear-gradient(180deg, #0A0A0D 0%, #0C0B10 55%, #09090B 100%);
+    /* Rich metallic gold key light, upper left */
+    radial-gradient(110% 80% at 10% -5%, rgba(212, 175, 55, 0.24), transparent 60%),
+    /* Champagne gold fill, upper right */
+    radial-gradient(90% 70% at 92% 8%, rgba(231, 201, 96, 0.18), transparent 60%),
+    /* Deep warm gold bounce, bottom center */
+    radial-gradient(120% 65% at 50% 105%, rgba(170, 119, 28, 0.22), transparent 66%),
+    /* Gold pool mid-page */
+    radial-gradient(65% 45% at 85% 55%, rgba(212, 175, 55, 0.15), transparent 70%),
+    linear-gradient(180deg, #0A0907 0%, #0E0C09 50%, #0A0907 100%);
 }
 
 html.light::before {
@@ -77,7 +76,7 @@ html.light::before {
     linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #FAF7F2 100%);
 }
 
-/* Fine film grain — kills the flat "CSS gradient" look */
+/* Fine film grain */
 html::after {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 180px 180px;
@@ -99,12 +98,19 @@ html.light::after { opacity: 0.035; mix-blend-mode: multiply; }
   font-weight: 800;
 }
 
+.gold-gradient-text {
+  background: linear-gradient(135deg, #FFF5C0 0%, #E7C960 40%, #D4AF37 70%, #B8860B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 /* Dark vs Light Glass Panels */
 html.dark .glass-panel {
-  background: rgba(18, 18, 22, 0.9);
+  background: rgba(16, 15, 12, 0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(212, 175, 55, 0.32);
+  box-shadow: 0 10px 40px -10px rgba(212, 175, 55, 0.15);
 }
 
 html.light .glass-panel {
@@ -116,10 +122,11 @@ html.light .glass-panel {
 }
 
 html.dark .glass-card {
-  background: rgba(24, 24, 30, 0.75);
+  background: rgba(20, 18, 14, 0.82);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  box-shadow: 0 6px 25px -8px rgba(212, 175, 55, 0.12);
 }
 
 html.light .glass-card {
@@ -130,7 +137,7 @@ html.light .glass-card {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
 }
 
-/* Entrance reveal used by the Services & Courses columns */
+/* Entrance reveal */
 @keyframes gvFadeUp {
   from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: none; }
@@ -154,4 +161,12 @@ html.light .glass-card {
 ::-webkit-scrollbar-thumb {
   background: #52525B;
   border-radius: 4px;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background: #8A6D1F;
+  border-radius: 4px;
+}
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #D4AF37;
 }
