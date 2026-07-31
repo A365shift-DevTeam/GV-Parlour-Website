@@ -108,10 +108,10 @@ export default function ContactUs({ theme }) {
                 </div>
                 <div>
                   <span className={`text-[11px] font-bold uppercase block ${isDark ? 'text-[#D4AF37]' : 'text-slate-500'}`}>Email Address</span>
-                  <a href="mailto:info@gvstudiosbeauty.com" className={`transition-colors font-medium ${
+                  <a href="mailto:gvceo23@gmail.com" className={`transition-colors font-medium ${
                     isDark ? 'text-white hover:text-[#E7C960]' : 'text-slate-900 hover:text-black'
                   }`}>
-                    info@gvstudiosbeauty.com
+                    gvceo23@gmail.com
                   </a>
                 </div>
               </div>
