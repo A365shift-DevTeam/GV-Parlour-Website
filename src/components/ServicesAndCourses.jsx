@@ -250,7 +250,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
       num: '7.4',
       title: 'Uneven Skin Tone Balancing',
       desc: 'Hydrating micro-dermabrasion & tone harmonization for seamless skin radiance.',
-      src: '/assets/founder.webp',
+      src: '/assets/facial_cleanup.webp',
       badge: 'Skin Tone Care'
     }
   ];

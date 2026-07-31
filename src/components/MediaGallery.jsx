@@ -31,7 +31,7 @@ export default function MediaGallery({ theme }) {
       id: 4,
       title: 'Lakme Academy Certificate',
       subtitle: 'Official recognition award',
-      src: '/assets/certificate.webp',
+      src: '/assets/hair_colouring.webp',
       badge: 'Accolades'
     }
   ];
