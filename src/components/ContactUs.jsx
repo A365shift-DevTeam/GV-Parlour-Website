@@ -8,6 +8,7 @@ import {
   Send, 
   CheckCircle2
 } from 'lucide-react';
+import openChatbot from '../utils/openChatbot';
 
 export default function ContactUs({ theme }) {
   const [submitted, setSubmitted] = useState(false);
@@ -36,7 +37,9 @@ export default function ContactUs({ theme }) {
     }, 4000);
   };
 
-  const handleWhatsAppDirect = () => {
+  // Only reached when the chatbot widget fails to load — WhatsApp keeps the
+  // button useful instead of leaving it dead.
+  const handleWhatsAppFallback = () => {
     const text = encodeURIComponent(
       `Hello GV Studios! I am interested in booking a course/service.\nName: ${formData.name || 'Client'}\nInterest: ${formData.interest}`
     );
@@ -144,7 +147,7 @@ export default function ContactUs({ theme }) {
 
             <div className="pt-4 border-t border-[#D4AF37]/20">
               <button
-                onClick={handleWhatsAppDirect}
+                onClick={(e) => openChatbot(e, { onFallback: handleWhatsAppFallback })}
                 className="w-full py-4 rounded-2xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2.5 shadow-lg transition-all bg-[#D4AF37] hover:bg-[#E7C960] text-black hover:shadow-xl hover:scale-[1.01]"
               >
                 <MessageSquare className="w-4 h-4 fill-black text-black" />

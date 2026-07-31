@@ -81,7 +81,7 @@ export default function MediaGallery({ theme }) {
           </div>
 
           <h2 className={`fluid-section-title font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-            Our Work: <span className="gold-gradient-text">Images & Video Reels</span>
+            <span className="gold-gradient-text">Images & Videos</span>
           </h2>
 
           <p className={`text-sm sm:text-base font-normal ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>

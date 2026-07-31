@@ -63,10 +63,13 @@ function scrollToContact() {
 
 /**
  * Opens the chatbot window. Waits briefly for a still-booting widget, then
- * gives up and scrolls to the contact section instead — a click that does
- * nothing visible for seconds reads as broken.
+ * gives up and runs the fallback instead — a click that does nothing visible
+ * for seconds reads as broken.
+ *
+ * `onFallback` overrides the default scroll-to-contact, which is pointless for
+ * a button that already lives inside the contact section.
  */
-export default function openChatbot(e) {
+export default function openChatbot(e, { onFallback } = {}) {
   if (e) e.preventDefault();
 
   if (tryOpenChatbot()) return;
@@ -79,7 +82,7 @@ export default function openChatbot(e) {
     }
     if (Date.now() - startedAt >= MAX_WAIT) {
       clearInterval(timer);
-      scrollToContact();
+      (onFallback || scrollToContact)();
     }
   }, POLL_INTERVAL);
 }
