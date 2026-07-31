@@ -79,7 +79,7 @@ export default function FounderAndCertificates({ theme }) {
               </div>
 
               <h2 className={`fluid-section-title font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                Meet <span className={isDark ? 'gold-gradient-text' : 'text-slate-600'}>Galla Vidya</span>
+                Meet <span className="gold-gradient-text">Galla Vidya</span>
               </h2>
 
               <p className={`text-sm sm:text-base font-normal leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>

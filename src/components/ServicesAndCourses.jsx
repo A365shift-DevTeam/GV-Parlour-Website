@@ -401,19 +401,22 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
       title: 'Expert in Hydrafacial',
       role: 'Clinical Skin Hydration',
       desc: 'Multi-step vortex suction technology that exfoliates, extracts impurities, and infuses intense hydration serums.',
-      image: '/assets/hydrafacial.webp'
+      image: '/assets/hydrafacial.webp',
+      objectPos: 'object-center'
     },
     {
       title: 'Master Cosmetologist',
       role: 'Full Spectrum Beauty',
       desc: 'Certified expert in modern hair aesthetics, skin therapy, and bridal makeover consultations.',
-      image: '/assets/founder.webp'
+      image: '/assets/founder.webp',
+      objectPos: 'object-top'
     },
     {
       title: 'Pro Nail Technician',
       role: 'Gel Art & Extensions',
       desc: 'Specialist in artificial nail fixing, gel overlays, 3D nail art designs, and nail bed care.',
-      image: '/assets/nail_art.webp'
+      image: '/assets/nail_art.webp',
+      objectPos: 'object-center'
     }
   ];
 
@@ -434,7 +437,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
           </div>
 
           <h2 className={`fluid-section-title font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-            Our Professional <span className={isDark ? 'text-slate-300' : 'text-slate-600'}>Courses & Services</span>
+            Our Professional <span className="gold-gradient-text">Courses & Services</span>
           </h2>
 
           <p className={`text-sm sm:text-base font-normal ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
@@ -724,7 +727,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
                   <img
                     src={spec.image}
                     alt={spec.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className={`w-full h-full object-cover ${spec.objectPos || 'object-top'} group-hover:scale-105 transition-transform duration-500`}
                   />
                 </div>
                 <div className="p-6 space-y-3">

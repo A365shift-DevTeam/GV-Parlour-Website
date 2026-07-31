@@ -58,7 +58,7 @@ export default function ContactUs({ theme }) {
           </div>
 
           <h2 className={`fluid-section-title font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-            Connect With <span className={isDark ? 'gold-gradient-text' : 'text-slate-600'}>GV Studios</span>
+            Connect With <span className="gold-gradient-text">GV Studios</span>
           </h2>
 
           <p className={`text-sm sm:text-base font-normal ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
