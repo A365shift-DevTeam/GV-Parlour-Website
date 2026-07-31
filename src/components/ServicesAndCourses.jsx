@@ -261,65 +261,50 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
       id: 'basic',
       title: 'Basic Level Course',
       duration: '2 Weeks',
-      badge: 'Popular for Beginners',
-      description: 'Foundational beauty course covering daily grooming essentials, basic hair styling, manicure & pedicure techniques.',
+      badge: 'Basic Level',
       modules: [
         'Personal Grooming',
-        'Threading Techniques',
+        'Threading',
         'Manicure & Pedicure',
-        'Hair Wash & Conditioning',
-        'Basic Hair Cut',
+        'Hair Wash',
+        'Hair Cut',
         '3 Types of Nail Polish Application',
         'Artificial Temporary Nail Fixing Technique'
       ],
-      trainingMode: 'Theory + Practical Training',
+      trainingMode: 'Training: Theory + Practical',
     },
     {
       id: 'standard',
       title: 'Standard Level Course',
       duration: '3 Months',
-      badge: 'Most Recommended',
+      badge: 'Standard Level',
       popular: true,
-      description: 'Comprehensive professional cosmetologist training including luxury treatments, product mastery, and career growth support.',
       modules: [
-        'Includes ALL Basic Course Modules',
-        'Head Spa & Scalp Therapy',
-        'Gel Nail Polish Application & Art',
-        'Facial & Skin Rejuvenation',
-        'Luxury Spa Treatments',
-        'In-depth Product Knowledge',
-        'Hair Cut – 6 Modern Types'
+        'Includes all Basic Course modules',
+        'Head Spa',
+        'Gel Nail Polish',
+        'Facial',
+        'Luxury Treatments',
+        'Product Knowledge',
+        'Hair Cut – 6 Types'
       ],
       additionalPerks: [
-        'Spoken English Modules',
+        'Spoken English',
         'Personality Development',
-        'Marketing & Salon Operations',
-        '100% Placement Support'
+        'Marketing',
+        'Placement Support'
       ],
-      trainingMode: 'Theory + Practical Training',
+      trainingMode: 'Training: Theory + Practical',
     },
     {
       id: 'advanced',
       title: 'Advanced Level Course',
       duration: '6 Months',
-      badge: 'Master Diploma',
-      description: 'Elite masterclass covering high-end advanced skin procedures, hydrafacials, chemical peels, hair loss treatments, and nail technology.',
+      badge: 'Advanced Level',
       modules: [
-        'Includes Complete Basic & Standard Modules',
-        'Advanced Skin Treatments (Acne, Anti-Ageing, Pigmentation)',
-        'Clinical Hydrafacial Procedures',
-        'Advanced Hair Treatments & Restoration',
-        'Dandruff & Frizzy Hair Treatments',
-        'Pro Nail Technician & Extension Certification',
-        'Bridal Makeup & Styling Masterclass'
+        'Includes Basic Course plus Advanced Skin, Hair and Nail Treatments'
       ],
-      additionalPerks: [
-        'Professional Kit Included',
-        'Client Management & Consultation',
-        'Internship at GV Studios',
-        'Lifetime Mentorship & Placement'
-      ],
-      trainingMode: 'Theory + Practical Training',
+      trainingMode: 'Training: Theory + Practical',
     }
   ];
 
@@ -518,18 +503,20 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
                     </div>
                   </div>
 
-                  <p className={`text-xs sm:text-sm leading-relaxed font-normal mt-4 ${
-                    isDark ? 'text-slate-300' : 'text-slate-600'
-                  }`}>
-                    {course.description}
-                  </p>
+                  {course.description && (
+                    <p className={`text-xs sm:text-sm leading-relaxed font-normal mt-4 ${
+                      isDark ? 'text-slate-300' : 'text-slate-600'
+                    }`}>
+                      {course.description}
+                    </p>
+                  )}
 
                   {/* Modules */}
                   <div className="mt-5">
                     <h5 className={`text-[10px] font-bold uppercase tracking-[0.15em] mb-3 ${
                       isDark ? 'text-white' : 'text-slate-900'
                     }`}>
-                      Curriculum Modules
+                      Course Modules
                     </h5>
                     <ul className="space-y-2">
                       {course.modules.map((mod, idx) => (
@@ -547,21 +534,12 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
 
                   {course.additionalPerks && (
                     <div className={`mt-5 pt-4 border-t ${isDark ? 'border-white/10' : 'border-slate-200'}`}>
-                      <h5 className={`text-[10px] font-bold uppercase tracking-[0.15em] mb-2.5 ${
+                      <p className={`text-xs font-normal leading-relaxed ${
                         isDark ? 'text-slate-300' : 'text-slate-700'
                       }`}>
-                        Additional Value Perks
-                      </h5>
-                      <div className="space-y-1.5">
-                        {course.additionalPerks.map((perk, pIdx) => (
-                          <div key={pIdx} className={`px-2.5 py-1 rounded-lg border text-[11px] font-medium flex items-center gap-1.5 ${
-                            isDark ? 'bg-black/40 border-white/10 text-slate-200' : 'bg-slate-50 border-slate-200 text-slate-800'
-                          }`}>
-                            <Star className={`w-3 h-3 shrink-0 ${isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'}`} />
-                            <span>{perk}</span>
-                          </div>
-                        ))}
-                      </div>
+                        <strong className={isDark ? 'text-[#E7C960]' : 'text-[#8A6D1F]'}>Additional: </strong>
+                        {course.additionalPerks.join(', ')}.
+                      </p>
                     </div>
                   )}
                 </div>
