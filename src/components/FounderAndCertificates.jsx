@@ -38,7 +38,7 @@ export default function FounderAndCertificates({ theme }) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
           {/* Left Column: Founder Profile Image (5 cols) */}
-          <div className="lg:col-span-5 relative space-y-6">
+          <div className="lg:col-span-5 relative">
             <div className={`relative rounded-3xl p-1 shadow-2xl group ${
               isDark ? 'bg-white/20' : 'bg-slate-300'
             }`}>
@@ -67,27 +67,6 @@ export default function FounderAndCertificates({ theme }) {
                 </div>
               </div>
             </div>
-
-            <div className="grid grid-cols-3 gap-3">
-              <div className={`p-3.5 rounded-2xl text-center space-y-1 border shadow-sm ${
-                isDark ? 'bg-[#161620] border-white/10 text-white' : 'bg-white border-slate-200 text-slate-900'
-              }`}>
-                <span className="text-xs font-bold block">Hydrafacial</span>
-                <span className={`text-[10px] font-medium block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Specialist</span>
-              </div>
-              <div className={`p-3.5 rounded-2xl text-center space-y-1 border shadow-sm ${
-                isDark ? 'bg-[#161620] border-white/10 text-white' : 'bg-white border-slate-200 text-slate-900'
-              }`}>
-                <span className="text-xs font-bold block">Nail Tech</span>
-                <span className={`text-[10px] font-medium block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Gel & Extensions</span>
-              </div>
-              <div className={`p-3.5 rounded-2xl text-center space-y-1 border shadow-sm ${
-                isDark ? 'bg-[#161620] border-white/10 text-white' : 'bg-white border-slate-200 text-slate-900'
-              }`}>
-                <span className="text-xs font-bold block">Academy</span>
-                <span className={`text-[10px] font-medium block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Instructor</span>
-              </div>
-            </div>
           </div>
 
           {/* Right Column: Story & Certificate (7 cols) */}
@@ -110,9 +89,9 @@ export default function FounderAndCertificates({ theme }) {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {[
-                { title: 'Expert in Hydrafacial', desc: 'Vortex skin rejuvenation & anti-ageing care.' },
-                { title: 'Cosmetologist', desc: 'Comprehensive hair, skin & scalp therapy.' },
-                { title: 'Nail Technician', desc: 'Artistic temporary & gel nail extensions.' },
+                { title: 'Expert Cosmetologist', desc: 'Comprehensive hair, skin & scalp therapy.' },
+                { title: 'Certified Artist', desc: 'Licensed practitioner with master training.' },
+                { title: 'Academy Lead Instructor', desc: 'Empowering students through live practice.' },
               ].map((spec, i) => (
                 <div key={i} className={`p-4 rounded-2xl border space-y-1 shadow-sm ${
                   isDark ? 'glass-card border-[#D4AF37]/30' : 'bg-white border-slate-200'

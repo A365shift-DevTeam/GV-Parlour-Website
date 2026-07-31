@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import {
   GraduationCap,
   Clock,
@@ -14,7 +15,9 @@ import {
   Star,
   Crown,
   Sun,
-  Gem
+  Gem,
+  Eye,
+  X
 } from 'lucide-react';
 
 /* Shared column heading — gold rule + eyebrow */
@@ -52,6 +55,172 @@ function ColumnHeading({ icon: Icon, eyebrow, title, sub, isDark }) {
 
 export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
   const isDark = theme !== 'light';
+  const [activeServiceFilter, setActiveServiceFilter] = useState('all');
+  const [previewMedia, setPreviewMedia] = useState(null);
+
+  const serviceFilterButtons = [
+    { id: 'all', label: 'All Services' },
+    { id: 'facial-services', label: '1. Facial Services' },
+    { id: 'hair-styling', label: '2. Hair Styling' },
+    { id: 'hair-care-spa', label: '3. Hair Care & Spa' },
+    { id: 'hair-treatments', label: '4. Hair Treatments' },
+    { id: 'nail-services', label: '5. Nail Services' },
+    { id: 'hair-removal', label: '6. Hair Removal' },
+  ];
+
+  const parlourServicesList = [
+    // 1. Facial Services
+    {
+      id: 'facial-cleanup',
+      categoryId: 'facial-services',
+      categoryName: 'Facial Services',
+      num: '1.1',
+      title: 'Facial Cleanup',
+      desc: 'Deep pore cleansing, herbal exfoliation & radiant natural skin glow.',
+      src: '/assets/facial_cleanup.png',
+      badge: 'Facial Services'
+    },
+
+    // 2. Hair Styling
+    {
+      id: 'hair-cut',
+      categoryId: 'hair-styling',
+      categoryName: 'Hair Styling',
+      num: '2.1',
+      title: 'Hair Cut & Styling',
+      desc: 'Custom haircuts tailored to your face shape, layer cuts & modern styles.',
+      src: '/assets/hair_styling.png',
+      badge: 'Hair Cut'
+    },
+    {
+      id: 'hair-wash',
+      categoryId: 'hair-styling',
+      categoryName: 'Hair Styling',
+      num: '2.2',
+      title: 'Hair Wash & Conditioning',
+      desc: 'Refreshing cleanse with premium shampoo, deep conditioning & scalp rinse.',
+      src: '/assets/hair_wash.png',
+      badge: 'Hair Wash'
+    },
+    {
+      id: 'hair-colouring',
+      categoryId: 'hair-styling',
+      categoryName: 'Hair Styling',
+      num: '2.3',
+      title: 'Hair Colouring & Balayage',
+      desc: 'Highlights, balayage, global tinting & grey coverage with glossy shine.',
+      src: '/assets/hair_colouring.png',
+      badge: 'Hair Colour'
+    },
+
+    // 3. Hair Care & Spa
+    {
+      id: 'hair-spa',
+      categoryId: 'hair-care-spa',
+      categoryName: 'Hair Care & Spa',
+      num: '3.1',
+      title: 'Hair Spa Therapy',
+      desc: 'Deep nourishment, scalp revitalization, steam treatment & moisture repair.',
+      src: '/assets/hair_care_spa.png',
+      badge: 'Hair Spa'
+    },
+    {
+      id: 'hair-oil-massage',
+      categoryId: 'hair-care-spa',
+      categoryName: 'Hair Care & Spa',
+      num: '3.2',
+      title: 'Hair Hot Oil Massage',
+      desc: 'Stress-relieving hot oil scalp massage for root wellness & relaxation.',
+      src: '/assets/hair_oil_massage.png',
+      badge: 'Oil Massage'
+    },
+
+    // 4. Hair Treatments
+    {
+      id: 'hair-keratin',
+      categoryId: 'hair-treatments',
+      categoryName: 'Hair Treatments',
+      num: '4.1',
+      title: 'Keratin Hair Treatment',
+      desc: 'Keratin protein repair, smoothening & mirror-like glossy shine.',
+      src: '/assets/hair_treatment.png',
+      badge: 'Keratin'
+    },
+    {
+      id: 'dandruff-treatment',
+      categoryId: 'hair-treatments',
+      categoryName: 'Hair Treatments',
+      num: '4.2',
+      title: 'Anti-Dandruff Scalp Treatment',
+      desc: 'Scalp detox & anti-dandruff therapy for healthy, flake-free hair roots.',
+      src: '/assets/hair_wash.png',
+      badge: 'Dandruff Care'
+    },
+    {
+      id: 'frizzy-treatment',
+      categoryId: 'hair-treatments',
+      categoryName: 'Hair Treatments',
+      num: '4.3',
+      title: 'Frizzy Hair Moisture Treatment',
+      desc: 'Moisture lock & intense frizz control for smooth, manageable hair.',
+      src: '/assets/hair_treatment.png',
+      badge: 'Frizz Control'
+    },
+    {
+      id: 'hairfall-treatment',
+      categoryId: 'hair-treatments',
+      categoryName: 'Hair Treatments',
+      num: '4.4',
+      title: 'Hair Fall Control Therapy',
+      desc: 'Follicle strengthening & hair regrowth care for thicker, fuller hair.',
+      src: '/assets/hair_care_spa.png',
+      badge: 'Hair Fall Care'
+    },
+
+    // 5. Nail Services
+    {
+      id: 'manicure',
+      categoryId: 'nail-services',
+      categoryName: 'Nail Services',
+      num: '5.1',
+      title: 'Manicure Hand Spa',
+      desc: 'Exfoliation, cuticle care, hand massage, nail shaping & polish.',
+      src: '/assets/manicure.png',
+      badge: 'Manicure'
+    },
+    {
+      id: 'pedicure',
+      categoryId: 'nail-services',
+      categoryName: 'Nail Services',
+      num: '5.2',
+      title: 'Pedicure Foot Spa',
+      desc: 'Relaxing foot spa, heel repair, exfoliating scrub & precision nail care.',
+      src: '/assets/pedicure.png',
+      badge: 'Pedicure'
+    },
+
+    // 6. Hair Removal
+    {
+      id: 'threading',
+      categoryId: 'hair-removal',
+      categoryName: 'Hair Removal',
+      num: '6.1',
+      title: 'Eyebrow & Facial Threading',
+      desc: 'Precision eyebrow shaping, upper lip & delicate facial hair threading.',
+      src: '/assets/threading.png',
+      badge: 'Threading'
+    },
+    {
+      id: 'waxing',
+      categoryId: 'hair-removal',
+      categoryName: 'Hair Removal',
+      num: '6.2',
+      title: 'Organic Body Waxing',
+      desc: 'Smooth, touchably soft skin with gentle, soothing organic wax.',
+      src: '/assets/waxing.png',
+      badge: 'Waxing'
+    }
+  ];
 
   const courses = [
     {
@@ -417,114 +586,113 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
           </button>
         </div>
 
-        {/* ============ CATEGORIZED PARLOUR SERVICES ============ */}
+        {/* ============ PARLOUR SERVICES (INDIVIDUAL IMAGE CARDS) ============ */}
         <div className="space-y-8 animate-fadeIn">
           <ColumnHeading
             icon={Scissors}
             eyebrow="Parlour"
             title="Our Services"
-            sub="Explore our complete menu of skin, hair, nail, and grooming services categorized for your convenience."
+            sub="Explore our complete menu of skin, hair, nail, and grooming services."
             isDark={isDark}
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
-            {serviceCategories.map((cat) => {
-              const CatIcon = cat.icon;
+          {/* Service Name Filter Buttons */}
+          <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto pb-2 pt-1 no-scrollbar">
+            {serviceFilterButtons.map((btn) => {
+              const active = activeServiceFilter === btn.id;
               return (
+                <button
+                  key={btn.id}
+                  onClick={() => setActiveServiceFilter(btn.id)}
+                  className={`px-4 sm:px-5 py-2.5 rounded-full text-xs font-bold whitespace-nowrap transition-all duration-300 shrink-0 border ${
+                    active
+                      ? 'bg-[#D4AF37] text-black border-[#D4AF37] shadow-lg shadow-[0_0_15px_rgba(212,175,55,0.3)] scale-[1.02]'
+                      : isDark
+                        ? 'bg-black/40 border-[#D4AF37]/25 text-slate-300 hover:border-[#D4AF37]/60 hover:text-white'
+                        : 'bg-white border-slate-300 text-slate-700 hover:bg-slate-100 hover:border-slate-400 shadow-sm'
+                  }`}
+                >
+                  {btn.label}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Grid of Individual Sub-Service Image Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
+            {parlourServicesList
+              .filter((service) => activeServiceFilter === 'all' || service.categoryId === activeServiceFilter)
+              .map((service) => (
                 <div
-                  key={cat.id}
-                  className={`rounded-3xl border p-6 sm:p-7 shadow-xl transition-all duration-300 flex flex-col justify-between group ${
+                  key={service.id}
+                  className={`rounded-3xl border overflow-hidden shadow-xl transition-all duration-300 flex flex-col justify-between group ${
                     isDark
                       ? 'glass-card border-white/12 hover:border-[#D4AF37]/50'
-                      : 'bg-white/90 border-slate-200 hover:border-[#D4AF37]/60 backdrop-blur-md'
+                      : 'bg-white border-slate-200 hover:border-[#D4AF37]/60 shadow-md'
                   }`}
                 >
                   <div>
-                    {/* Category Header */}
-                    <div className={`flex items-center justify-between gap-3 border-b pb-4 mb-5 ${
-                      isDark ? 'border-white/10' : 'border-slate-200'
-                    }`}>
-                      <div className="flex items-center gap-3">
-                        <span className={`w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 ${
-                          isDark
-                            ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#D4AF37]'
-                            : 'bg-[#D4AF37]/20 border-[#D4AF37]/50 text-[#8A6D1F]'
-                        }`}>
-                          <CatIcon className="w-4.5 h-4.5" />
-                        </span>
-                        <div>
-                          <span className={`text-[10px] font-extrabold uppercase tracking-[0.18em] block ${
-                            isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'
-                          }`}>
-                            Category {cat.number}
-                          </span>
-                          <h3 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                            {cat.title}
-                          </h3>
+                    {/* Image Area */}
+                    <div 
+                      onClick={() => setPreviewMedia({ src: service.src, title: service.title, desc: service.desc, badge: service.badge })}
+                      className="aspect-[16/10] overflow-hidden relative cursor-pointer"
+                    >
+                      <img
+                        src={service.src}
+                        alt={service.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+                      
+                      {/* Top Badges */}
+                      <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/75 backdrop-blur-md border border-[#D4AF37]/40 text-[#E7C960] text-[10px] font-extrabold uppercase tracking-wider">
+                        {service.badge}
+                      </span>
+
+                      <span className="absolute top-3 right-3 w-7 h-7 rounded-lg bg-black/75 backdrop-blur-md border border-[#D4AF37]/40 text-[#E7C960] text-[11px] font-extrabold flex items-center justify-center">
+                        {service.num}
+                      </span>
+
+                      {/* Zoom Icon Overlay */}
+                      <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-full bg-black/70 border border-[#D4AF37]/50 flex items-center justify-center text-[#E7C960]">
+                          <Eye className="w-5 h-5" />
                         </div>
                       </div>
-
-                      <span className={`text-2xl font-extrabold opacity-20 ${
-                        isDark ? 'text-white' : 'text-slate-900'
-                      }`}>
-                        0{cat.number}
-                      </span>
                     </div>
 
-                    {/* Services Sub-list inside this category */}
-                    <div className="space-y-3">
-                      {cat.services.map((item, itemIdx) => {
-                        return (
-                          <div
-                            key={itemIdx}
-                            className={`p-3.5 rounded-2xl border transition-all duration-300 ${
-                              isDark
-                                ? 'bg-black/30 border-white/8 hover:border-[#D4AF37]/35 hover:bg-black/50'
-                                : 'bg-slate-50/90 border-slate-200/80 hover:border-[#D4AF37]/50 hover:bg-white'
-                            }`}
-                          >
-                            <div className="flex items-start gap-3">
-                              <span className={`w-6 h-6 rounded-lg text-[11px] font-bold flex items-center justify-center shrink-0 mt-0.5 ${
-                                isDark
-                                  ? 'bg-[#D4AF37]/20 text-[#E7C960] border border-[#D4AF37]/30'
-                                  : 'bg-[#D4AF37]/20 text-[#8A6D1F] border border-[#D4AF37]/40'
-                              }`}>
-                                {cat.number}.{item.num}
-                              </span>
+                    {/* Content Area */}
+                    <div className="p-6 space-y-2">
+                      <span className={`text-[10px] font-extrabold uppercase tracking-[0.18em] block ${
+                        isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'
+                      }`}>
+                        {service.categoryName}
+                      </span>
 
-                              <div className="min-w-0 flex-1">
-                                <h4 className={`text-sm font-bold leading-tight ${
-                                  isDark ? 'text-white' : 'text-slate-900'
-                                }`}>
-                                  {item.title}
-                                </h4>
-                                <p className={`text-xs font-normal leading-relaxed mt-1 ${
-                                  isDark ? 'text-slate-400' : 'text-slate-600'
-                                }`}>
-                                  {item.desc}
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        );
-                      })}
+                      <h3 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                        {service.title}
+                      </h3>
+
+                      <p className={`text-xs font-normal leading-relaxed ${
+                        isDark ? 'text-slate-300' : 'text-slate-600'
+                      }`}>
+                        {service.desc}
+                      </p>
                     </div>
                   </div>
 
-                  <a
-                    href="#contact"
-                    className={`mt-6 w-full py-3 rounded-xl font-bold text-[11px] uppercase tracking-[0.12em] flex items-center justify-center gap-2 transition-all shadow-md ${
-                      isDark
-                        ? 'bg-white/10 text-white hover:bg-white/20 border border-white/20'
-                        : 'bg-slate-900 text-white hover:bg-black'
-                    }`}
-                  >
-                    Book Service
-                    <ChevronRight className="w-4 h-4" />
-                  </a>
+                  {/* Booking Button Footer */}
+                  <div className="p-6 pt-0">
+                    <a
+                      href="#contact"
+                      className="w-full py-3 rounded-xl font-bold text-[11px] uppercase tracking-[0.12em] flex items-center justify-center gap-2 transition-all shadow-md bg-[#D4AF37] text-black hover:bg-[#E7C960] hover:shadow-lg"
+                    >
+                      Book Service
+                      <ChevronRight className="w-4 h-4" />
+                    </a>
+                  </div>
                 </div>
-              );
-            })}
+              ))}
           </div>
         </div>
 
@@ -604,6 +772,56 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
             ))}
           </div>
         </div>
+
+        {/* Service Image Modal Viewer */}
+        {previewMedia && createPortal(
+          <div 
+            onClick={() => setPreviewMedia(null)}
+            className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-xl flex items-center justify-center p-4 sm:p-6 animate-fadeIn"
+          >
+            <div 
+              onClick={(e) => e.stopPropagation()}
+              className={`relative w-full max-w-4xl rounded-3xl overflow-hidden border p-5 sm:p-7 shadow-2xl space-y-4 max-h-[92dvh] flex flex-col ${
+                isDark ? 'glass-panel border-[#D4AF37]/40 text-white' : 'bg-white border-slate-300 text-slate-900'
+              }`}
+            >
+              <div className="flex items-center justify-between gap-4 border-b pb-4 border-[#D4AF37]/30">
+                <div>
+                  <span className={`text-[10px] font-extrabold uppercase tracking-widest block ${
+                    isDark ? 'text-[#D4AF37]' : 'text-slate-500'
+                  }`}>
+                    {previewMedia.badge} Service Showcase
+                  </span>
+                  <h3 className={`text-lg sm:text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    {previewMedia.title}
+                  </h3>
+                </div>
+
+                <button
+                  onClick={() => setPreviewMedia(null)}
+                  className={`p-2 rounded-full border transition-all ${
+                    isDark ? 'bg-black/60 text-[#E7C960] hover:text-white border-[#D4AF37]/40' : 'bg-slate-100 text-slate-800 hover:bg-slate-200 border-slate-300'
+                  }`}
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="rounded-2xl overflow-hidden border border-[#D4AF37]/30 shadow-2xl bg-black flex-1 min-h-0 flex items-center justify-center p-2">
+                <img
+                  src={previewMedia.src}
+                  alt={previewMedia.title}
+                  className="max-h-[70dvh] w-auto max-w-full object-contain rounded-xl"
+                />
+              </div>
+
+              <p className={`text-xs sm:text-sm font-normal text-center ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                {previewMedia.desc}
+              </p>
+            </div>
+          </div>,
+          document.body
+        )}
 
       </div>
     </section>
