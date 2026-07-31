@@ -411,7 +411,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
       objectPos: 'object-top'
     },
     {
-      title: 'Pro Nail Technician',
+      title: 'Nail Technician',
       role: 'Gel Art & Extensions',
       desc: 'Specialist in artificial nail fixing, gel overlays, 3D nail art designs, and nail bed care.',
       image: '/assets/nail_art.webp',

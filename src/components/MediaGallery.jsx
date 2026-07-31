@@ -63,6 +63,15 @@ export default function MediaGallery({ theme }) {
       videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-hands-of-a-woman-getting-a-manicure-41380-large.mp4',
       duration: '0:35 Reel',
       badge: 'Nail Art Reel'
+    },
+    {
+      id: 104,
+      title: 'Advanced Hair Colouring & Styling Reel',
+      subtitle: 'Balayage, fashion shades & gloss treatment session',
+      poster: '/assets/hair_colouring.webp',
+      videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-stylist-combing-a-woman-s-hair-40542-large.mp4',
+      duration: '0:55 Reel',
+      badge: 'Hair Color Reel'
     }
   ];
 
