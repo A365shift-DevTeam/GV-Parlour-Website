@@ -25,9 +25,8 @@ function ColumnHeading({ eyebrow, title, sub, isDark }) {
   return (
     <div className="space-y-2.5 text-center max-w-2xl mx-auto">
       <div>
-        <span className={`block text-[10px] font-extrabold uppercase tracking-[0.2em] ${
-          isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'
-        }`}>
+        <span className={`block text-[10px] font-extrabold uppercase tracking-[0.2em] ${isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'
+          }`}>
           {eyebrow}
         </span>
         <h3 className={`text-xl sm:text-2xl font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
@@ -37,9 +36,8 @@ function ColumnHeading({ eyebrow, title, sub, isDark }) {
       <p className={`text-xs sm:text-sm font-normal ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
         {sub}
       </p>
-      <div className={`h-px w-full bg-gradient-to-r ${
-        isDark ? 'from-transparent via-[#D4AF37]/50 to-transparent' : 'from-transparent via-[#D4AF37]/70 to-transparent'
-      }`} />
+      <div className={`h-px w-full bg-gradient-to-r ${isDark ? 'from-transparent via-[#D4AF37]/50 to-transparent' : 'from-transparent via-[#D4AF37]/70 to-transparent'
+        }`} />
     </div>
   );
 }
@@ -421,18 +419,16 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
   ];
 
   return (
-    <section id="services-courses" className={`py-20 sm:py-28 transition-colors duration-300 relative ${
-      isDark ? 'bg-[#0E0E12]/55 text-slate-100' : 'bg-[#F3EDE3]/50 text-slate-900'
-    }`}>
+    <section id="services-courses" className={`py-20 sm:py-28 transition-colors duration-300 relative ${isDark ? 'bg-[#0E0E12]/55 text-slate-100' : 'bg-[#F3EDE3]/50 text-slate-900'
+      }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 relative z-10">
 
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
-          <div className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-bold uppercase tracking-wider backdrop-blur-sm ${
-            isDark
+          <div className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-bold uppercase tracking-wider backdrop-blur-sm ${isDark
               ? 'bg-[#D4AF37]/10 border-[#D4AF37]/30 text-[#E7C960]'
               : 'bg-white/70 border-[#D4AF37]/40 text-[#8A6D1F]'
-          }`}>
+            }`}>
             Professional Beauty Studio & Academy
           </div>
 
@@ -459,15 +455,14 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
             {courses.map((course, cIdx) => (
               <article
                 key={course.id}
-                className={`relative rounded-3xl p-6 sm:p-7 border flex flex-col justify-between transition-all duration-300 group shadow-lg ${
-                  isDark
+                className={`relative rounded-3xl p-6 sm:p-7 border flex flex-col justify-between transition-all duration-300 group shadow-lg ${isDark
                     ? course.popular
                       ? 'bg-[#161620]/95 border-[#D4AF37]/60 shadow-[0_0_40px_-15px_rgba(212,175,55,0.55)]'
                       : 'bg-[#121218]/85 border-white/10 hover:border-white/30'
                     : course.popular
                       ? 'bg-white/95 border-[#D4AF37] shadow-xl'
                       : 'bg-white/85 border-slate-200 hover:border-slate-300'
-                }`}
+                  }`}
               >
                 {course.popular && (
                   <div className="absolute -top-3 left-7 px-3.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-[0.15em] shadow-md bg-[#D4AF37] text-black">
@@ -477,19 +472,16 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
 
                 <div>
                   {/* Card header: index numeral + title + duration */}
-                  <div className={`flex items-start justify-between gap-3 border-b pb-4 ${
-                    isDark ? 'border-white/10' : 'border-slate-200'
-                  }`}>
+                  <div className={`flex items-start justify-between gap-3 border-b pb-4 ${isDark ? 'border-white/10' : 'border-slate-200'
+                    }`}>
                     <div className="flex items-center gap-3 min-w-0">
-                      <span className={`text-3xl font-extrabold leading-none tabular-nums shrink-0 ${
-                        isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'
-                      }`}>
+                      <span className={`text-3xl font-extrabold leading-none tabular-nums shrink-0 ${isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'
+                        }`}>
                         0{cIdx + 1}
                       </span>
                       <div className="min-w-0">
-                        <span className={`text-[10px] font-bold tracking-[0.15em] uppercase block ${
-                          isDark ? 'text-slate-400' : 'text-slate-500'
-                        }`}>
+                        <span className={`text-[10px] font-bold tracking-[0.15em] uppercase block ${isDark ? 'text-slate-400' : 'text-slate-500'
+                          }`}>
                           {course.badge}
                         </span>
                         <h4 className={`text-lg font-bold mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>
@@ -498,37 +490,32 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
                       </div>
                     </div>
 
-                    <div className={`px-2.5 py-1 rounded-full border text-[11px] font-bold flex items-center gap-1 shrink-0 ${
-                      isDark ? 'bg-black/50 border-[#D4AF37]/35 text-[#E7C960]' : 'bg-[#D4AF37]/10 border-[#D4AF37]/40 text-[#8A6D1F]'
-                    }`}>
+                    <div className={`px-2.5 py-1 rounded-full border text-[11px] font-bold flex items-center gap-1 shrink-0 ${isDark ? 'bg-black/50 border-[#D4AF37]/35 text-[#E7C960]' : 'bg-[#D4AF37]/10 border-[#D4AF37]/40 text-[#8A6D1F]'
+                      }`}>
                       <Clock className="w-3.5 h-3.5" />
                       {course.duration}
                     </div>
                   </div>
 
                   {course.description && (
-                    <p className={`text-xs sm:text-sm leading-relaxed font-normal mt-4 ${
-                      isDark ? 'text-slate-300' : 'text-slate-600'
-                    }`}>
+                    <p className={`text-xs sm:text-sm leading-relaxed font-normal mt-4 ${isDark ? 'text-slate-300' : 'text-slate-600'
+                      }`}>
                       {course.description}
                     </p>
                   )}
 
                   {/* Modules */}
                   <div className="mt-5">
-                    <h5 className={`text-[10px] font-bold uppercase tracking-[0.15em] mb-3 ${
-                      isDark ? 'text-white' : 'text-slate-900'
-                    }`}>
+                    <h5 className={`text-[10px] font-bold uppercase tracking-[0.15em] mb-3 ${isDark ? 'text-white' : 'text-slate-900'
+                      }`}>
                       Course Modules
                     </h5>
                     <ul className="space-y-2">
                       {course.modules.map((mod, idx) => (
-                        <li key={idx} className={`flex items-start gap-2 text-xs ${
-                          isDark ? 'text-slate-200' : 'text-slate-700'
-                        }`}>
-                          <CheckCircle2 className={`w-3.5 h-3.5 shrink-0 mt-0.5 ${
-                            isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'
-                          }`} />
+                        <li key={idx} className={`flex items-start gap-2 text-xs ${isDark ? 'text-slate-200' : 'text-slate-700'
+                          }`}>
+                          <CheckCircle2 className={`w-3.5 h-3.5 shrink-0 mt-0.5 ${isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'
+                            }`} />
                           <span>{mod}</span>
                         </li>
                       ))}
@@ -537,9 +524,8 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
 
                   {course.additionalPerks && (
                     <div className={`mt-5 pt-4 border-t ${isDark ? 'border-white/10' : 'border-slate-200'}`}>
-                      <p className={`text-xs font-normal leading-relaxed ${
-                        isDark ? 'text-slate-300' : 'text-slate-700'
-                      }`}>
+                      <p className={`text-xs font-normal leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'
+                        }`}>
                         <strong className={isDark ? 'text-[#E7C960]' : 'text-[#8A6D1F]'}>Additional: </strong>
                         {course.additionalPerks.join(', ')}.
                       </p>
@@ -547,12 +533,10 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
                   )}
                 </div>
 
-                <div className={`pt-5 mt-6 border-t flex flex-col gap-3 ${
-                  isDark ? 'border-white/10' : 'border-slate-200'
-                }`}>
-                  <span className={`flex items-center gap-1.5 text-xs font-medium ${
-                    isDark ? 'text-slate-400' : 'text-slate-500'
+                <div className={`pt-5 mt-6 border-t flex flex-col gap-3 ${isDark ? 'border-white/10' : 'border-slate-200'
                   }`}>
+                  <span className={`flex items-center gap-1.5 text-xs font-medium ${isDark ? 'text-slate-400' : 'text-slate-500'
+                    }`}>
                     <UserCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                     {course.trainingMode}
                   </span>
@@ -571,17 +555,15 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
         </div>
 
         {/* ---------- Custom Course Banner ---------- */}
-        <div className={`mb-20 rounded-3xl p-6 sm:p-8 border flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl ${
-          isDark ? 'glass-card border-[#D4AF37]/30' : 'bg-white/90 border-[#D4AF37]/40 backdrop-blur-md'
-        }`}>
+        <div className={`mb-20 rounded-3xl p-6 sm:p-8 border flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl ${isDark ? 'glass-card border-[#D4AF37]/30' : 'bg-white/90 border-[#D4AF37]/40 backdrop-blur-md'
+          }`}>
           <div className="flex items-center gap-4 text-left">
             <div className="w-14 h-14 rounded-2xl shrink-0 flex items-center justify-center shadow-lg bg-[#D4AF37] text-black">
               <BookOpen className="w-7 h-7" />
             </div>
             <div>
-              <span className={`text-[10px] font-bold uppercase tracking-[0.2em] ${
-                isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'
-              }`}>
+              <span className={`text-[10px] font-bold uppercase tracking-[0.2em] ${isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'
+                }`}>
                 Tailored Beauty Education
               </span>
               <h3 className={`text-lg sm:text-xl font-bold mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>
@@ -612,13 +594,12 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
                 <button
                   key={btn.id}
                   onClick={() => setActiveServiceFilter(btn.id)}
-                  className={`px-4 sm:px-5 py-2.5 rounded-full text-xs font-bold whitespace-nowrap transition-all duration-300 shrink-0 border ${
-                    active
+                  className={`px-4 sm:px-5 py-2.5 rounded-full text-xs font-bold whitespace-nowrap transition-all duration-300 shrink-0 border ${active
                       ? 'bg-[#D4AF37] text-black border-[#D4AF37] shadow-lg shadow-[0_0_15px_rgba(212,175,55,0.3)] scale-[1.02]'
                       : isDark
                         ? 'bg-black/40 border-[#D4AF37]/25 text-slate-300 hover:border-[#D4AF37]/60 hover:text-white'
                         : 'bg-white border-slate-300 text-slate-700 hover:bg-slate-100 hover:border-slate-400 shadow-sm'
-                  }`}
+                    }`}
                 >
                   {btn.label}
                 </button>
@@ -633,15 +614,14 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
               .map((service) => (
                 <div
                   key={service.id}
-                  className={`rounded-3xl border overflow-hidden shadow-xl transition-all duration-300 flex flex-col justify-between group ${
-                    isDark
+                  className={`rounded-3xl border overflow-hidden shadow-xl transition-all duration-300 flex flex-col justify-between group ${isDark
                       ? 'glass-card border-white/12 hover:border-[#D4AF37]/50'
                       : 'bg-white border-slate-200 hover:border-[#D4AF37]/60 shadow-md'
-                  }`}
+                    }`}
                 >
                   <div>
                     {/* Image Area */}
-                    <div 
+                    <div
                       onClick={() => setPreviewMedia({ src: service.src, title: service.title, desc: service.desc, badge: service.badge })}
                       className="aspect-[16/10] overflow-hidden relative cursor-pointer"
                     >
@@ -651,7 +631,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
-                      
+
                       {/* Top Badges */}
                       <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/75 backdrop-blur-md border border-[#D4AF37]/40 text-[#E7C960] text-[10px] font-extrabold uppercase tracking-wider">
                         {service.badge}
@@ -671,9 +651,8 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
 
                     {/* Content Area */}
                     <div className="p-6 space-y-2">
-                      <span className={`text-[10px] font-extrabold uppercase tracking-[0.18em] block ${
-                        isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'
-                      }`}>
+                      <span className={`text-[10px] font-extrabold uppercase tracking-[0.18em] block ${isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'
+                        }`}>
                         {service.categoryName}
                       </span>
 
@@ -681,9 +660,8 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
                         {service.title}
                       </h3>
 
-                      <p className={`text-xs font-normal leading-relaxed ${
-                        isDark ? 'text-slate-300' : 'text-slate-600'
-                      }`}>
+                      <p className={`text-xs font-normal leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'
+                        }`}>
                         {service.desc}
                       </p>
                     </div>
@@ -719,9 +697,8 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
             {specializations.map((spec, sIdx) => (
               <div
                 key={sIdx}
-                className={`rounded-3xl overflow-hidden border transition-all duration-300 group ${
-                  isDark ? 'glass-card border-white/12 hover:border-[#D4AF37]/45' : 'bg-white/85 border-slate-200 hover:border-[#D4AF37]/60 backdrop-blur-md shadow-md'
-                }`}
+                className={`rounded-3xl overflow-hidden border transition-all duration-300 group ${isDark ? 'glass-card border-white/12 hover:border-[#D4AF37]/45' : 'bg-white/85 border-slate-200 hover:border-[#D4AF37]/60 backdrop-blur-md shadow-md'
+                  }`}
               >
                 <div className="h-48 overflow-hidden relative">
                   <img
@@ -731,9 +708,8 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
                   />
                 </div>
                 <div className="p-6 space-y-3">
-                  <span className={`px-3 py-1 rounded-full border text-[10px] font-bold uppercase tracking-[0.15em] inline-block ${
-                    isDark ? 'bg-[#D4AF37]/10 border-[#D4AF37]/30 text-[#E7C960]' : 'bg-[#D4AF37]/10 border-[#D4AF37]/40 text-[#8A6D1F]'
-                  }`}>
+                  <span className={`px-3 py-1 rounded-full border text-[10px] font-bold uppercase tracking-[0.15em] inline-block ${isDark ? 'bg-[#D4AF37]/10 border-[#D4AF37]/30 text-[#E7C960]' : 'bg-[#D4AF37]/10 border-[#D4AF37]/40 text-[#8A6D1F]'
+                    }`}>
                     {spec.role}
                   </span>
                   <h4 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
@@ -750,21 +726,19 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
 
         {/* Service Image Modal Viewer */}
         {previewMedia && createPortal(
-          <div 
+          <div
             onClick={() => setPreviewMedia(null)}
             className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-xl flex items-center justify-center p-4 sm:p-6 animate-fadeIn"
           >
-            <div 
+            <div
               onClick={(e) => e.stopPropagation()}
-              className={`relative w-full max-w-4xl rounded-3xl overflow-hidden border p-5 sm:p-7 shadow-2xl space-y-4 max-h-[92dvh] flex flex-col ${
-                isDark ? 'glass-panel border-[#D4AF37]/40 text-white' : 'bg-white border-slate-300 text-slate-900'
-              }`}
+              className={`relative w-full max-w-4xl rounded-3xl overflow-hidden border p-5 sm:p-7 shadow-2xl space-y-4 max-h-[92dvh] flex flex-col ${isDark ? 'glass-panel border-[#D4AF37]/40 text-white' : 'bg-white border-slate-300 text-slate-900'
+                }`}
             >
               <div className="flex items-center justify-between gap-4 border-b pb-4 border-[#D4AF37]/30">
                 <div>
-                  <span className={`text-[10px] font-extrabold uppercase tracking-widest block ${
-                    isDark ? 'text-[#D4AF37]' : 'text-slate-500'
-                  }`}>
+                  <span className={`text-[10px] font-extrabold uppercase tracking-widest block ${isDark ? 'text-[#D4AF37]' : 'text-slate-500'
+                    }`}>
                     {previewMedia.badge} Service Showcase
                   </span>
                   <h3 className={`text-lg sm:text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
@@ -774,9 +748,8 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
 
                 <button
                   onClick={() => setPreviewMedia(null)}
-                  className={`p-2 rounded-full border transition-all ${
-                    isDark ? 'bg-black/60 text-[#E7C960] hover:text-white border-[#D4AF37]/40' : 'bg-slate-100 text-slate-800 hover:bg-slate-200 border-slate-300'
-                  }`}
+                  className={`p-2 rounded-full border transition-all ${isDark ? 'bg-black/60 text-[#E7C960] hover:text-white border-[#D4AF37]/40' : 'bg-slate-100 text-slate-800 hover:bg-slate-200 border-slate-300'
+                    }`}
                 >
                   <X className="w-5 h-5" />
                 </button>
