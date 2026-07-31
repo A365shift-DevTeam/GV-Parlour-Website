@@ -15,7 +15,7 @@ export default function Footer({ theme }) {
         }`}>
           {/* Logo Brand */}
           <div className="flex items-center gap-3">
-            <img src="/assets/logo.png" alt="GV Studios" className="w-10 h-10 object-contain" />
+            <img src="/assets/logo.webp" alt="GV Studios" className="w-10 h-10 object-contain" />
             <div>
               <span className="text-lg font-bold text-white block leading-none">
                 GV STUDIOS

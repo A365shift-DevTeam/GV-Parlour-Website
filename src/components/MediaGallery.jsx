@@ -10,28 +10,28 @@ export default function MediaGallery({ theme }) {
       id: 1,
       title: 'Hydrafacial Clinical Glow',
       subtitle: 'Deep cleansing & rejuvenation',
-      src: '/assets/hydrafacial.png',
+      src: '/assets/hydrafacial.webp',
       badge: 'Skin Care'
     },
     {
       id: 2,
       title: 'Gel Nail Polish & Extensions',
       subtitle: '3D Nail art & glossy finish',
-      src: '/assets/nail_art.png',
+      src: '/assets/nail_art.webp',
       badge: 'Nail Studio'
     },
     {
       id: 3,
       title: 'Academy Practical Training',
       subtitle: 'Hands-on student haircut session',
-      src: '/assets/academy.png',
+      src: '/assets/academy.webp',
       badge: 'Academy'
     },
     {
       id: 4,
       title: 'Lakme Academy Certificate',
       subtitle: 'Official recognition award',
-      src: '/assets/certificate.png',
+      src: '/assets/certificate.webp',
       badge: 'Accolades'
     }
   ];
@@ -41,7 +41,7 @@ export default function MediaGallery({ theme }) {
       id: 101,
       title: 'Hydrafacial 6-Step Clinical Procedure',
       subtitle: 'Watch Galla Vidya perform deep vortex skin hydration',
-      poster: '/assets/hydrafacial.png',
+      poster: '/assets/hydrafacial.webp',
       videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-woman-getting-a-facial-treatment-41381-large.mp4',
       duration: '0:45 Reel',
       badge: 'Hydrafacial Reel'
@@ -50,7 +50,7 @@ export default function MediaGallery({ theme }) {
       id: 102,
       title: 'Haircut & Styling Masterclass Reel',
       subtitle: '6 Modern Haircut Techniques Demonstration',
-      poster: '/assets/academy.png',
+      poster: '/assets/academy.webp',
       videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-hairdresser-cutting-hair-to-a-client-40540-large.mp4',
       duration: '1:10 Reel',
       badge: 'Haircut Reel'
@@ -59,7 +59,7 @@ export default function MediaGallery({ theme }) {
       id: 103,
       title: 'Gel Nail Extension Art & Polish Reel',
       subtitle: 'Temporary artificial nail fixing & gel art technique',
-      poster: '/assets/nail_art.png',
+      poster: '/assets/nail_art.webp',
       videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-hands-of-a-woman-getting-a-manicure-41380-large.mp4',
       duration: '0:35 Reel',
       badge: 'Nail Art Reel'
@@ -77,7 +77,7 @@ export default function MediaGallery({ theme }) {
           <div className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-bold uppercase tracking-wider ${
             isDark ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#E7C960]' : 'bg-slate-100 border-slate-300 text-slate-800'
           }`}>
-            <Video className="w-3.5 h-3.5" /> Studio Portfolio & Live Reels
+            Studio Portfolio & Live Reels
           </div>
 
           <h2 className={`fluid-section-title font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>

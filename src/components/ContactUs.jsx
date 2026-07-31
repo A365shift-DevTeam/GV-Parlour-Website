@@ -54,7 +54,7 @@ export default function ContactUs({ theme }) {
           <div className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-bold uppercase tracking-wider ${
             isDark ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#E7C960]' : 'bg-slate-100 border-slate-300 text-slate-800'
           }`}>
-            <MessageSquare className="w-3.5 h-3.5" /> Get In Touch & Book Now
+            Get In Touch & Book Now
           </div>
 
           <h2 className={`fluid-section-title font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
@@ -66,216 +66,92 @@ export default function ContactUs({ theme }) {
           </p>
         </div>
 
-        {/* Contact Form & Information Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-          
-          {/* Left Column (5 cols) */}
-          <div className="lg:col-span-5 space-y-6">
-            <div className={`p-7 rounded-3xl border space-y-6 shadow-xl ${
-              isDark ? 'glass-card border-[#D4AF37]/35' : 'bg-slate-50 border-slate-200'
-            }`}>
-              <h3 className={`text-xl font-bold flex items-center gap-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+        {/* Contact Information Box (Centered without enrollment form) */}
+        <div className="max-w-3xl mx-auto">
+          <div className={`p-8 sm:p-10 rounded-3xl border space-y-8 shadow-2xl ${
+            isDark ? 'glass-card border-[#D4AF37]/40 shadow-[0_0_35px_-5px_rgba(212,175,55,0.15)]' : 'bg-white border-slate-200 shadow-xl'
+          }`}>
+            <div className="text-center space-y-2 border-b pb-6 border-[#D4AF37]/30">
+              <h3 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                 Contact Information
               </h3>
+              <p className={`text-xs sm:text-sm font-normal ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                Get in touch directly via phone, email, or WhatsApp for appointments & course details.
+              </p>
+            </div>
 
-              <div className="space-y-4 text-xs sm:text-sm">
-                <div className="flex items-start gap-4">
-                  <div className={`w-10 h-10 rounded-xl border flex items-center justify-center shrink-0 ${
-                    isDark ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#E7C960]' : 'bg-slate-200 border-slate-300 text-slate-900'
-                  }`}>
-                    <Phone className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <span className={`text-[11px] font-bold uppercase block ${isDark ? 'text-[#D4AF37]' : 'text-slate-500'}`}>Phone / WhatsApp</span>
-                    <a href="tel:+919876543210" className={`font-semibold text-sm transition-colors ${
-                      isDark ? 'text-white hover:text-[#E7C960]' : 'text-slate-900 hover:text-black'
-                    }`}>
-                      +91 98765 43210 / +91 91234 56789
-                    </a>
-                  </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-xs sm:text-sm">
+              <div className="flex items-start gap-4">
+                <div className={`w-11 h-11 rounded-xl border flex items-center justify-center shrink-0 ${
+                  isDark ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#E7C960]' : 'bg-slate-100 border-slate-300 text-slate-900'
+                }`}>
+                  <Phone className="w-5 h-5" />
                 </div>
-
-                <div className="flex items-start gap-4">
-                  <div className={`w-10 h-10 rounded-xl border flex items-center justify-center shrink-0 ${
-                    isDark ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#E7C960]' : 'bg-slate-200 border-slate-300 text-slate-900'
+                <div>
+                  <span className={`text-[11px] font-bold uppercase block ${isDark ? 'text-[#D4AF37]' : 'text-slate-500'}`}>Phone / WhatsApp</span>
+                  <a href="tel:+919876543210" className={`font-semibold text-sm transition-colors ${
+                    isDark ? 'text-white hover:text-[#E7C960]' : 'text-slate-900 hover:text-black'
                   }`}>
-                    <Mail className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <span className={`text-[11px] font-bold uppercase block ${isDark ? 'text-[#D4AF37]' : 'text-slate-500'}`}>Email Address</span>
-                    <a href="mailto:info@gvstudiosbeauty.com" className={`transition-colors ${
-                      isDark ? 'text-white hover:text-[#E7C960]' : 'text-slate-900 hover:text-black'
-                    }`}>
-                      info@gvstudiosbeauty.com
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className={`w-10 h-10 rounded-xl border flex items-center justify-center shrink-0 ${
-                    isDark ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#E7C960]' : 'bg-slate-200 border-slate-300 text-slate-900'
-                  }`}>
-                    <MapPin className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <span className={`text-[11px] font-bold uppercase block ${isDark ? 'text-[#D4AF37]' : 'text-slate-500'}`}>Studio Location</span>
-                    <p className={`font-normal leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                      GV Studios Beauty & Academy, Main Road, Premier Complex, City Center.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className={`w-10 h-10 rounded-xl border flex items-center justify-center shrink-0 ${
-                    isDark ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#E7C960]' : 'bg-slate-200 border-slate-300 text-slate-900'
-                  }`}>
-                    <Clock className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <span className={`text-[11px] font-bold uppercase block ${isDark ? 'text-[#D4AF37]' : 'text-slate-500'}`}>Opening Hours</span>
-                    <p className={`font-normal ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                      Mon – Sun: 9:00 AM – 8:30 PM
-                    </p>
-                  </div>
+                    +91 98765 43210 / +91 91234 56789
+                  </a>
                 </div>
               </div>
 
+              <div className="flex items-start gap-4">
+                <div className={`w-11 h-11 rounded-xl border flex items-center justify-center shrink-0 ${
+                  isDark ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#E7C960]' : 'bg-slate-100 border-slate-300 text-slate-900'
+                }`}>
+                  <Mail className="w-5 h-5" />
+                </div>
+                <div>
+                  <span className={`text-[11px] font-bold uppercase block ${isDark ? 'text-[#D4AF37]' : 'text-slate-500'}`}>Email Address</span>
+                  <a href="mailto:info@gvstudiosbeauty.com" className={`transition-colors font-medium ${
+                    isDark ? 'text-white hover:text-[#E7C960]' : 'text-slate-900 hover:text-black'
+                  }`}>
+                    info@gvstudiosbeauty.com
+                  </a>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className={`w-11 h-11 rounded-xl border flex items-center justify-center shrink-0 ${
+                  isDark ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#E7C960]' : 'bg-slate-100 border-slate-300 text-slate-900'
+                }`}>
+                  <MapPin className="w-5 h-5" />
+                </div>
+                <div>
+                  <span className={`text-[11px] font-bold uppercase block ${isDark ? 'text-[#D4AF37]' : 'text-slate-500'}`}>Studio Location</span>
+                  <p className={`font-normal leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                    GV Studios Beauty & Academy, Main Road, Premier Complex, City Center.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className={`w-11 h-11 rounded-xl border flex items-center justify-center shrink-0 ${
+                  isDark ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#E7C960]' : 'bg-slate-100 border-slate-300 text-slate-900'
+                }`}>
+                  <Clock className="w-5 h-5" />
+                </div>
+                <div>
+                  <span className={`text-[11px] font-bold uppercase block ${isDark ? 'text-[#D4AF37]' : 'text-slate-500'}`}>Opening Hours</span>
+                  <p className={`font-normal ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                    Mon – Sun: 9:00 AM – 8:30 PM
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-[#D4AF37]/20">
               <button
                 onClick={handleWhatsAppDirect}
-                className="w-full py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-all bg-[#D4AF37] hover:bg-[#E7C960] text-black hover:shadow-xl"
+                className="w-full py-4 rounded-2xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2.5 shadow-lg transition-all bg-[#D4AF37] hover:bg-[#E7C960] text-black hover:shadow-xl hover:scale-[1.01]"
               >
                 <MessageSquare className="w-4 h-4 fill-black text-black" />
-                Instant WhatsApp Inquiry
+                Instant WhatsApp Inquiry & Booking
               </button>
             </div>
           </div>
-
-          {/* Right Column: Booking Form (7 cols) */}
-          <div className="lg:col-span-7">
-            <div className={`p-7 sm:p-10 rounded-3xl border shadow-2xl space-y-6 ${
-              isDark ? 'glass-panel border-[#D4AF37]/35' : 'bg-slate-50 border-slate-200'
-            }`}>
-              
-              <div>
-                <h3 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  Enroll or Book Appointment
-                </h3>
-                <p className={`text-xs sm:text-sm font-normal mt-1 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-                  Fill in your details and our academy counselor will contact you within 2 hours.
-                </p>
-              </div>
-
-              {submitted ? (
-                <div className={`p-6 rounded-2xl border text-center space-y-2 animate-fadeIn ${
-                  isDark ? 'bg-[#D4AF37]/15 border-[#D4AF37]/30 text-white' : 'bg-slate-200 border-slate-300 text-slate-900'
-                }`}>
-                  <CheckCircle2 className={`w-12 h-12 mx-auto ${isDark ? 'text-[#E7C960]' : 'text-emerald-500'}`} />
-                  <h4 className="text-lg font-bold">Inquiry Received Successfully!</h4>
-                  <p className="text-xs">
-                    Thank you! Galla Vidya and the GV Studios team will reach out to you shortly.
-                  </p>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className={`text-xs font-bold uppercase tracking-wider block mb-1.5 ${isDark ? 'text-[#E7C960]' : 'text-slate-700'}`}>
-                        Full Name *
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        placeholder="Enter your name"
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className={`w-full px-4 py-3 rounded-xl border text-sm focus:outline-none transition-colors ${
-                          isDark ? 'bg-[#0E0C09] border-[#D4AF37]/30 focus:border-[#D4AF37] text-white' : 'bg-white border-slate-300 focus:border-slate-900 text-slate-900'
-                        }`}
-                      />
-                    </div>
-
-                    <div>
-                      <label className={`text-xs font-bold uppercase tracking-wider block mb-1.5 ${isDark ? 'text-[#E7C960]' : 'text-slate-700'}`}>
-                        Phone Number *
-                      </label>
-                      <input
-                        type="tel"
-                        required
-                        placeholder="Enter mobile number"
-                        value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        className={`w-full px-4 py-3 rounded-xl border text-sm focus:outline-none transition-colors ${
-                          isDark ? 'bg-[#0E0C09] border-[#D4AF37]/30 focus:border-[#D4AF37] text-white' : 'bg-white border-slate-300 focus:border-slate-900 text-slate-900'
-                        }`}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className={`text-xs font-bold uppercase tracking-wider block mb-1.5 ${isDark ? 'text-[#E7C960]' : 'text-slate-700'}`}>
-                        Email Address
-                      </label>
-                      <input
-                        type="email"
-                        placeholder="name@example.com"
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className={`w-full px-4 py-3 rounded-xl border text-sm focus:outline-none transition-colors ${
-                          isDark ? 'bg-[#0E0C09] border-[#D4AF37]/30 focus:border-[#D4AF37] text-white' : 'bg-white border-slate-300 focus:border-slate-900 text-slate-900'
-                        }`}
-                      />
-                    </div>
-
-                    <div>
-                      <label className={`text-xs font-bold uppercase tracking-wider block mb-1.5 ${isDark ? 'text-[#E7C960]' : 'text-slate-700'}`}>
-                        Course / Service Interest *
-                      </label>
-                      <select
-                        value={formData.interest}
-                        onChange={(e) => setFormData({ ...formData, interest: e.target.value })}
-                        className={`w-full px-4 py-3 rounded-xl border text-sm focus:outline-none transition-colors ${
-                          isDark ? 'bg-[#16140E] border-[#D4AF37]/30 focus:border-[#D4AF37] text-white' : 'bg-white border-slate-300 focus:border-slate-900 text-slate-900'
-                        }`}
-                      >
-                        <option value="Basic Level Course (2 Weeks)">Basic Level Course (2 Weeks)</option>
-                        <option value="Standard Level Course (3 Months)">Standard Level Course (3 Months)</option>
-                        <option value="Advanced Level Course (6 Months)">Advanced Level Course (6 Months)</option>
-                        <option value="Customized Course Plan">Customized Course Plan</option>
-                        <option value="Hydrafacial Clinical Treatment">Hydrafacial Clinical Treatment</option>
-                        <option value="Gel Nails & Extensions">Gel Nails & Extensions</option>
-                        <option value="General Parlour Service">General Parlour Service</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className={`text-xs font-bold uppercase tracking-wider block mb-1.5 ${isDark ? 'text-[#E7C960]' : 'text-slate-700'}`}>
-                      Your Message or Custom Course Request
-                    </label>
-                    <textarea
-                      rows="4"
-                      placeholder="Tell us about your preferred timing, specific modules, or questions..."
-                      value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      className={`w-full px-4 py-3 rounded-xl border text-sm focus:outline-none transition-colors ${
-                        isDark ? 'bg-[#0E0C09] border-[#D4AF37]/30 focus:border-[#D4AF37] text-white' : 'bg-white border-slate-300 focus:border-slate-900 text-slate-900'
-                      }`}
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="w-full py-4 text-xs font-bold uppercase tracking-widest rounded-xl shadow-lg flex items-center justify-center gap-2 transition-all bg-[#D4AF37] hover:bg-[#E7C960] text-black hover:shadow-xl"
-                  >
-                    <Send className="w-4 h-4" />
-                    Submit Enrollment Request
-                  </button>
-                </form>
-              )}
-            </div>
-          </div>
-
         </div>
 
       </div>

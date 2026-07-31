@@ -21,33 +21,24 @@ import {
 } from 'lucide-react';
 
 /* Shared column heading — gold rule + eyebrow */
-function ColumnHeading({ icon: Icon, eyebrow, title, sub, isDark }) {
+function ColumnHeading({ eyebrow, title, sub, isDark }) {
   return (
-    <div className="space-y-2.5">
-      <div className="flex items-center gap-3">
-        <span className={`w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 ${
-          isDark
-            ? 'bg-[#D4AF37]/12 border-[#D4AF37]/35 text-[#D4AF37]'
-            : 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#8A6D1F]'
+    <div className="space-y-2.5 text-center max-w-2xl mx-auto">
+      <div>
+        <span className={`block text-[10px] font-extrabold uppercase tracking-[0.2em] ${
+          isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'
         }`}>
-          <Icon className="w-4.5 h-4.5" />
+          {eyebrow}
         </span>
-        <div>
-          <span className={`block text-[10px] font-extrabold uppercase tracking-[0.2em] ${
-            isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'
-          }`}>
-            {eyebrow}
-          </span>
-          <h3 className={`text-xl sm:text-2xl font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-            {title}
-          </h3>
-        </div>
+        <h3 className={`text-xl sm:text-2xl font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+          {title}
+        </h3>
       </div>
       <p className={`text-xs sm:text-sm font-normal ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
         {sub}
       </p>
-      <div className={`h-px w-full bg-gradient-to-r to-transparent ${
-        isDark ? 'from-[#D4AF37]/50' : 'from-[#D4AF37]/70'
+      <div className={`h-px w-full bg-gradient-to-r ${
+        isDark ? 'from-transparent via-[#D4AF37]/50 to-transparent' : 'from-transparent via-[#D4AF37]/70 to-transparent'
       }`} />
     </div>
   );
@@ -55,7 +46,7 @@ function ColumnHeading({ icon: Icon, eyebrow, title, sub, isDark }) {
 
 export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
   const isDark = theme !== 'light';
-  const [activeServiceFilter, setActiveServiceFilter] = useState('all');
+  const [activeServiceFilter, setActiveServiceFilter] = useState('facial-services');
   const [previewMedia, setPreviewMedia] = useState(null);
 
   const serviceFilterButtons = [
@@ -66,6 +57,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
     { id: 'hair-treatments', label: '4. Hair Treatments' },
     { id: 'nail-services', label: '5. Nail Services' },
     { id: 'hair-removal', label: '6. Hair Removal' },
+    { id: 'skin-treatments', label: '7. Skin Treatments' },
   ];
 
   const parlourServicesList = [
@@ -77,7 +69,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
       num: '1.1',
       title: 'Facial Cleanup',
       desc: 'Deep pore cleansing, herbal exfoliation & radiant natural skin glow.',
-      src: '/assets/facial_cleanup.png',
+      src: '/assets/facial_cleanup.webp',
       badge: 'Facial Services'
     },
 
@@ -89,7 +81,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
       num: '2.1',
       title: 'Hair Cut & Styling',
       desc: 'Custom haircuts tailored to your face shape, layer cuts & modern styles.',
-      src: '/assets/hair_styling.png',
+      src: '/assets/hair_styling.webp',
       badge: 'Hair Cut'
     },
     {
@@ -99,7 +91,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
       num: '2.2',
       title: 'Hair Wash & Conditioning',
       desc: 'Refreshing cleanse with premium shampoo, deep conditioning & scalp rinse.',
-      src: '/assets/hair_wash.png',
+      src: '/assets/hair_wash.webp',
       badge: 'Hair Wash'
     },
     {
@@ -109,7 +101,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
       num: '2.3',
       title: 'Hair Colouring & Balayage',
       desc: 'Highlights, balayage, global tinting & grey coverage with glossy shine.',
-      src: '/assets/hair_colouring.png',
+      src: '/assets/hair_colouring.webp',
       badge: 'Hair Colour'
     },
 
@@ -121,7 +113,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
       num: '3.1',
       title: 'Hair Spa Therapy',
       desc: 'Deep nourishment, scalp revitalization, steam treatment & moisture repair.',
-      src: '/assets/hair_care_spa.png',
+      src: '/assets/hair_care_spa.webp',
       badge: 'Hair Spa'
     },
     {
@@ -131,7 +123,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
       num: '3.2',
       title: 'Hair Hot Oil Massage',
       desc: 'Stress-relieving hot oil scalp massage for root wellness & relaxation.',
-      src: '/assets/hair_oil_massage.png',
+      src: '/assets/hair_oil_massage.webp',
       badge: 'Oil Massage'
     },
 
@@ -143,7 +135,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
       num: '4.1',
       title: 'Keratin Hair Treatment',
       desc: 'Keratin protein repair, smoothening & mirror-like glossy shine.',
-      src: '/assets/hair_treatment.png',
+      src: '/assets/hair_treatment.webp',
       badge: 'Keratin'
     },
     {
@@ -153,7 +145,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
       num: '4.2',
       title: 'Anti-Dandruff Scalp Treatment',
       desc: 'Scalp detox & anti-dandruff therapy for healthy, flake-free hair roots.',
-      src: '/assets/hair_wash.png',
+      src: '/assets/hair_wash.webp',
       badge: 'Dandruff Care'
     },
     {
@@ -163,7 +155,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
       num: '4.3',
       title: 'Frizzy Hair Moisture Treatment',
       desc: 'Moisture lock & intense frizz control for smooth, manageable hair.',
-      src: '/assets/hair_treatment.png',
+      src: '/assets/hair_treatment.webp',
       badge: 'Frizz Control'
     },
     {
@@ -173,7 +165,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
       num: '4.4',
       title: 'Hair Fall Control Therapy',
       desc: 'Follicle strengthening & hair regrowth care for thicker, fuller hair.',
-      src: '/assets/hair_care_spa.png',
+      src: '/assets/hair_care_spa.webp',
       badge: 'Hair Fall Care'
     },
 
@@ -185,7 +177,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
       num: '5.1',
       title: 'Manicure Hand Spa',
       desc: 'Exfoliation, cuticle care, hand massage, nail shaping & polish.',
-      src: '/assets/manicure.png',
+      src: '/assets/manicure.webp',
       badge: 'Manicure'
     },
     {
@@ -195,7 +187,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
       num: '5.2',
       title: 'Pedicure Foot Spa',
       desc: 'Relaxing foot spa, heel repair, exfoliating scrub & precision nail care.',
-      src: '/assets/pedicure.png',
+      src: '/assets/pedicure.webp',
       badge: 'Pedicure'
     },
 
@@ -207,7 +199,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
       num: '6.1',
       title: 'Eyebrow & Facial Threading',
       desc: 'Precision eyebrow shaping, upper lip & delicate facial hair threading.',
-      src: '/assets/threading.png',
+      src: '/assets/threading.webp',
       badge: 'Threading'
     },
     {
@@ -217,8 +209,50 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
       num: '6.2',
       title: 'Organic Body Waxing',
       desc: 'Smooth, touchably soft skin with gentle, soothing organic wax.',
-      src: '/assets/waxing.png',
+      src: '/assets/waxing.webp',
       badge: 'Waxing'
+    },
+
+    // 7. Skin Treatments
+    {
+      id: 'acne-treatment',
+      categoryId: 'skin-treatments',
+      categoryName: 'Skin Treatments',
+      num: '7.1',
+      title: 'Acne Reduction Therapy',
+      desc: 'Targeted deep cleansers, blue-light soothing masks to eliminate active acne & clear clogged pores.',
+      src: '/assets/acne_treatment.webp',
+      badge: 'Acne Care'
+    },
+    {
+      id: 'anti-ageing',
+      categoryId: 'skin-treatments',
+      categoryName: 'Skin Treatments',
+      num: '7.2',
+      title: 'Anti-Ageing Skin Therapy',
+      desc: 'Collagen-boosting procedures & skin tightening serums for youthful firmness & elasticity.',
+      src: '/assets/facial_cleanup.webp',
+      badge: 'Anti-Ageing'
+    },
+    {
+      id: 'pigmentation',
+      categoryId: 'skin-treatments',
+      categoryName: 'Skin Treatments',
+      num: '7.3',
+      title: 'Pigmentation Correction',
+      desc: 'Brightening clinical peels & targeted spot reduction for luminous, clear skin tone.',
+      src: '/assets/hydrafacial.webp',
+      badge: 'Pigmentation'
+    },
+    {
+      id: 'skin-tone-balancing',
+      categoryId: 'skin-treatments',
+      categoryName: 'Skin Treatments',
+      num: '7.4',
+      title: 'Uneven Skin Tone Balancing',
+      desc: 'Hydrating micro-dermabrasion & tone harmonization for seamless skin radiance.',
+      src: '/assets/founder.webp',
+      badge: 'Skin Tone Care'
     }
   ];
 
@@ -382,19 +416,19 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
       title: 'Expert in Hydrafacial',
       role: 'Clinical Skin Hydration',
       desc: 'Multi-step vortex suction technology that exfoliates, extracts impurities, and infuses intense hydration serums.',
-      image: '/assets/hydrafacial.png'
+      image: '/assets/hydrafacial.webp'
     },
     {
       title: 'Master Cosmetologist',
       role: 'Full Spectrum Beauty',
       desc: 'Certified expert in modern hair aesthetics, skin therapy, and bridal makeover consultations.',
-      image: '/assets/founder.png'
+      image: '/assets/founder.webp'
     },
     {
       title: 'Pro Nail Technician',
       role: 'Gel Art & Extensions',
       desc: 'Specialist in artificial nail fixing, gel overlays, 3D nail art designs, and nail bed care.',
-      image: '/assets/nail_art.png'
+      image: '/assets/nail_art.webp'
     }
   ];
 
@@ -411,7 +445,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
               ? 'bg-[#D4AF37]/10 border-[#D4AF37]/30 text-[#E7C960]'
               : 'bg-white/70 border-[#D4AF37]/40 text-[#8A6D1F]'
           }`}>
-            <GraduationCap className="w-4 h-4" /> Professional Beauty Studio & Academy
+            Professional Beauty Studio & Academy
           </div>
 
           <h2 className={`fluid-section-title font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
@@ -577,13 +611,6 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
               </p>
             </div>
           </div>
-
-          <button
-            onClick={onOpenCustomizer}
-            className="px-7 py-3.5 text-[11px] font-bold uppercase tracking-[0.12em] rounded-full transition-all shadow-lg shrink-0 flex items-center gap-2 bg-[#D4AF37] text-black hover:bg-[#E7C960]"
-          >
-            Customize Your Course
-          </button>
         </div>
 
         {/* ============ PARLOUR SERVICES (INDIVIDUAL IMAGE CARDS) ============ */}
@@ -597,7 +624,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
           />
 
           {/* Service Name Filter Buttons */}
-          <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto pb-2 pt-1 no-scrollbar">
+          <div className="flex items-center justify-center gap-2 sm:gap-3 overflow-x-auto pb-2 pt-1 no-scrollbar flex-wrap">
             {serviceFilterButtons.map((btn) => {
               const active = activeServiceFilter === btn.id;
               return (
@@ -696,40 +723,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
           </div>
         </div>
 
-        {/* ---------- Skin Treatments ---------- */}
-        <div className="mt-20">
-          <ColumnHeading
-            icon={ShieldCheck}
-            eyebrow="Clinical"
-            title="Skin Treatments"
-            sub="Advanced dermatological-grade procedures performed in-studio."
-            isDark={isDark}
-          />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-            {skinTreatments.map((treatment, idx) => (
-              <div
-                key={idx}
-                className={`p-7 rounded-3xl border transition-all duration-300 shadow-xl ${
-                  isDark ? 'glass-card border-[#D4AF37]/30 hover:border-[#D4AF37]/60' : 'bg-white/85 border-slate-200 hover:border-[#D4AF37]/60 backdrop-blur-md'
-                }`}
-              >
-                <div className="space-y-2">
-                  <span className={`text-[10px] font-bold uppercase tracking-[0.15em] ${
-                    isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'
-                  }`}>
-                    Clinical Skin Care
-                  </span>
-                  <h4 className={`text-lg sm:text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                    {treatment.title}
-                  </h4>
-                  <p className={`text-xs sm:text-sm leading-relaxed font-normal ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-                    {treatment.desc}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+
 
         {/* ---------- Specializations ---------- */}
         <div className="mt-20">

@@ -73,7 +73,7 @@ export default function Header({ theme, onToggleTheme }) {
             isDark ? 'border-[#D4AF37]/60 group-hover:border-[#E7C960]' : 'border-slate-300 group-hover:border-slate-900'
           }`}>
             <img 
-              src="/assets/logo.png" 
+              src="/assets/logo.webp" 
               alt="GV Studios Logo" 
               className="w-full h-full object-contain"
             />

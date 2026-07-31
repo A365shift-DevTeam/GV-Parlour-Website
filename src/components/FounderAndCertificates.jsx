@@ -44,7 +44,7 @@ export default function FounderAndCertificates({ theme }) {
             }`}>
               <div className="relative rounded-[22px] overflow-hidden bg-black aspect-[4/5]">
                 <img
-                  src="/assets/founder.png"
+                  src="/assets/founder.webp"
                   alt="Galla Vidya - Founder & Master Cosmetologist"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
@@ -75,7 +75,7 @@ export default function FounderAndCertificates({ theme }) {
               <div className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-bold uppercase tracking-wider ${
                 isDark ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#E7C960]' : 'bg-slate-200 border-slate-300 text-slate-800'
               }`}>
-                <Award className="w-4 h-4" /> Founder & Master Credential
+                Founder & Master Credential
               </div>
 
               <h2 className={`fluid-section-title font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
@@ -122,7 +122,7 @@ export default function FounderAndCertificates({ theme }) {
                   }`}
                 >
                   <img
-                    src="/assets/certificate.png"
+                    src="/assets/certificate.webp"
                     alt="Certificate of Recognition - Galla Vidya"
                     className="w-full h-full object-cover"
                   />
@@ -201,7 +201,7 @@ export default function FounderAndCertificates({ theme }) {
 
               <div className="rounded-2xl overflow-hidden border border-[#D4AF37]/30 shadow-2xl bg-black flex-1 min-h-0 flex items-center justify-center p-2">
                 <img
-                  src="/assets/certificate.png"
+                  src="/assets/certificate.webp"
                   alt="Full Certificate of Recognition - Galla Vidya"
                   className="max-h-[72dvh] w-auto max-w-full object-contain rounded-xl"
                 />
