@@ -239,18 +239,16 @@ export default function ScrollHeroCanvas({ theme }) {
     >
       <div
         ref={stickyRef}
-        className={`sticky top-0 w-full h-[100svh] sm:h-[100dvh] overflow-hidden flex flex-col transition-colors duration-300 ${
-          isDark ? 'bg-[#0A0907]' : 'bg-[#0A0907]'
-        }`}
+        className="sticky top-0 w-full h-[100svh] sm:h-[100dvh] overflow-hidden bg-[#0A0907]"
       >
-        {/* object-contain keeps the full 16:9 frame visible (letterboxed on mobile) */}
-        <div className="relative w-full h-full flex-1 flex items-center justify-center bg-[#0A0907]">
+        {/* Full-viewport stage — cover fills every edge (no letterbox) */}
+        <div className="relative w-full h-full bg-[#0A0907]">
           <img
             src={HERO_POSTER}
             alt="GV Studio"
             width="1920"
             height="1080"
-            className={`absolute inset-0 w-full h-full object-contain z-0 transition-opacity duration-700 ${
+            className={`absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-700 ${
               ready && !prefersReducedMotion ? 'opacity-0 pointer-events-none' : 'opacity-100'
             }`}
           />
@@ -258,7 +256,7 @@ export default function ScrollHeroCanvas({ theme }) {
           {!prefersReducedMotion && (
             <video
               ref={videoRef}
-              className={`absolute inset-0 w-full h-full object-contain z-10 pointer-events-none block transition-opacity duration-700 ${
+              className={`absolute inset-0 w-full h-full object-cover z-10 pointer-events-none block transition-opacity duration-700 ${
                 ready ? 'opacity-100' : 'opacity-0'
               }`}
               muted
