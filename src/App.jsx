@@ -7,9 +7,11 @@ import FounderAndCertificates from './components/FounderAndCertificates';
 import ContactUs from './components/ContactUs';
 import Footer from './components/Footer';
 import useSmoothScroll from './hooks/useSmoothScroll';
+import useIsMobile from './hooks/useIsMobile';
 
 export default function App() {
   useSmoothScroll();
+  const isMobile = useIsMobile();
 
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -30,21 +32,20 @@ export default function App() {
     localStorage.setItem('gv_theme', theme);
   }, [theme]);
 
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
-  };
+  const toggleTheme = () => setTheme((p) => (p === 'dark' ? 'light' : 'dark'));
 
   return (
     <div
-      className={`min-h-screen font-sans selection:bg-[#D4AF37] selection:text-black transition-colors duration-300 bg-transparent ${
+      className={`min-h-screen overflow-x-clip font-sans antialiased selection:bg-[#D4AF37] selection:text-black ${
         theme === 'light' ? 'text-stone-900' : 'text-stone-100'
       }`}
     >
       <Header theme={theme} onToggleTheme={toggleTheme} />
 
-      <main>
+      <main className="overflow-x-clip">
         <ScrollHeroCanvas theme={theme} />
-        <FounderAndCertificates theme={theme} />
+        {/* Desktop founder — mobile founder lives inside sticky hero (#story) */}
+        {!isMobile && <FounderAndCertificates theme={theme} />}
         <ServicesAndCourses theme={theme} />
         <MediaGallery theme={theme} />
         <ContactUs theme={theme} />

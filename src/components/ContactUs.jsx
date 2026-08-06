@@ -39,7 +39,7 @@ export default function ContactUs({ theme }) {
         isDark ? 'text-stone-100' : 'text-stone-900'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 relative z-10 space-y-8 lg:space-y-10">
+      <div className="section-wrap relative z-10 space-y-8 lg:space-y-10">
         {/* Intro — full width so cards below share one baseline */}
         <div className="max-w-xl space-y-4">
           <p className="section-eyebrow">

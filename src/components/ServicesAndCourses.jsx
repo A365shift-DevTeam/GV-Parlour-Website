@@ -291,7 +291,7 @@ export default function ServicesAndCourses({ theme }) {
         isDark ? 'text-stone-100' : 'text-stone-900'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 relative z-10 space-y-20 sm:space-y-24">
+      <div className="section-wrap relative z-10 space-y-16 sm:space-y-20 lg:space-y-24">
         {/* Page intro */}
         <SectionIntro
           eyebrow="Studio & Academy"

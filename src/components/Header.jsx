@@ -2,251 +2,207 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X, Sun, Moon, Phone, MessageCircle, Calendar } from 'lucide-react';
 import openChatbot from '../utils/openChatbot';
 
+const NAV_LINKS = [
+  { name: 'Home', href: '#hero' },
+  { name: 'Founder', href: '#founder' },
+  { name: 'Services', href: '#services-courses' },
+  { name: 'Lookbook', href: '#gallery' },
+  { name: 'Contact', href: '#contact' },
+];
+
+function scrollToTarget(targetId) {
+  const header = document.querySelector('header');
+  const offset = header ? header.getBoundingClientRect().height : 80;
+
+  // Resolve story aliases if needed
+  let el = document.querySelector(targetId);
+  if (!el && targetId === '#founder') {
+    el = document.querySelector('#founder') || document.querySelector('#story');
+  }
+  if (!el) return;
+
+  if (window.lenis) {
+    window.lenis.scrollTo(el, { offset: -offset, duration: 1.35 });
+    return;
+  }
+  const top = el.getBoundingClientRect().top + window.pageYOffset - offset;
+  window.scrollTo({ top, behavior: 'smooth' });
+}
+
 export default function Header({ theme, onToggleTheme }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const isDark = theme === 'dark';
 
   useEffect(() => {
-    const handleScroll = () => {
-      const heroEl = document.querySelector('#hero');
-      if (heroEl) {
-        const heroBottom = heroEl.getBoundingClientRect().bottom;
-        setScrolled(heroBottom <= 100);
-      } else {
-        setScrolled(window.scrollY > 80);
-      }
+    const onScroll = () => {
+      const hero = document.querySelector('#hero');
+      if (hero) setScrolled(hero.getBoundingClientRect().bottom <= 100);
+      else setScrolled(window.scrollY > 48);
     };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Lock body scroll when mobile menu open
   useEffect(() => {
     if (!mobileOpen) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+    if (window.lenis) window.lenis.stop();
     return () => {
       document.body.style.overflow = prev;
+      if (window.lenis) window.lenis.start();
     };
   }, [mobileOpen]);
 
-  const navLinks = [
-    { name: 'Home', href: '#hero' },
-    { name: 'Founder', href: '#founder' },
-    { name: 'Services', href: '#services-courses' },
-    { name: 'Lookbook', href: '#gallery' },
-    { name: 'Contact', href: '#contact' },
-  ];
-
-  const handleNavClick = (e, targetId) => {
+  const handleNav = (e, href) => {
     e.preventDefault();
     setMobileOpen(false);
-
-    const headerEl = document.querySelector('header');
-    const headerHeight = headerEl ? headerEl.getBoundingClientRect().height : 80;
-
-    const targetEl = document.querySelector(targetId);
-    if (!targetEl) return;
-
-    if (window.lenis) {
-      window.lenis.scrollTo(targetEl, { offset: -headerHeight, duration: 1.4 });
-      return;
-    }
-
-    const targetPosition = targetEl.getBoundingClientRect().top + window.pageYOffset - headerHeight;
-    window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+    // Defer scroll until drawer unlocks Lenis
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => scrollToTarget(href));
+    });
   };
+
+  const iconBtn = `tap-target inline-flex items-center justify-center rounded-full border transition-all active:scale-95 ${
+    isDark
+      ? 'border-white/20 bg-black/25 text-white backdrop-blur-sm hover:bg-black/40'
+      : 'border-stone-300/60 bg-white/50 text-stone-800 backdrop-blur-sm hover:bg-white/80'
+  }`;
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      className={`fixed top-0 left-0 right-0 z-50 h-20 border-b transition-colors duration-300 ${
         scrolled
           ? isDark
-            ? 'bg-[#0A0907]/90 backdrop-blur-xl border-b border-[#D4AF37]/20 py-2.5 shadow-[0_8px_32px_rgba(0,0,0,0.35)]'
-            : 'bg-[#FAF7F2]/92 backdrop-blur-xl border-b border-stone-200/80 py-2.5 shadow-sm'
-          : 'bg-transparent border-transparent py-4 sm:py-5'
+            ? 'border-[#D4AF37]/20 bg-[#0A0907]/80 backdrop-blur-xl'
+            : 'border-stone-200/70 bg-[#FAF7F2]/85 backdrop-blur-xl'
+          : 'border-transparent bg-transparent'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 flex items-center justify-between gap-4">
-        {/* Brand */}
+      <div className="section-wrap flex h-full items-center justify-between gap-3">
+        {/* Logo */}
         <a
           href="#hero"
-          onClick={(e) => handleNavClick(e, '#hero')}
-          className="flex items-center gap-2.5 sm:gap-3 group shrink-0"
+          onClick={(e) => handleNav(e, '#hero')}
+          className="flex min-h-11 shrink-0 items-center gap-2 active:opacity-80"
         >
-          <div
-            className={`relative w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden p-[1.5px] transition-all ${
-              isDark
-                ? 'bg-gradient-to-br from-[#E7C960] to-[#8A6D1F] shadow-[0_0_16px_rgba(212,175,55,0.25)]'
-                : 'bg-gradient-to-br from-[#D4AF37] to-[#8A6D1F] shadow-sm'
-            }`}
-          >
+          <div className="h-9 w-9 overflow-hidden rounded-full bg-gradient-to-br from-[#E7C960] to-[#8A6D1F] p-[1.5px] sm:h-10 sm:w-10">
             <img
               src="/assets/logo_dark.webp"
               alt="GV Studio"
-              className="w-full h-full object-cover rounded-full scale-[1.04] bg-black"
+              className="h-full w-full scale-[1.04] rounded-full object-cover bg-black"
             />
           </div>
           <div className="leading-none">
-            <span
-              className={`font-bold text-base sm:text-xl tracking-tight block ${
-                isDark ? 'text-white' : 'text-stone-900'
-              }`}
-            >
+            <span className={`block text-sm font-bold sm:text-base ${isDark ? 'text-white' : 'text-stone-900'}`}>
               GV Studio
             </span>
-            <span
-              className={`text-[9px] sm:text-[10px] tracking-[0.2em] uppercase font-semibold mt-1 block ${
-                isDark ? 'text-[#D4AF37]/90' : 'text-stone-500'
-              }`}
-            >
+            <span className={`mt-0.5 block text-[9px] font-semibold uppercase tracking-[0.18em] ${isDark ? 'text-[#D4AF37]' : 'text-stone-500'}`}>
               Beauty & Academy
             </span>
           </div>
         </a>
 
-        {/* Desktop nav */}
-        <div className="hidden lg:flex items-center gap-1">
-          <nav
-            className={`flex items-center gap-0.5 px-1.5 py-1 rounded-full border ${
-              scrolled
-                ? isDark
-                  ? 'bg-white/[0.03] border-white/10'
-                  : 'bg-white/60 border-stone-200'
-                : isDark
-                  ? 'bg-black/25 border-white/10 backdrop-blur-md'
-                  : 'bg-white/40 border-white/50 backdrop-blur-md'
-            }`}
-          >
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={(e) => handleNavClick(e, link.href)}
-                className={`px-3.5 py-1.5 rounded-full text-[12px] font-semibold tracking-wide transition-all ${
-                  isDark
-                    ? 'text-stone-300 hover:text-white hover:bg-white/10'
-                    : 'text-stone-700 hover:text-stone-950 hover:bg-white/80'
-                }`}
-              >
-                {link.name}
-              </a>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-2 ml-3">
-            <button
-              onClick={onToggleTheme}
-              className={`p-2.5 rounded-full border transition-all ${
-                isDark
-                  ? 'bg-[#D4AF37]/10 border-[#D4AF37]/30 text-[#E7C960] hover:bg-[#D4AF37]/20'
-                  : 'bg-white/80 border-stone-200 text-stone-700 hover:bg-white shadow-sm'
-              }`}
-              title={`Switch to ${isDark ? 'Light' : 'Dark'} Mode`}
-              aria-label="Toggle Theme"
-            >
-              {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-            </button>
-
+        {/* md+ nav links */}
+        <nav
+          className={`hidden items-center gap-0.5 rounded-full border px-1.5 py-1 md:flex ${
+            isDark ? 'border-white/10 bg-black/20 backdrop-blur-md' : 'border-stone-200 bg-white/50 backdrop-blur-md'
+          }`}
+        >
+          {NAV_LINKS.map((link) => (
             <a
-              href="#contact"
-              onClick={(e) => {
-                setMobileOpen(false);
-                openChatbot(e);
-              }}
-              className="btn-gold !py-2.5 !px-4"
+              key={link.name}
+              href={link.href}
+              onClick={(e) => handleNav(e, link.href)}
+              className={`min-h-11 rounded-full px-3.5 text-[12px] font-semibold transition-colors active:opacity-70 ${
+                isDark ? 'text-stone-300 hover:bg-white/10 hover:text-white' : 'text-stone-700 hover:bg-white hover:text-stone-950'
+              }`}
             >
-              <Calendar className="w-3.5 h-3.5" />
-              Book
+              <span className="inline-flex min-h-11 items-center">{link.name}</span>
             </a>
-          </div>
+          ))}
+        </nav>
+
+        {/* Desktop actions */}
+        <div className="hidden items-center gap-2 md:flex">
+          <button type="button" onClick={onToggleTheme} className={iconBtn} aria-label="Toggle theme">
+            {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </button>
+          <a
+            href="#contact"
+            onClick={(e) => {
+              e.preventDefault();
+              openChatbot(e);
+            }}
+            className="btn-gold"
+          >
+            <Calendar className="h-3.5 w-3.5" />
+            <span className="sm:hidden">Book</span>
+            <span className="hidden sm:inline">Book Now</span>
+          </a>
         </div>
 
-        {/* Mobile controls */}
-        <div className="flex items-center gap-2 lg:hidden">
-          <a
-            href="tel:+919994357515"
-            className={`p-2.5 rounded-full border transition-all ${
-              isDark
-                ? 'bg-[#D4AF37]/12 border-[#D4AF37]/35 text-[#E7C960]'
-                : 'bg-white/80 border-stone-200 text-stone-800 shadow-sm'
-            }`}
-            aria-label="Call Studio"
-          >
-            <Phone className="w-4 h-4" />
+        {/* Mobile actions */}
+        <div className="flex items-center gap-1.5 md:hidden">
+          <a href="tel:+919994357515" className={iconBtn} aria-label="Call">
+            <Phone className="h-4 w-4" />
           </a>
-
-          <button
-            onClick={onToggleTheme}
-            className={`p-2.5 rounded-full border transition-all ${
-              isDark
-                ? 'bg-black/40 border-white/15 text-amber-200'
-                : 'bg-white/80 border-stone-200 text-stone-800'
-            }`}
-            aria-label="Toggle Theme"
-          >
-            {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          <button type="button" onClick={onToggleTheme} className={iconBtn} aria-label="Toggle theme">
+            {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
-
           <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className={`p-2.5 rounded-full border transition-all ${
-              isDark ? 'bg-white/10 border-white/15 text-white' : 'bg-stone-100 border-stone-200 text-stone-900'
-            }`}
-            aria-label="Toggle navigation menu"
+            type="button"
+            onClick={() => setMobileOpen((o) => !o)}
+            className={iconBtn}
+            aria-label="Menu"
             aria-expanded={mobileOpen}
           >
-            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile drawer */}
+      {/* Full-screen mobile drawer */}
       {mobileOpen && (
         <div
-          className={`lg:hidden fixed inset-x-0 top-full border-b shadow-2xl animate-fadeIn ${
-            isDark
-              ? 'bg-[#0A0907]/97 backdrop-blur-2xl border-[#D4AF37]/25 text-white'
-              : 'bg-[#FAF7F2]/98 backdrop-blur-2xl border-stone-200 text-stone-900'
-          }`}
+          className={`fixed inset-0 z-[70] pt-24 md:hidden ${
+            isDark ? 'bg-[#0A0907]/96 text-white' : 'bg-[#FAF7F2]/98 text-stone-900'
+          } backdrop-blur-2xl`}
         >
-          <div data-lenis-prevent className="px-5 py-6 space-y-5 max-h-[82dvh] overflow-y-auto">
+          <div data-lenis-prevent className="section-wrap flex h-full flex-col gap-5 overflow-y-auto pb-10">
             <div className="grid grid-cols-2 gap-2.5">
               <a
                 href="tel:+919994357515"
-                className={`py-3 px-3 rounded-2xl border text-xs font-bold flex items-center justify-center gap-2 ${
+                className={`flex min-h-12 items-center justify-center gap-2 rounded-2xl border text-xs font-bold active:scale-95 ${
                   isDark
-                    ? 'bg-[#D4AF37]/12 border-[#D4AF37]/35 text-[#E7C960]'
-                    : 'bg-white border-stone-200 text-stone-900'
+                    ? 'border-[#D4AF37]/35 bg-[#D4AF37]/12 text-[#E7C960]'
+                    : 'border-stone-200 bg-white text-stone-900'
                 }`}
               >
-                <Phone className="w-3.5 h-3.5" />
-                Call Now
+                <Phone className="h-4 w-4" />
+                Call
               </a>
               <a
                 href="https://wa.me/919994357515?text=Hello%20GV%20Studio!"
                 target="_blank"
                 rel="noreferrer"
-                className="py-3 px-3 rounded-2xl border border-emerald-500/35 bg-emerald-500/12 text-emerald-400 text-xs font-bold flex items-center justify-center gap-2"
+                className="flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-emerald-500/35 bg-emerald-500/12 text-xs font-bold text-emerald-400 active:scale-95"
               >
-                <MessageCircle className="w-3.5 h-3.5" />
+                <MessageCircle className="h-4 w-4" />
                 WhatsApp
               </a>
             </div>
 
-            <nav className="space-y-1">
-              {navLinks.map((link) => (
+            <nav className="flex flex-col gap-1">
+              {NAV_LINKS.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
-                  onClick={(e) => handleNavClick(e, link.href)}
-                  className={`block py-3.5 px-4 rounded-2xl text-base font-semibold tracking-wide transition-all ${
-                    isDark
-                      ? 'hover:bg-white/8 text-stone-200 hover:text-white'
-                      : 'hover:bg-white text-stone-800 hover:text-stone-950'
+                  onClick={(e) => handleNav(e, link.href)}
+                  className={`flex min-h-12 items-center rounded-2xl px-4 text-base font-semibold active:opacity-70 ${
+                    isDark ? 'hover:bg-white/8' : 'hover:bg-white'
                   }`}
                 >
                   {link.name}
@@ -260,20 +216,14 @@ export default function Header({ theme, onToggleTheme }) {
                 setMobileOpen(false);
                 openChatbot(e);
               }}
-              className="btn-gold w-full"
+              className="btn-gold w-full min-h-12"
             >
-              <Calendar className="w-4 h-4" />
+              <Calendar className="h-4 w-4" />
               Book Appointment
             </a>
 
-            <p
-              className={`pt-2 text-[11px] leading-relaxed ${
-                isDark ? 'text-stone-500' : 'text-stone-500'
-              }`}
-            >
-              <span className={`font-semibold block mb-0.5 ${isDark ? 'text-stone-400' : 'text-stone-600'}`}>
-                Studio · Coimbatore
-              </span>
+            <p className="text-[11px] leading-relaxed text-stone-500">
+              <span className="mb-0.5 block font-semibold text-stone-400">Studio · Coimbatore</span>
               Flat No. 23, 4th floor, The Green Residence, Meena Estate, Sowripalayam 641028
             </p>
           </div>
