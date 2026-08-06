@@ -260,9 +260,59 @@ html.light .glass-card {
   animation: gvSoftPulse 2.4s ease-in-out infinite;
 }
 
+/* Hero video loader — gold ring spinner */
+@keyframes gvHeroSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes gvHeroPulse {
+  0%, 100% { opacity: 0.45; transform: scale(0.96); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+.hero-loader-ring {
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 9999px;
+  border: 2px solid rgba(212, 175, 55, 0.18);
+  border-top-color: #E7C960;
+  border-right-color: rgba(212, 175, 55, 0.55);
+  animation: gvHeroSpin 0.85s linear infinite;
+}
+
+.hero-loader-dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 9999px;
+  background: #D4AF37;
+  animation: gvHeroPulse 1.2s ease-in-out infinite;
+}
+
+.hero-loader-track {
+  height: 2px;
+  width: 7.5rem;
+  border-radius: 9999px;
+  background: rgba(212, 175, 55, 0.15);
+  overflow: hidden;
+}
+
+.hero-loader-fill {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #8A6D1F, #D4AF37, #E7C960);
+  transition: width 200ms ease-out;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-fadeIn,
   .animate-soft-pulse {
+    animation: none;
+  }
+  .hero-loader-ring {
+    animation: none;
+    border-top-color: #D4AF37;
+  }
+  .hero-loader-dot {
     animation: none;
   }
 }
