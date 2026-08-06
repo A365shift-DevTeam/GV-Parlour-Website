@@ -27,17 +27,146 @@ export default function FounderAndCertificates({ theme, compact = false }) {
     { title: 'Academy Instructor', desc: 'Live practicals that build real careers.' },
   ];
 
+  /* Compact sticky layout: dense, flush under video — NO nested scroll */
+  if (compact) {
+    return (
+      <section
+        id="founder"
+        className={`relative h-full min-h-0 overflow-hidden px-4 py-3 ${
+          isDark ? 'bg-[#0A0907] text-stone-100' : 'bg-[#FAF7F2] text-stone-900'
+        }`}
+      >
+        <div className="space-y-3">
+          <div className="space-y-2">
+            <p className="section-eyebrow">
+              <span className={`inline-block h-px w-6 ${isDark ? 'bg-[#D4AF37]' : 'bg-[#8A6D1F]'}`} />
+              Founder & Credentials
+            </p>
+            <h2 className={`text-[28px] font-extrabold leading-tight tracking-tight sm:text-[34px] ${isDark ? 'text-white' : 'text-stone-900'}`}>
+              Meet <span className="gold-gradient-text">Galla Vidya</span>
+            </h2>
+            <p className={`text-[13px] font-light leading-relaxed ${isDark ? 'text-stone-400' : 'text-stone-600'}`}>
+              Galla Vidya founded{' '}
+              <strong className={isDark ? 'text-[#E7C960]' : 'text-stone-900'}>GV Studio</strong> to bring
+              high-quality treatments and practical cosmetology training under one roof.
+            </p>
+          </div>
+
+          <div
+            className={`flex items-center gap-3 rounded-2xl border p-2.5 ${
+              isDark ? 'border-white/10 bg-white/[0.04]' : 'border-stone-200 bg-white'
+            }`}
+          >
+            <img
+              src="/assets/founder.webp"
+              alt=""
+              className="h-12 w-12 shrink-0 rounded-xl object-cover object-top"
+            />
+            <div className="min-w-0">
+              <p className="label mb-0.5">Founder</p>
+              <p className={`truncate text-sm font-bold ${isDark ? 'text-white' : 'text-stone-900'}`}>
+                Galla Vidya
+              </p>
+              <p className="truncate text-[11px] text-stone-500">Lakmé Academy Partner</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-2">
+            {credentials.map((spec) => (
+              <div
+                key={spec.title}
+                className={`flex min-h-11 items-start gap-2 rounded-xl border px-3 py-2.5 ${
+                  isDark ? 'border-white/10 bg-white/[0.03]' : 'border-stone-200 bg-white'
+                }`}
+              >
+                <CheckCircle2
+                  className={`mt-0.5 h-4 w-4 shrink-0 ${isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'}`}
+                />
+                <div className="min-w-0">
+                  <h4
+                    className={`text-[11px] font-bold uppercase tracking-wider ${
+                      isDark ? 'text-white' : 'text-stone-900'
+                    }`}
+                  >
+                    {spec.title}
+                  </h4>
+                  <p className="text-[11px] leading-snug text-stone-500">{spec.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setCertModalOpen(true)}
+            className={`flex w-full min-h-12 items-center gap-3 rounded-2xl border p-2.5 text-left active:scale-[0.99] ${
+              isDark ? 'border-[#D4AF37]/30 bg-white/[0.03]' : 'border-stone-200 bg-white'
+            }`}
+          >
+            <img
+              src="/assets/certificate.webp"
+              alt=""
+              className="h-12 w-16 shrink-0 rounded-lg object-cover"
+            />
+            <div className="min-w-0 flex-1">
+              <p className={`text-[11px] font-bold ${isDark ? 'text-[#E7C960]' : 'text-[#8A6D1F]'}`}>
+                Lakmé Academy Recognition
+              </p>
+              <p className="text-[11px] text-stone-500">Tap to view certificate</p>
+            </div>
+            <Maximize2 className={`h-4 w-4 shrink-0 ${isDark ? 'text-[#E7C960]' : 'text-stone-400'}`} />
+          </button>
+        </div>
+
+        {certModalOpen &&
+          createPortal(
+            <div
+              onClick={() => setCertModalOpen(false)}
+              className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/92 p-4 backdrop-blur-xl animate-fadeIn"
+              role="dialog"
+              aria-modal="true"
+            >
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className={`relative flex max-h-[90dvh] w-full max-w-lg flex-col gap-3 overflow-hidden rounded-2xl border p-4 ${
+                  isDark ? 'glass-panel border-[#D4AF37]/35 text-white' : 'border-stone-200 bg-white text-stone-900'
+                }`}
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <h3 className="text-base font-bold">Certificate</h3>
+                  <button
+                    type="button"
+                    onClick={() => setCertModalOpen(false)}
+                    className="tap-target rounded-full border border-white/15 p-2"
+                    aria-label="Close"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
+                <img
+                  src="/assets/certificate.webp"
+                  alt="Certificate"
+                  className="max-h-[70dvh] w-full rounded-xl object-contain"
+                />
+              </div>
+            </div>,
+            document.body
+          )}
+      </section>
+    );
+  }
+
   return (
     <section
-      id={compact ? 'founder' : 'founder'}
-      className={`relative transition-colors duration-300 ${
-        compact ? 'py-8 sm:py-10' : 'section-pad'
-      } ${isDark ? 'text-stone-100' : 'text-stone-900'}`}
+      id="founder"
+      className={`relative transition-colors duration-300 section-pad ${
+        isDark ? 'text-stone-100' : 'text-stone-900'
+      }`}
     >
       <div className="section-wrap relative z-10">
-        <div className={`grid-adaptive-2 items-center ${compact ? '!gap-8' : ''}`}>
-          {/* Portrait — desktop only when not compact; compact skips side image */}
-          {!compact && (
+        <div className="grid-adaptive-2 items-center">
+          {/* Portrait */}
+          {(
             <div className="relative mx-auto w-full max-w-md lg:max-w-none">
               <div className="relative">
                 <div

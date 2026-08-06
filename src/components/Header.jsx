@@ -46,14 +46,19 @@ export default function Header({ theme, onToggleTheme }) {
   }, []);
 
   useEffect(() => {
-    if (!mobileOpen) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    if (window.lenis) window.lenis.stop();
-    return () => {
-      document.body.style.overflow = prev;
-      if (window.lenis) window.lenis.start();
+    const unlock = () => {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
     };
+
+    if (!mobileOpen) {
+      unlock();
+      return undefined;
+    }
+
+    // Only lock while drawer is open
+    document.body.style.overflow = 'hidden';
+    return unlock;
   }, [mobileOpen]);
 
   const handleNav = (e, href) => {

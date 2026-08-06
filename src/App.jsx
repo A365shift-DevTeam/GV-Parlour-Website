@@ -32,6 +32,23 @@ export default function App() {
     localStorage.setItem('gv_theme', theme);
   }, [theme]);
 
+  // Permanent scroll unlock — fixes "works after hard refresh only"
+  useEffect(() => {
+    const unlock = () => {
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+      document.documentElement.style.height = '';
+      document.body.style.height = '';
+    };
+    unlock();
+    window.addEventListener('pageshow', unlock);
+    window.addEventListener('focus', unlock);
+    return () => {
+      window.removeEventListener('pageshow', unlock);
+      window.removeEventListener('focus', unlock);
+    };
+  }, []);
+
   const toggleTheme = () => setTheme((p) => (p === 'dark' ? 'light' : 'dark'));
 
   return (
@@ -44,7 +61,6 @@ export default function App() {
 
       <main className="overflow-x-clip">
         <ScrollHeroCanvas theme={theme} />
-        {/* Desktop founder — mobile founder lives inside sticky hero (#story) */}
         {!isMobile && <FounderAndCertificates theme={theme} />}
         <ServicesAndCourses theme={theme} />
         <MediaGallery theme={theme} />
