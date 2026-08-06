@@ -397,24 +397,24 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
 
   const specializations = [
     {
-      title: 'Expert in Hydrafacial',
-      role: 'Clinical Skin Hydration',
-      desc: 'Multi-step vortex suction technology that exfoliates, extracts impurities, and infuses intense hydration serums.',
-      image: '/assets/hydrafacial.webp',
+      title: 'Bridal & HD Makeover Expert',
+      role: 'Clinical & Bridal Makeover',
+      desc: 'Professional HD bridal makeup, traditional saree draping, and flawless event styling.',
+      image: '/assets/makeup.webp',
       objectPos: 'object-center'
     },
     {
       title: 'Master Cosmetologist',
-      role: 'Full Spectrum Beauty',
-      desc: 'Certified expert in modern hair aesthetics, skin therapy, and bridal makeover consultations.',
+      role: 'Founder & Beauty Master',
+      desc: 'Certified expert in modern hair aesthetics, skin therapy, and custom beauty consultations.',
       image: '/assets/founder.webp',
       objectPos: 'object-top'
     },
     {
-      title: 'Nail Technician',
-      role: 'Gel Art & Extensions',
-      desc: 'Specialist in artificial nail fixing, gel overlays, 3D nail art designs, and nail bed care.',
-      image: '/assets/nail_art.webp',
+      title: 'Hair Aesthetics & Styling',
+      role: 'Precision Hair Cut & Color',
+      desc: 'Specialist in modern haircuts, balayage hair coloring, keratin smoothing, and hair spa.',
+      image: '/assets/hair.webp',
       objectPos: 'object-center'
     }
   ];

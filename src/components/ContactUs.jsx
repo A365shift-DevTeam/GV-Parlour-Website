@@ -43,7 +43,7 @@ export default function ContactUs({ theme }) {
     const text = encodeURIComponent(
       `Hello GV Studio! I am interested in booking a course/service.\nName: ${formData.name || 'Client'}\nInterest: ${formData.interest}`
     );
-    window.open(`https://wa.me/?text=${text}`, '_blank');
+    window.open(`https://wa.me/919994357515?text=${text}`, '_blank');
   };
 
   return (
@@ -92,10 +92,10 @@ export default function ContactUs({ theme }) {
                 </div>
                 <div>
                   <span className={`text-[11px] font-bold uppercase block ${isDark ? 'text-[#D4AF37]' : 'text-slate-500'}`}>Phone / WhatsApp</span>
-                  <a href="tel:+919876543210" className={`font-semibold text-sm transition-colors ${
+                  <a href="tel:+919994357515" className={`font-semibold text-sm transition-colors ${
                     isDark ? 'text-white hover:text-[#E7C960]' : 'text-slate-900 hover:text-black'
                   }`}>
-                    +91 98765 43210 / +91 91234 56789
+                    +91 99943 57515
                   </a>
                 </div>
               </div>
@@ -125,7 +125,13 @@ export default function ContactUs({ theme }) {
                 <div>
                   <span className={`text-[11px] font-bold uppercase block ${isDark ? 'text-[#D4AF37]' : 'text-slate-500'}`}>Studio Location</span>
                   <p className={`font-normal leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                    GV Studio Beauty & Academy, Main Road, Premier Complex, City Center.
+                    <strong className={`block ${isDark ? 'text-white' : 'text-slate-900'}`}>Galla Vidya</strong>
+                    Flat No. 23, 4th floor,<br />
+                    The Green Residence Apartment, Meena Estate,<br />
+                    Sowripalayam, Coimbatore 641028<br />
+                    <span className={`text-xs mt-1.5 block font-medium ${isDark ? 'text-[#E7C960]' : 'text-slate-600'}`}>
+                      Landmark: INDIAN BANK
+                    </span>
                   </p>
                 </div>
               </div>
@@ -151,7 +157,7 @@ export default function ContactUs({ theme }) {
                 className="w-full py-4 rounded-2xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2.5 shadow-lg transition-all bg-[#D4AF37] hover:bg-[#E7C960] text-black hover:shadow-xl hover:scale-[1.01]"
               >
                 <MessageSquare className="w-4 h-4 fill-black text-black" />
-                Inquiry & Booking
+                Inquiry & Booking Via Chatbot
               </button>
             </div>
           </div>

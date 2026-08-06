@@ -64,17 +64,17 @@ export default function App() {
           onOpenCustomizer={() => setCustomizerOpen(true)} 
         />
 
-        {/* Section 2: Services & Courses */}
+        {/* Section 2: Founder Details & Certificate */}
+        <FounderAndCertificates theme={theme} />
+
+        {/* Section 3: Services & Courses */}
         <ServicesAndCourses 
           theme={theme}
           onOpenCustomizer={() => setCustomizerOpen(true)} 
         />
 
-        {/* Section 3: Showcase Images & Videos */}
+        {/* Section 4: Showcase Images & Videos */}
         <MediaGallery theme={theme} />
-
-        {/* Section 4: Founder Details & Certificate */}
-        <FounderAndCertificates theme={theme} />
 
         {/* Section 5: Contact Us */}
         <ContactUs theme={theme} />

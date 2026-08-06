@@ -8,67 +8,81 @@ export default function MediaGallery({ theme }) {
   const imagesList = [
     {
       id: 1,
-      title: 'Hydrafacial Clinical Glow',
-      subtitle: 'Deep cleansing & rejuvenation',
-      src: '/assets/hydrafacial.webp',
-      badge: 'Skin Care'
+      title: 'Bridal & HD Makeover',
+      subtitle: 'Flawless HD bridal & event makeup',
+      src: '/assets/makeup.webp',
+      badge: 'Bridal Makeup'
     },
     {
       id: 2,
-      title: 'Gel Nail Polish & Extensions',
-      subtitle: '3D Nail art & glossy finish',
-      src: '/assets/nail_art.webp',
-      badge: 'Nail Studio'
+      title: 'Haircut & Styling Transformation',
+      subtitle: 'Modern layer cuts & professional styling',
+      src: '/assets/hair.webp',
+      badge: 'Hair Studio'
     },
     {
       id: 3,
-      title: 'Academy Practical Training',
-      subtitle: 'Hands-on student haircut session',
-      src: '/assets/academy.webp',
-      badge: 'Academy'
+      title: 'Traditional & Festive Makeover',
+      subtitle: 'Custom saree draping & event makeup',
+      src: '/assets/makeup4.webp',
+      badge: 'Festive Look'
     },
     {
       id: 4,
-      title: 'Lakme Academy Certificate',
-      subtitle: 'Official recognition award',
-      src: '/assets/hair_colouring.webp',
-      badge: 'Accolades'
+      title: 'Advanced Hair Coloring & Balayage',
+      subtitle: 'Global hair color & highlights',
+      src: '/assets/hair2.webp',
+      badge: 'Hair Care'
+    },
+    {
+      id: 5,
+      title: 'Glamour & Party Makeup',
+      subtitle: 'Radiant night & party makeover',
+      src: '/assets/makeup3.webp',
+      badge: 'Party Look'
+    },
+    {
+      id: 6,
+      title: 'Eye & Lip Precision Beauty',
+      subtitle: 'Detailed eye makeup & lip contouring',
+      src: '/assets/makeup2.webp',
+      badge: 'Beauty Detail'
     }
   ];
 
   const videosList = [
     {
       id: 101,
-      title: 'Hydrafacial 6-Step Clinical Procedure',
-      subtitle: 'Watch Galla Vidya perform deep vortex skin hydration',
-      poster: '/assets/hydrafacial.webp',
+      title: 'Bridal HD Makeup Masterclass Reel',
+      subtitle: 'Watch Galla Vidya perform HD bridal makeover',
+      poster: '/assets/makeup.webp',
       videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-woman-getting-a-facial-treatment-41381-large.mp4',
       duration: '0:45 Reel',
-      badge: 'Hydrafacial Reel'
+      badge: 'Bridal Reel'
     },
     {
       id: 102,
       title: 'Haircut & Styling Masterclass Reel',
-      subtitle: '6 Modern Haircut Techniques Demonstration',
-      poster: '/assets/academy.webp',
+      subtitle: 'Modern Haircut Techniques Demonstration',
+      poster: '/assets/hair.webp',
       videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-hairdresser-cutting-hair-to-a-client-40540-large.mp4',
       duration: '1:10 Reel',
       badge: 'Haircut Reel'
     },
     {
       id: 103,
-      title: 'Gel Nail Extension Art & Polish Reel',
-      subtitle: 'Temporary artificial nail fixing & gel art technique',
-      poster: '/assets/nail_art.webp',
+      title: 'Festive Makeover & Saree Draping Reel',
+      subtitle: 'Traditional look transformation session',
+      poster: '/assets/makeup4.webp',
       videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-hands-of-a-woman-getting-a-manicure-41380-large.mp4',
       duration: '0:35 Reel',
-      badge: 'Nail Art Reel'
+      badge: 'Makeover Reel'
     },
     {
       id: 104,
       title: 'Advanced Hair Colouring & Styling Reel',
       subtitle: 'Balayage, fashion shades & gloss treatment session',
-      poster: '/assets/hair_colouring.webp',
+      poster: '/assets/hair2.webp',
       videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-stylist-combing-a-woman-s-hair-40542-large.mp4',
       duration: '0:55 Reel',
       badge: 'Hair Color Reel'
@@ -242,16 +256,16 @@ export default function MediaGallery({ theme }) {
         {/* Modal Lightbox */}
         {activeMedia && (
           <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl flex items-center justify-center p-4 animate-fadeIn">
-            <div className="relative w-full max-w-4xl glass-panel rounded-3xl overflow-hidden border border-white/20 shadow-2xl p-4 sm:p-6">
+            <div className="relative w-full max-w-4xl bg-[#121218] rounded-3xl overflow-hidden border border-[#D4AF37]/50 shadow-2xl p-4 sm:p-6 text-white">
               
               <button
                 onClick={() => setActiveMedia(null)}
-                className="absolute top-4 right-4 z-10 p-2.5 rounded-full bg-black/80 text-white hover:text-slate-300 border border-white/20 transition-all"
+                className="absolute top-4 right-4 z-10 p-2.5 rounded-full bg-black/80 text-white hover:text-[#E7C960] border border-white/20 transition-all hover:scale-110"
               >
                 <X className="w-6 h-6" />
               </button>
 
-              <div className="aspect-video w-full rounded-2xl overflow-hidden bg-black relative flex items-center justify-center">
+              <div className="aspect-video w-full rounded-2xl overflow-hidden bg-black relative flex items-center justify-center border border-white/10">
                 {activeMedia.type === 'video' ? (
                   <video
                     src={activeMedia.src}
@@ -269,10 +283,10 @@ export default function MediaGallery({ theme }) {
               </div>
 
               <div className="pt-4 px-2 space-y-1">
-                <span className="text-xs font-bold uppercase tracking-widest text-slate-300">
+                <span className="text-xs font-extrabold uppercase tracking-widest text-[#E7C960]">
                   {activeMedia.badge}
                 </span>
-                <h3 className="text-xl font-bold text-white">
+                <h3 className="text-xl sm:text-2xl font-bold text-white">
                   {activeMedia.title}
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-300 font-normal">
