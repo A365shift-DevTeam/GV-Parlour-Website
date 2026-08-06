@@ -24,6 +24,30 @@ const SEEK_TIMEOUT_MS = 800;
 const STAGE_STRETCH_RESERVE = 120;
 
 /**
+ * Mobile does NOT scrub the video. Seeking a video costs ~88ms median on a
+ * mid-range phone (measured at 6x CPU throttle) — and that cost is the seek
+ * machinery itself, not decode depth: landing exactly on a keyframe still cost
+ * 88ms vs 106ms mid-GOP. That caps the scrub at ~12 updates/sec, which reads as
+ * stuck, frame-by-frame scrolling. Drawing a preloaded WebP to a canvas costs
+ * 0ms median / 3ms p90 under the same throttle.
+ *
+ * Frames are extracted from gv-studio-hero.webm itself (NOT public/frames*,
+ * which hold the older hero creative) over the same t=1.0s..7.95s the scrub
+ * covered, so the visuals are unchanged:
+ *   ffmpeg -ss 1.0 -t 6.95 -i public/assets/gv-studio-hero.webm \
+ *     -vf "fps=10.5,scale=960:-2" -c:v libwebp -q:v 70 -compression_level 6 \
+ *     public/hero-frames/%08d.webp
+ * 73 frames, 4.4MB — the same weight as the webm it replaces, ~23px of scroll
+ * travel per frame. Side benefit: WebP decodes everywhere, so this also
+ * sidesteps VP9/WebM being undecodable on iOS Safari before 17.4.
+ */
+const FRAME_COUNT = 73;
+const FRAME_SRC = (n) => `/hero-frames/${String(n).padStart(8, '0')}.webp`;
+const FRAME_INDICES = Array.from({ length: FRAME_COUNT }, (_, i) => i + 1);
+const FRAME_LOAD_CONCURRENCY = 4;
+const DPR_CAP = 2;
+
+/**
  * Reliable mobile scroll + scrub:
  * - Sticky stage height is FIXED in pixels (visualViewport)
  * - Section height is FIXED in pixels (always > viewport → always scrollable)
@@ -49,6 +73,11 @@ export default function ScrollHeroCanvas({ theme }) {
   const markedReadyRef = useRef(false);
   const lastMeasureRef = useRef(null);
   const seekTimerRef = useRef(null);
+  const canvasRef = useRef(null);
+  const framesRef = useRef([]);
+  const loadedRef = useRef([]);
+  const drawnIndexRef = useRef(-1);
+  const posterImgRef = useRef(null);
 
   const [ready, setReady] = useState(false);
   const [loadPct, setLoadPct] = useState(0);
@@ -161,11 +190,14 @@ export default function ScrollHeroCanvas({ theme }) {
   }, []);
 
   useEffect(() => {
+    // Mobile has no <video> — the frame-sequence effect owns loading there.
+    if (isMobile) return undefined;
+
     const video = videoRef.current;
     if (!video || prefersReducedMotion) {
       setShowLoader(false);
       setReady(true);
-      return;
+      return undefined;
     }
 
     const blockPlay = () => {
@@ -269,7 +301,52 @@ export default function ScrollHeroCanvas({ theme }) {
       video.removeEventListener('seeked', onSeeked);
       video.removeEventListener('error', markReady);
     };
-  }, [prefersReducedMotion, scrubToProgress, markReady]);
+  }, [isMobile, prefersReducedMotion, scrubToProgress, markReady]);
+
+  /** Cover-fit a source onto the canvas, cropping overflow rather than letterboxing. */
+  const paint = useCallback((src, srcW, srcH) => {
+    const canvas = canvasRef.current;
+    if (!canvas || !srcW || !srcH) return false;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return false;
+
+    const cw = canvas.width;
+    const ch = canvas.height;
+    const scale = Math.max(cw / srcW, ch / srcH);
+    const dw = srcW * scale;
+    const dh = srcH * scale;
+    ctx.drawImage(src, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+    return true;
+  }, []);
+
+  /**
+   * Draw the frame for this progress. Falls back to the nearest already-loaded
+   * frame, so scrolling is never blocked on the download — the sequence just
+   * sharpens as frames arrive.
+   */
+  const drawFrameForProgress = useCallback(
+    (progress) => {
+      const frames = framesRef.current;
+      const loaded = loadedRef.current;
+      if (!frames.length) return;
+
+      const exact = Math.round(progress * (frames.length - 1));
+      let idx = -1;
+      if (loaded[exact]) {
+        idx = exact;
+      } else {
+        for (let d = 1; d < frames.length; d++) {
+          if (loaded[exact - d]) { idx = exact - d; break; }
+          if (loaded[exact + d]) { idx = exact + d; break; }
+        }
+      }
+      if (idx < 0 || idx === drawnIndexRef.current) return;
+
+      const img = frames[idx];
+      if (paint(img, img.naturalWidth, img.naturalHeight)) drawnIndexRef.current = idx;
+    },
+    [paint]
+  );
 
   const syncProgress = useCallback(() => {
     const container = containerRef.current;
@@ -290,8 +367,99 @@ export default function ScrollHeroCanvas({ theme }) {
     const raw = -container.getBoundingClientRect().top / travel;
     const clamped = Math.max(0, Math.min(1, raw));
     progressRef.current = clamped;
-    scrubToProgress(clamped);
-  }, [scrubToProgress, isMobile, scrubPx]);
+    if (isMobile) drawFrameForProgress(clamped);
+    else scrubToProgress(clamped);
+  }, [scrubToProgress, drawFrameForProgress, isMobile, scrubPx]);
+
+  // Size the canvas backing store to its CSS box (DPR-capped) and repaint.
+  useEffect(() => {
+    if (!isMobile || prefersReducedMotion) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const resize = () => {
+      const rect = canvas.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      const dpr = Math.min(window.devicePixelRatio || 1, DPR_CAP);
+      const w = Math.round(rect.width * dpr);
+      const h = Math.round(rect.height * dpr);
+      if (canvas.width === w && canvas.height === h) return;
+      canvas.width = w;
+      canvas.height = h;
+      drawnIndexRef.current = -1; // backing store cleared — force a repaint
+      const poster = posterImgRef.current;
+      if (poster?.complete && poster.naturalWidth) {
+        paint(poster, poster.naturalWidth, poster.naturalHeight);
+      }
+      drawFrameForProgress(progressRef.current);
+    };
+
+    resize();
+    const ro = new ResizeObserver(resize);
+    ro.observe(canvas);
+    return () => ro.disconnect();
+  }, [isMobile, prefersReducedMotion, paint, drawFrameForProgress]);
+
+  // Progressive frame load. Scroll is never gated on this.
+  useEffect(() => {
+    if (!isMobile || prefersReducedMotion) {
+      return undefined;
+    }
+
+    let cancelled = false;
+    const frames = FRAME_INDICES.map(() => null);
+    framesRef.current = frames;
+    loadedRef.current = FRAME_INDICES.map(() => false);
+    drawnIndexRef.current = -1;
+
+    // Poster covers the canvas until the first real frame lands
+    const poster = new Image();
+    poster.src = HERO_POSTER;
+    posterImgRef.current = poster;
+    poster.decode().catch(() => null).then(() => {
+      if (cancelled || drawnIndexRef.current >= 0) return;
+      paint(poster, poster.naturalWidth, poster.naturalHeight);
+    });
+
+    let cursor = 0;
+    let done = 0;
+    const loadNext = () => {
+      if (cancelled) return;
+      const i = cursor++;
+      if (i >= FRAME_INDICES.length) return;
+      const img = new Image();
+      img.decoding = 'async';
+      img.src = FRAME_SRC(FRAME_INDICES[i]);
+      const settle = () => {
+        if (cancelled) return;
+        done += 1;
+        setLoadPct(Math.round((done / FRAME_INDICES.length) * 100));
+        if (done >= 3) markReady();
+        if (done >= FRAME_INDICES.length) setLoadPct(100);
+        // Repaint if this frame is a better match than what's on screen
+        drawFrameForProgress(progressRef.current);
+        loadNext();
+      };
+      img
+        .decode()
+        .then(() => {
+          if (cancelled) return;
+          frames[i] = img;
+          loadedRef.current[i] = true;
+          settle();
+        })
+        .catch(() => settle());
+    };
+
+    for (let c = 0; c < FRAME_LOAD_CONCURRENCY; c++) loadNext();
+
+    // Never let a slow network keep the loader up indefinitely
+    const safety = window.setTimeout(markReady, 4000);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(safety);
+    };
+  }, [isMobile, prefersReducedMotion, paint, drawFrameForProgress, markReady]);
 
   useEffect(() => {
     if (prefersReducedMotion) return;
@@ -324,7 +492,58 @@ export default function ScrollHeroCanvas({ theme }) {
     syncProgress();
   }, [prefersReducedMotion, syncProgress, isMobile, stagePx, scrubPx, navPx]);
 
-  const fitClass = isMobile ? 'object-contain object-top' : 'object-cover scale-110 origin-center';
+  // Desktop-only now; the mobile path paints cover-fit onto the canvas.
+  const fitClass = 'object-cover scale-110 origin-center';
+
+  const loaderOverlay = showLoader && !prefersReducedMotion && (
+    <div
+      className="pointer-events-none absolute inset-0 z-30 flex flex-col items-center justify-center transition-opacity duration-500"
+      style={{
+        opacity: ready ? 0 : 1,
+        background:
+          'radial-gradient(ellipse at center, rgba(10,9,7,0.4) 0%, rgba(10,9,7,0.8) 75%)',
+      }}
+      aria-busy={!ready}
+    >
+      <div className="flex flex-col items-center gap-4">
+        <div className="relative flex items-center justify-center">
+          <div className="hero-loader-ring" />
+          <div className="absolute hero-loader-dot" />
+        </div>
+        <span className="font-mono text-[11px] tabular-nums text-white/55">
+          {Math.min(100, Math.max(loadPct, 0))}%
+        </span>
+      </div>
+    </div>
+  );
+
+  // Mobile: canvas frame sequence. No video element, so none of the seek
+  // machinery above runs on this path.
+  const mobileMedia = (
+    <>
+      {prefersReducedMotion ? (
+        <img
+          src={HERO_POSTER}
+          alt="GV Studio"
+          width={1920}
+          height={1080}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+      ) : (
+        <canvas
+          ref={canvasRef}
+          aria-label="GV Studio"
+          role="img"
+          className="pointer-events-none absolute inset-0 h-full w-full"
+          // Own compositing layer: without this, redrawing the canvas
+          // invalidates the sticky subtree and repaints the founder content
+          // underneath on every scroll frame.
+          style={{ willChange: 'transform', transform: 'translateZ(0)', contain: 'paint' }}
+        />
+      )}
+      {loaderOverlay}
+    </>
+  );
 
   const media = (
     <>
@@ -353,27 +572,7 @@ export default function ScrollHeroCanvas({ theme }) {
           <source src={HERO_WEBM} type="video/webm" />
         </video>
       )}
-      {showLoader && !prefersReducedMotion && (
-        <div
-          className="pointer-events-none absolute inset-0 z-30 flex flex-col items-center justify-center transition-opacity duration-500"
-          style={{
-            opacity: ready ? 0 : 1,
-            background:
-              'radial-gradient(ellipse at center, rgba(10,9,7,0.4) 0%, rgba(10,9,7,0.8) 75%)',
-          }}
-          aria-busy={!ready}
-        >
-          <div className="flex flex-col items-center gap-4">
-            <div className="relative flex items-center justify-center">
-              <div className="hero-loader-ring" />
-              <div className="absolute hero-loader-dot" />
-            </div>
-            <span className="font-mono text-[11px] tabular-nums text-white/55">
-              {Math.min(100, Math.max(loadPct, 0))}%
-            </span>
-          </div>
-        </div>
-      )}
+      {loaderOverlay}
     </>
   );
 
@@ -410,7 +609,7 @@ export default function ScrollHeroCanvas({ theme }) {
             className="relative w-full shrink-0 overflow-hidden bg-[#0A0907]"
             style={{ aspectRatio: String(ASPECT) }}
           >
-            {media}
+            {mobileMedia}
           </div>
 
           {/* Founder flush under video — no black gap, no nested scroll */}
