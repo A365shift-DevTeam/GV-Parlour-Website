@@ -1,334 +1,597 @@
-import React, { useState } from 'react';
-import { Play, Image as ImageIcon, X, Eye, Video } from 'lucide-react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { createPortal } from 'react-dom';
+import { Play, X, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
+
+const FILTERS = [
+  { id: 'all', label: 'All' },
+  { id: 'bridal', label: 'Bridal' },
+  { id: 'hair', label: 'Hair' },
+  { id: 'makeup', label: 'Makeup' },
+  { id: 'reels', label: 'Reels' },
+];
+
+/* Layout (All filter):
+ *  md 3-col: hero 2×2 + 2 side tiles, then 2 full rows of 3
+ *  lg 4-col: hero 2×2 + 4 side tiles, then 1 full row of 4
+ * No orphan cells — every slot is filled.
+ */
+const LOOKS = [
+  {
+    id: 1,
+    kind: 'image',
+    title: 'Bridal HD Makeover',
+    subtitle: 'Flawless bridal & event makeup',
+    src: '/assets/makeup.webp',
+    category: 'bridal',
+    featured: true,
+  },
+  {
+    id: 2,
+    kind: 'image',
+    title: 'Layer Cut & Style',
+    subtitle: 'Modern cuts & professional finish',
+    src: '/assets/hair.webp',
+    category: 'hair',
+  },
+  {
+    id: 3,
+    kind: 'image',
+    title: 'Festive Radiance',
+    subtitle: 'Traditional makeover & saree drape',
+    src: '/assets/makeup4.webp',
+    category: 'makeup',
+  },
+  {
+    id: 4,
+    kind: 'image',
+    title: 'Balayage Colour',
+    subtitle: 'Global colour & soft highlights',
+    src: '/assets/hair2.webp',
+    category: 'hair',
+  },
+  {
+    id: 5,
+    kind: 'image',
+    title: 'Party Glam',
+    subtitle: 'Night-out glow & contour',
+    src: '/assets/makeup3.webp',
+    category: 'makeup',
+  },
+  {
+    id: 6,
+    kind: 'image',
+    title: 'Eye Detail Art',
+    subtitle: 'Precision liner & lip sculpt',
+    src: '/assets/makeup2.webp',
+    category: 'makeup',
+  },
+  {
+    id: 7,
+    kind: 'image',
+    title: 'Soft Glam Look',
+    subtitle: 'Everyday elegance, elevated',
+    src: '/assets/look.webp',
+    category: 'bridal',
+  },
+  {
+    id: 8,
+    kind: 'image',
+    title: 'Studio Signature',
+    subtitle: 'Full glam transformation',
+    src: '/assets/look2.webp',
+    category: 'bridal',
+  },
+  {
+    id: 9,
+    kind: 'image',
+    title: 'Editorial Makeup',
+    subtitle: 'Camera-ready beauty finish',
+    src: '/assets/makeup5.webp',
+    category: 'makeup',
+  },
+];
+
+const REELS = [
+  {
+    id: 101,
+    kind: 'video',
+    title: 'Bridal HD Masterclass',
+    subtitle: 'HD bridal makeover session',
+    poster: '/assets/makeup.webp',
+    src: 'https://assets.mixkit.co/videos/preview/mixkit-woman-getting-a-facial-treatment-41381-large.mp4',
+    duration: '0:45',
+    category: 'bridal',
+  },
+  {
+    id: 102,
+    kind: 'video',
+    title: 'Cut & Style Reel',
+    subtitle: 'Modern haircut techniques',
+    poster: '/assets/hair.webp',
+    src: 'https://assets.mixkit.co/videos/preview/mixkit-hairdresser-cutting-hair-to-a-client-40540-large.mp4',
+    duration: '1:10',
+    category: 'hair',
+  },
+  {
+    id: 103,
+    kind: 'video',
+    title: 'Festive Makeover',
+    subtitle: 'Traditional look walkthrough',
+    poster: '/assets/makeup4.webp',
+    src: 'https://assets.mixkit.co/videos/preview/mixkit-hands-of-a-woman-getting-a-manicure-41380-large.mp4',
+    duration: '0:35',
+    category: 'makeup',
+  },
+  {
+    id: 104,
+    kind: 'video',
+    title: 'Colour & Gloss',
+    subtitle: 'Balayage & fashion shades',
+    poster: '/assets/hair2.webp',
+    src: 'https://assets.mixkit.co/videos/preview/mixkit-stylist-combing-a-woman-s-hair-40542-large.mp4',
+    duration: '0:55',
+    category: 'hair',
+  },
+];
 
 export default function MediaGallery({ theme }) {
-  const [activeMedia, setActiveMedia] = useState(null);
-  const [mobileTab, setMobileTab] = useState('photos'); // 'photos' | 'reels'
+  const [filter, setFilter] = useState('all');
+  const [activeIndex, setActiveIndex] = useState(null);
   const isDark = theme !== 'light';
 
-  const imagesList = [
-    {
-      id: 1,
-      title: 'Bridal & HD Makeover',
-      subtitle: 'Flawless HD bridal & event makeup',
-      src: '/assets/makeup.webp',
-      badge: 'Bridal Makeup'
-    },
-    {
-      id: 2,
-      title: 'Haircut & Styling Transformation',
-      subtitle: 'Modern layer cuts & professional styling',
-      src: '/assets/hair.webp',
-      badge: 'Hair Studio'
-    },
-    {
-      id: 3,
-      title: 'Traditional & Festive Makeover',
-      subtitle: 'Custom saree draping & event makeup',
-      src: '/assets/makeup4.webp',
-      badge: 'Festive Look'
-    },
-    {
-      id: 4,
-      title: 'Advanced Hair Coloring & Balayage',
-      subtitle: 'Global hair color & highlights',
-      src: '/assets/hair2.webp',
-      badge: 'Hair Care'
-    },
-    {
-      id: 5,
-      title: 'Glamour & Party Makeup',
-      subtitle: 'Radiant night & party makeover',
-      src: '/assets/makeup3.webp',
-      badge: 'Party Look'
-    },
-    {
-      id: 6,
-      title: 'Eye & Lip Precision Beauty',
-      subtitle: 'Detailed eye makeup & lip contouring',
-      src: '/assets/makeup2.webp',
-      badge: 'Beauty Detail'
-    }
-  ];
+  const filteredLooks = useMemo(() => {
+    if (filter === 'all') return LOOKS;
+    if (filter === 'reels') return [];
+    return LOOKS.filter((item) => item.category === filter);
+  }, [filter]);
 
-  const videosList = [
-    {
-      id: 101,
-      title: 'Bridal HD Makeup Masterclass Reel',
-      subtitle: 'Watch Galla Vidya perform HD bridal makeover',
-      poster: '/assets/makeup.webp',
-      videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-woman-getting-a-facial-treatment-41381-large.mp4',
-      duration: '0:45 Reel',
-      badge: 'Bridal Reel'
-    },
-    {
-      id: 102,
-      title: 'Haircut & Styling Masterclass Reel',
-      subtitle: 'Modern Haircut Techniques Demonstration',
-      poster: '/assets/hair.webp',
-      videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-hairdresser-cutting-hair-to-a-client-40540-large.mp4',
-      duration: '1:10 Reel',
-      badge: 'Haircut Reel'
-    },
-    {
-      id: 103,
-      title: 'Festive Makeover & Saree Draping Reel',
-      subtitle: 'Traditional look transformation session',
-      poster: '/assets/makeup4.webp',
-      videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-hands-of-a-woman-getting-a-manicure-41380-large.mp4',
-      duration: '0:35 Reel',
-      badge: 'Makeover Reel'
-    },
-    {
-      id: 104,
-      title: 'Advanced Hair Colouring & Styling Reel',
-      subtitle: 'Balayage, fashion shades & gloss treatment session',
-      poster: '/assets/hair2.webp',
-      videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-stylist-combing-a-woman-s-hair-40542-large.mp4',
-      duration: '0:55 Reel',
-      badge: 'Hair Color Reel'
+  const filteredReels = useMemo(() => {
+    if (filter === 'all' || filter === 'reels') return REELS;
+    return REELS.filter((item) => item.category === filter);
+  }, [filter]);
+
+  const showLooks = filter !== 'reels' && filteredLooks.length > 0;
+  const showReels = (filter === 'all' || filter === 'reels' || filteredReels.length > 0) && filteredReels.length > 0;
+
+  // Flat list for lightbox navigation (looks first, then reels when visible)
+  const lightboxItems = useMemo(() => {
+    const items = [];
+    if (showLooks) {
+      filteredLooks.forEach((img) => {
+        items.push({
+          type: 'image',
+          id: img.id,
+          title: img.title,
+          subtitle: img.subtitle,
+          src: img.src,
+          category: img.category,
+        });
+      });
     }
-  ];
+    if (showReels) {
+      filteredReels.forEach((vid) => {
+        items.push({
+          type: 'video',
+          id: vid.id,
+          title: vid.title,
+          subtitle: vid.subtitle,
+          src: vid.src,
+          poster: vid.poster,
+          duration: vid.duration,
+          category: vid.category,
+        });
+      });
+    }
+    return items;
+  }, [filteredLooks, filteredReels, showLooks, showReels]);
+
+  const activeMedia = activeIndex != null ? lightboxItems[activeIndex] : null;
+
+  const openLook = (id) => {
+    const idx = lightboxItems.findIndex((item) => item.id === id);
+    if (idx >= 0) setActiveIndex(idx);
+  };
+
+  const openReel = (id) => {
+    const idx = lightboxItems.findIndex((item) => item.id === id);
+    if (idx >= 0) setActiveIndex(idx);
+  };
+
+  const closeLightbox = useCallback(() => setActiveIndex(null), []);
+
+  const goPrev = useCallback(() => {
+    setActiveIndex((i) => (i == null ? i : (i - 1 + lightboxItems.length) % lightboxItems.length));
+  }, [lightboxItems.length]);
+
+  const goNext = useCallback(() => {
+    setActiveIndex((i) => (i == null ? i : (i + 1) % lightboxItems.length));
+  }, [lightboxItems.length]);
+
+  // Freeze Lenis + body scroll while lightbox is open
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (activeMedia && window.lenis) window.lenis.stop();
+    else if (window.lenis) window.lenis.start();
+  }, [activeMedia]);
+
+  useEffect(() => {
+    if (activeIndex == null) return;
+    const onKey = (e) => {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') goPrev();
+      if (e.key === 'ArrowRight') goNext();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [activeIndex, closeLightbox, goPrev, goNext]);
+
+  // Reset index if filter shrinks the list out from under us
+  useEffect(() => {
+    setActiveIndex(null);
+  }, [filter]);
+
+  const categoryLabel = (cat) => {
+    if (cat === 'bridal') return 'Bridal';
+    if (cat === 'hair') return 'Hair';
+    if (cat === 'makeup') return 'Makeup';
+    return cat;
+  };
 
   return (
-    <section id="gallery" className={`py-16 sm:py-28 transition-colors duration-300 relative ${
-      isDark ? 'bg-[#09090B]/40 text-slate-100' : 'bg-white/40 text-slate-900'
-    }`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10">
-        
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-3 sm:space-y-4 mb-10 sm:mb-16">
-          <div className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-bold uppercase tracking-wider ${
-            isDark ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#E7C960]' : 'bg-slate-100 border-slate-300 text-slate-800'
-          }`}>
-            Studio Portfolio & Live Reels
+    <section
+      id="gallery"
+      className={`py-16 sm:py-28 transition-colors duration-300 relative overflow-hidden ${
+        isDark ? 'bg-[#09090B]/40 text-slate-100' : 'bg-white/40 text-slate-900'
+      }`}
+    >
+      {/* Soft gold wash behind the mosaic */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-[420px] opacity-60"
+        style={{
+          background: isDark
+            ? 'radial-gradient(60% 80% at 50% 0%, rgba(212,175,55,0.12), transparent 70%)'
+            : 'radial-gradient(60% 80% at 50% 0%, rgba(212,175,55,0.10), transparent 70%)',
+        }}
+      />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 relative z-10">
+        {/* Header */}
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-10 sm:mb-14">
+          <div className="max-w-xl space-y-3 sm:space-y-4">
+            <div
+              className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-bold uppercase tracking-wider ${
+                isDark
+                  ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#E7C960]'
+                  : 'bg-slate-100 border-slate-300 text-slate-800'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              Studio Lookbook
+            </div>
+
+            <h2 className={`fluid-section-title font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+              Real <span className="gold-gradient-text">Transformations</span>
+            </h2>
+
+            <p className={`text-sm sm:text-base font-normal leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+              A curated lookbook of bridal glam, hair artistry, and party looks — plus short reels from the chair.
+            </p>
           </div>
 
-          <h2 className={`fluid-section-title font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-            <span className="gold-gradient-text">Images & Videos</span>
-          </h2>
-
-          <p className={`text-sm sm:text-base font-normal ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-            Browse through real photos of our parlour services and academy sessions, or watch live video reels.
-          </p>
-
-          {/* Mobile Segmented Switcher (lg:hidden) */}
-          <div className="flex lg:hidden justify-center pt-2">
-            <div className={`p-1 rounded-2xl border flex items-center gap-1 w-full max-w-xs ${
-              isDark ? 'bg-black/60 border-[#D4AF37]/40' : 'bg-slate-100 border-slate-300'
-            }`}>
-              <button
-                onClick={() => setMobileTab('photos')}
-                className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
-                  mobileTab === 'photos'
-                    ? 'bg-[#D4AF37] text-black shadow-md'
-                    : isDark ? 'text-slate-300 hover:text-white' : 'text-slate-700 hover:text-black'
-                }`}
-              >
-                <ImageIcon className="w-3.5 h-3.5" />
-                Photos ({imagesList.length})
-              </button>
-              <button
-                onClick={() => setMobileTab('reels')}
-                className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
-                  mobileTab === 'reels'
-                    ? 'bg-[#D4AF37] text-black shadow-md'
-                    : isDark ? 'text-slate-300 hover:text-white' : 'text-slate-700 hover:text-black'
-                }`}
-              >
-                <Video className="w-3.5 h-3.5" />
-                Reels ({videosList.length})
-              </button>
-            </div>
+          {/* Filter pills */}
+          <div
+            className={`flex flex-wrap items-center gap-1.5 p-1.5 rounded-2xl border self-start lg:self-auto ${
+              isDark ? 'bg-black/50 border-[#D4AF37]/30' : 'bg-white/80 border-slate-200 shadow-sm'
+            }`}
+            role="tablist"
+            aria-label="Gallery filters"
+          >
+            {FILTERS.map((f) => {
+              const active = filter === f.id;
+              return (
+                <button
+                  key={f.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => setFilter(f.id)}
+                  className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+                    active
+                      ? 'bg-[#D4AF37] text-black shadow-md'
+                      : isDark
+                        ? 'text-slate-300 hover:text-white hover:bg-white/5'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                  }`}
+                >
+                  {f.label}
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        {/* 2-Column Split Layout: Left side IMAGES | Right side VIDEOS */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
-          
-          {/* LEFT SIDE: IMAGES (6 cols) */}
-          <div className={`lg:col-span-6 space-y-6 ${mobileTab === 'photos' ? 'block' : 'hidden lg:block'}`}>
-            <div className={`hidden lg:flex items-center justify-between border-b pb-4 ${
-              isDark ? 'border-[#D4AF37]/30' : 'border-slate-200'
-            }`}>
-              <div className="flex items-center gap-2.5">
-                <div className={`w-9 h-9 rounded-xl border flex items-center justify-center ${
-                  isDark ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#E7C960]' : 'bg-slate-100 border-slate-300 text-slate-900'
-                }`}>
-                  <ImageIcon className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Photos & Transformations</h3>
-                  <span className={`text-xs font-normal ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Real client results & academy photos</span>
-                </div>
-              </div>
-              <span className={`text-xs font-bold px-3 py-1 rounded-full border ${
-                isDark ? 'text-[#E7C960] bg-[#D4AF37]/15 border-[#D4AF37]/40' : 'text-slate-800 bg-slate-100 border-slate-300'
-              }`}>
-                {imagesList.length} Photos
-              </span>
-            </div>
+        {/* Editorial photo mosaic — every grid cell filled (no empty slots) */}
+        {showLooks && (
+          <div
+            className={`grid gap-2.5 sm:gap-3 lg:gap-4 auto-rows-fr ${
+              filter === 'all'
+                ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
+                : 'grid-cols-2 md:grid-cols-3'
+            }`}
+          >
+            {filteredLooks.map((img, i) => {
+              const isFeatured = filter === 'all' && img.featured;
+              const count = filteredLooks.length;
+              const isLast = i === count - 1;
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              {imagesList.map((img) => (
-                <div
+              // Stretch the last tile across leftover columns so the row never ends half-empty
+              let fillClass = '';
+              if (!isFeatured && isLast) {
+                if (filter === 'all') {
+                  // All view bottom row is always 4 equal tiles on lg — no stretch needed
+                } else {
+                  // Filtered: 2-col mobile / 3-col desktop — expand last tile into leftover cols
+                  const remMobile = count % 2;
+                  const remMd = count % 3;
+                  if (remMobile === 1) fillClass += ' col-span-2';
+                  if (remMd === 1) fillClass += ' md:col-span-3';
+                  else if (remMd === 2) fillClass += ' md:col-span-2';
+                  else if (remMobile === 1) fillClass += ' md:col-span-1';
+                }
+              }
+
+              const spanClass = isFeatured
+                ? 'col-span-2 row-span-2'
+                : fillClass;
+
+              const aspectClass = isFeatured
+                ? 'aspect-[4/5] md:aspect-auto md:h-full'
+                : 'aspect-[4/5]';
+
+              return (
+                <button
                   key={img.id}
-                  onClick={() => setActiveMedia({ type: 'image', ...img })}
-                  className={`group relative rounded-2xl overflow-hidden border transition-all duration-300 cursor-pointer shadow-md hover:-translate-y-1 ${
-                    isDark ? 'glass-card border-[#D4AF37]/25 hover:border-[#D4AF37]/60' : 'bg-slate-50 border-slate-200 hover:border-slate-400'
-                  }`}
+                  type="button"
+                  onClick={() => openLook(img.id)}
+                  className={`group relative overflow-hidden rounded-2xl sm:rounded-3xl text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] focus-visible:ring-offset-2 ${
+                    isDark ? 'focus-visible:ring-offset-[#09090B]' : 'focus-visible:ring-offset-white'
+                  } ${spanClass} animate-fadeIn`}
+                  style={{ animationDelay: `${Math.min(i, 8) * 45}ms` }}
                 >
-                  <div className="aspect-[4/3] overflow-hidden relative">
+                  <div className={`relative w-full h-full overflow-hidden ${aspectClass}`}>
                     <img
                       src={img.src}
                       alt={img.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                    
-                    <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-[#D4AF37]/40 text-[#E7C960] text-[10px] font-bold uppercase tracking-wider">
-                      {img.badge}
+
+                    {/* Soft bottom veil */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent opacity-90 group-hover:opacity-100 transition-opacity" />
+
+                    {/* Gold frame — draws in on hover (salon mirror) */}
+                    <div
+                      aria-hidden
+                      className="pointer-events-none absolute inset-2.5 sm:inset-3 rounded-xl sm:rounded-2xl border border-[#D4AF37]/0 group-hover:border-[#D4AF37]/70 transition-all duration-500"
+                    />
+                    <div
+                      aria-hidden
+                      className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                      style={{
+                        boxShadow: 'inset 0 0 0 1px rgba(212,175,55,0.35)',
+                      }}
+                    />
+
+                    {/* Category chip */}
+                    <span className="absolute top-3 left-3 sm:top-4 sm:left-4 px-2.5 py-0.5 rounded-full bg-black/65 backdrop-blur-md border border-[#D4AF37]/40 text-[#E7C960] text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">
+                      {categoryLabel(img.category)}
                     </span>
 
-                    <div className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/60 border border-[#D4AF37]/40 flex items-center justify-center text-[#E7C960] opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Eye className="w-4 h-4 text-[#E7C960]" />
+                    {/* Caption */}
+                    <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 lg:p-5">
+                      <h3
+                        className={`font-bold text-white leading-snug ${
+                          isFeatured ? 'text-base sm:text-xl lg:text-2xl' : 'text-sm sm:text-base'
+                        }`}
+                      >
+                        {img.title}
+                      </h3>
+                      <p
+                        className={`text-white/70 mt-0.5 line-clamp-1 transition-all duration-300 ${
+                          isFeatured
+                            ? 'text-xs sm:text-sm opacity-100'
+                            : 'text-[11px] sm:text-xs opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0'
+                        }`}
+                      >
+                        {img.subtitle}
+                      </p>
                     </div>
                   </div>
-
-                  <div className="p-4 space-y-1">
-                    <h4 className={`text-sm font-bold transition-colors ${
-                      isDark ? 'text-white group-hover:text-[#E7C960]' : 'text-slate-900 group-hover:text-slate-700'
-                    }`}>
-                      {img.title}
-                    </h4>
-                    <p className={`text-xs font-normal ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                      {img.subtitle}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
+                </button>
+              );
+            })}
           </div>
+        )}
 
-          {/* RIGHT SIDE: VIDEOS & REELS (6 cols) */}
-          <div className={`lg:col-span-6 space-y-6 ${mobileTab === 'reels' ? 'block' : 'hidden lg:block'}`}>
-            <div className={`hidden lg:flex items-center justify-between border-b pb-4 ${
-              isDark ? 'border-[#D4AF37]/30' : 'border-slate-200'
-            }`}>
-              <div className="flex items-center gap-2.5">
-                <div className={`w-9 h-9 rounded-xl border flex items-center justify-center ${
-                  isDark ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#E7C960]' : 'bg-slate-100 border-slate-300 text-slate-900'
-                }`}>
-                  <Video className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Video Reels & Walkthroughs</h3>
-                  <span className={`text-xs font-normal ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Watch procedures & student sessions</span>
-                </div>
+        {/* Reels strip */}
+        {showReels && (
+          <div className={`${showLooks ? 'mt-12 sm:mt-16' : ''} space-y-5`}>
+            <div className="flex items-end justify-between gap-4">
+              <div>
+                <p
+                  className={`text-[11px] font-bold uppercase tracking-[0.18em] mb-1 ${
+                    isDark ? 'text-[#E7C960]' : 'text-[#B8860B]'
+                  }`}
+                >
+                  From the chair
+                </p>
+                <h3 className={`text-lg sm:text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  Video Reels
+                </h3>
               </div>
-              <span className={`text-xs font-bold px-3 py-1 rounded-full border ${
-                isDark ? 'text-[#E7C960] bg-[#D4AF37]/15 border-[#D4AF37]/40' : 'text-slate-800 bg-slate-100 border-slate-300'
-              }`}>
-                {videosList.length} Reels
+              <span
+                className={`hidden sm:inline text-xs font-medium ${isDark ? 'text-slate-500' : 'text-slate-400'}`}
+              >
+                Swipe to explore
               </span>
             </div>
 
-            <div className="space-y-4">
-              {videosList.map((vid) => (
-                <div
-                  key={vid.id}
-                  onClick={() => setActiveMedia({ type: 'video', src: vid.videoUrl, title: vid.title, subtitle: vid.subtitle, badge: vid.badge })}
-                  className={`p-4 rounded-2xl border transition-all duration-300 cursor-pointer shadow-md flex items-center gap-4 group hover:-translate-y-0.5 ${
-                    isDark ? 'glass-card border-[#D4AF37]/25 hover:border-[#D4AF37]/60' : 'bg-slate-50 border-slate-200 hover:border-slate-400'
-                  }`}
-                >
-                  <div className="w-28 sm:w-36 aspect-[16/10] rounded-xl overflow-hidden relative shrink-0 border border-[#D4AF37]/30">
-                    <img
-                      src={vid.poster}
-                      alt={vid.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                      <div className="w-10 h-10 rounded-full bg-[#D4AF37] text-black p-0.5 shadow-lg group-hover:scale-110 transition-transform">
-                        <div className="w-full h-full bg-[#D4AF37] rounded-full flex items-center justify-center">
-                          <Play className="w-4 h-4 text-black fill-black ml-0.5" />
+            <div className="-mx-4 sm:-mx-6 md:-mx-10 px-4 sm:px-6 md:px-10">
+              <div className="flex gap-3 sm:gap-4 overflow-x-auto no-scrollbar pb-2 snap-x snap-mandatory">
+                {filteredReels.map((vid, i) => (
+                  <button
+                    key={vid.id}
+                    type="button"
+                    onClick={() => openReel(vid.id)}
+                    className={`group relative shrink-0 w-[42vw] max-w-[200px] sm:w-[180px] sm:max-w-none snap-start rounded-2xl sm:rounded-3xl overflow-hidden text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] animate-fadeIn ${
+                      isDark ? 'ring-1 ring-[#D4AF37]/25' : 'ring-1 ring-slate-200 shadow-md'
+                    }`}
+                    style={{ animationDelay: `${i * 60}ms` }}
+                  >
+                    <div className="relative aspect-[9/14] overflow-hidden">
+                      <img
+                        src={vid.poster}
+                        alt={vid.title}
+                        loading="lazy"
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10" />
+
+                      {/* Play */}
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-12 h-12 rounded-full bg-[#D4AF37] text-black flex items-center justify-center shadow-lg shadow-black/30 group-hover:scale-110 transition-transform duration-300">
+                          <Play className="w-5 h-5 fill-black ml-0.5" />
                         </div>
                       </div>
-                    </div>
-                  </div>
 
-                  <div className="space-y-1.5 flex-1 min-w-0">
-                    <div className="flex items-center justify-between">
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
-                        isDark ? 'bg-[#D4AF37]/15 text-[#E7C960] border-[#D4AF37]/40' : 'bg-slate-200 text-slate-800 border-slate-300'
-                      }`}>
-                        {vid.badge}
+                      {/* Duration */}
+                      <span className="absolute top-3 right-3 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-sm text-[10px] font-bold text-white/90 border border-white/10">
+                        {vid.duration}
                       </span>
-                      <span className={`text-[11px] font-medium ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{vid.duration}</span>
+
+                      <div className="absolute bottom-0 left-0 right-0 p-3.5 space-y-0.5">
+                        <span className="text-[9px] font-bold uppercase tracking-wider text-[#E7C960]">
+                          {categoryLabel(vid.category)}
+                        </span>
+                        <h4 className="text-sm font-bold text-white leading-snug line-clamp-2">
+                          {vid.title}
+                        </h4>
+                      </div>
                     </div>
-
-                    <h4 className={`text-sm font-bold truncate transition-colors ${
-                      isDark ? 'text-white group-hover:text-[#E7C960]' : 'text-slate-900 group-hover:text-slate-700'
-                    }`}>
-                      {vid.title}
-                    </h4>
-
-                    <p className={`text-xs font-normal line-clamp-2 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-                      {vid.subtitle}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-        </div>
-
-        {/* Modal Lightbox */}
-        {activeMedia && (
-          <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl flex items-center justify-center p-4 animate-fadeIn">
-            <div className="relative w-full max-w-4xl bg-[#121218] rounded-3xl overflow-hidden border border-[#D4AF37]/50 shadow-2xl p-4 sm:p-6 text-white">
-              
-              <button
-                onClick={() => setActiveMedia(null)}
-                className="absolute top-4 right-4 z-10 p-2.5 rounded-full bg-black/80 text-white hover:text-[#E7C960] border border-white/20 transition-all hover:scale-110"
-              >
-                <X className="w-6 h-6" />
-              </button>
-
-              <div className="aspect-video w-full rounded-2xl overflow-hidden bg-black relative flex items-center justify-center border border-white/10">
-                {activeMedia.type === 'video' ? (
-                  <video
-                    src={activeMedia.src}
-                    controls
-                    autoPlay
-                    className="w-full h-full object-contain"
-                  />
-                ) : (
-                  <img
-                    src={activeMedia.src}
-                    alt={activeMedia.title}
-                    className="w-full h-full object-contain"
-                  />
-                )}
-              </div>
-
-              <div className="pt-4 px-2 space-y-1">
-                <span className="text-xs font-extrabold uppercase tracking-widest text-[#E7C960]">
-                  {activeMedia.badge}
-                </span>
-                <h3 className="text-xl sm:text-2xl font-bold text-white">
-                  {activeMedia.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-300 font-normal">
-                  {activeMedia.subtitle}
-                </p>
+                  </button>
+                ))}
               </div>
             </div>
           </div>
         )}
 
+        {!showLooks && !showReels && (
+          <div
+            className={`text-center py-20 rounded-3xl border ${
+              isDark ? 'border-[#D4AF37]/20 text-slate-400' : 'border-slate-200 text-slate-500'
+            }`}
+          >
+            Nothing in this category yet — try another filter.
+          </div>
+        )}
       </div>
+
+      {/* Lightbox */}
+      {activeMedia &&
+        createPortal(
+          <div
+            className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 animate-fadeIn"
+            role="dialog"
+            aria-modal="true"
+            aria-label={activeMedia.title}
+          >
+            <button
+              type="button"
+              aria-label="Close gallery"
+              className="absolute inset-0 bg-black/92 backdrop-blur-md"
+              onClick={closeLightbox}
+            />
+
+            <div className="relative w-full max-w-5xl z-10">
+              {/* Top bar */}
+              <div className="flex items-center justify-between gap-3 mb-3 sm:mb-4 px-1">
+                <div className="min-w-0">
+                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-[#E7C960]">
+                    {activeMedia.type === 'video' ? 'Reel' : categoryLabel(activeMedia.category)}
+                    {lightboxItems.length > 1 && (
+                      <span className="text-white/40 font-medium normal-case tracking-normal ml-2">
+                        {activeIndex + 1} / {lightboxItems.length}
+                      </span>
+                    )}
+                  </span>
+                  <h3 className="text-base sm:text-xl font-bold text-white truncate">
+                    {activeMedia.title}
+                  </h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={closeLightbox}
+                  className="shrink-0 p-2.5 rounded-full bg-white/10 text-white hover:bg-white/20 hover:text-[#E7C960] border border-white/15 transition-all"
+                  aria-label="Close"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-black border border-[#D4AF37]/35 shadow-2xl shadow-black/50">
+                <div className="aspect-video w-full flex items-center justify-center bg-black">
+                  {activeMedia.type === 'video' ? (
+                    <video
+                      key={activeMedia.src}
+                      src={activeMedia.src}
+                      poster={activeMedia.poster}
+                      controls
+                      autoPlay
+                      playsInline
+                      className="w-full h-full object-contain"
+                    />
+                  ) : (
+                    <img
+                      src={activeMedia.src}
+                      alt={activeMedia.title}
+                      className="w-full h-full object-contain max-h-[75vh]"
+                    />
+                  )}
+                </div>
+
+                {activeMedia.subtitle && (
+                  <div className="px-4 sm:px-5 py-3 border-t border-white/10 bg-[#121218]/95">
+                    <p className="text-xs sm:text-sm text-slate-300">{activeMedia.subtitle}</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Prev / Next */}
+              {lightboxItems.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    onClick={goPrev}
+                    className="absolute left-0 sm:-left-3 top-1/2 -translate-y-1/2 z-20 p-2.5 sm:p-3 rounded-full bg-black/70 border border-[#D4AF37]/40 text-[#E7C960] hover:bg-[#D4AF37] hover:text-black transition-all"
+                    aria-label="Previous"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={goNext}
+                    className="absolute right-0 sm:-right-3 top-1/2 -translate-y-1/2 z-20 p-2.5 sm:p-3 rounded-full bg-black/70 border border-[#D4AF37]/40 text-[#E7C960] hover:bg-[#D4AF37] hover:text-black transition-all"
+                    aria-label="Next"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                </>
+              )}
+            </div>
+          </div>,
+          document.body
+        )}
     </section>
   );
 }
