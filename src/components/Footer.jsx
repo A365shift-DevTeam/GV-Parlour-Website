@@ -1,128 +1,128 @@
 import React from 'react';
-import { Heart, Globe, Share2, MessageCircle } from 'lucide-react';
+import { Heart, MessageCircle, Phone, Mail } from 'lucide-react';
 
 export default function Footer({ theme }) {
   const isDark = theme !== 'light';
 
+  const columns = [
+    {
+      title: 'Academy',
+      links: [
+        { label: 'Basic · 2 Weeks', href: '#services-courses' },
+        { label: 'Standard · 3 Months', href: '#services-courses' },
+        { label: 'Advanced · 6 Months', href: '#services-courses' },
+        { label: 'Custom Syllabus', href: '#services-courses' },
+      ],
+    },
+    {
+      title: 'Parlour',
+      links: [
+        { label: 'Facial & Skin', href: '#services-courses' },
+        { label: 'Hair Cut & Colour', href: '#services-courses' },
+        { label: 'Hair Spa & Care', href: '#services-courses' },
+        { label: 'Nails & Grooming', href: '#services-courses' },
+      ],
+    },
+    {
+      title: 'Studio',
+      links: [
+        { label: 'Founder', href: '#founder' },
+        { label: 'Lookbook', href: '#gallery' },
+        { label: 'Contact', href: '#contact' },
+      ],
+    },
+  ];
+
   return (
-    <footer className={`border-t text-xs py-8 sm:py-12 transition-colors duration-300 ${
-      isDark ? 'bg-[#070604] border-[#D4AF37]/30 text-slate-400' : 'bg-slate-900 border-slate-800 text-slate-400'
-    }`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 space-y-6 sm:space-y-10">
-        
-        <div className={`flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6 border-b pb-6 sm:pb-8 ${
-          isDark ? 'border-[#D4AF37]/20' : 'border-white/10'
-        }`}>
-          {/* Logo Brand */}
-          <div className="flex items-center gap-3">
-            <div className={`relative w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden p-0.5 border transition-colors shadow-md ${
-              isDark ? 'border-[#D4AF37]/60' : 'border-slate-300'
-            }`}>
-              <img 
-                src="/assets/logo_dark.webp" 
-                alt="GV Studio Logo" 
-                className="w-full h-full object-cover rounded-full scale-[1.04]" 
-              />
+    <footer
+      className={`border-t transition-colors duration-300 ${
+        isDark
+          ? 'bg-[#070604] border-[#D4AF37]/20 text-stone-400'
+          : 'bg-stone-950 border-stone-800 text-stone-400'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 py-12 sm:py-16 space-y-10">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
+          {/* Brand */}
+          <div className="md:col-span-4 space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full overflow-hidden p-[1.5px] bg-gradient-to-br from-[#E7C960] to-[#8A6D1F]">
+                <img
+                  src="/assets/logo_dark.webp"
+                  alt="GV Studio"
+                  className="w-full h-full object-cover rounded-full scale-[1.04] bg-black"
+                />
+              </div>
+              <div>
+                <span className="text-base sm:text-lg font-bold text-white block leading-none">
+                  GV Studio
+                </span>
+                <span className="text-[10px] tracking-[0.2em] uppercase text-[#D4AF37] mt-1 block">
+                  Beauty & Academy
+                </span>
+              </div>
             </div>
-            <div>
-              <span className="text-base sm:text-lg font-bold text-white block leading-none">
-                GV STUDIO
-              </span>
-              <span className={`text-[9px] sm:text-[10px] tracking-widest uppercase mt-0.5 block ${
-                isDark ? 'text-[#D4AF37]' : 'text-slate-400'
-              }`}>
-                Beauty Parlour & Academy
-              </span>
-            </div>
-          </div>
-
-          {/* Tagline */}
-          <p className={`italic text-xs sm:text-sm text-center md:text-right font-normal ${
-            isDark ? 'text-[#E7C960]' : 'text-slate-300'
-          }`}>
-            "Enhancing Beauty, Inspiring Confidence"
-          </p>
-        </div>
-
-        {/* Links & Information (Compact 2-Column Grid on Mobile) */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 text-[11px] sm:text-xs">
-          <div>
-            <h4 className={`font-bold uppercase text-[10px] sm:text-xs tracking-wider mb-2.5 ${
-              isDark ? 'text-[#E7C960]' : 'text-white'
-            }`}>
-              Academy Courses
-            </h4>
-            <ul className="space-y-1.5 text-slate-300">
-              <li><a href="#services-courses" className={isDark ? 'hover:text-[#E7C960]' : 'hover:text-white'}>Basic Level – 2 Wks</a></li>
-              <li><a href="#services-courses" className={isDark ? 'hover:text-[#E7C960]' : 'hover:text-white'}>Standard – 3 Mos</a></li>
-              <li><a href="#services-courses" className={isDark ? 'hover:text-[#E7C960]' : 'hover:text-white'}>Advanced – 6 Mos</a></li>
-              <li><a href="#services-courses" className={isDark ? 'hover:text-[#E7C960]' : 'hover:text-white'}>Custom Syllabus</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className={`font-bold uppercase text-[10px] sm:text-xs tracking-wider mb-2.5 ${
-              isDark ? 'text-[#E7C960]' : 'text-white'
-            }`}>
-              Parlour & Skin
-            </h4>
-            <ul className="space-y-1.5 text-slate-300">
-              <li><a href="#services-courses" className={isDark ? 'hover:text-[#E7C960]' : 'hover:text-white'}>Hydrafacial Therapy</a></li>
-              <li><a href="#services-courses" className={isDark ? 'hover:text-[#E7C960]' : 'hover:text-white'}>Acne & Anti-Ageing</a></li>
-              <li><a href="#services-courses" className={isDark ? 'hover:text-[#E7C960]' : 'hover:text-white'}>Gel Nail Extensions</a></li>
-              <li><a href="#services-courses" className={isDark ? 'hover:text-[#E7C960]' : 'hover:text-white'}>Hair Spa & Care</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className={`font-bold uppercase text-[10px] sm:text-xs tracking-wider mb-2.5 ${
-              isDark ? 'text-[#E7C960]' : 'text-white'
-            }`}>
-              Founder & Accolades
-            </h4>
-            <ul className="space-y-1.5 text-slate-300">
-              <li><a href="#founder" className={isDark ? 'hover:text-[#E7C960]' : 'hover:text-white'}>Galla Vidya</a></li>
-              <li><a href="#founder" className={isDark ? 'hover:text-[#E7C960]' : 'hover:text-white'}>Lakme Recognition</a></li>
-              <li><a href="#founder" className={isDark ? 'hover:text-[#E7C960]' : 'hover:text-white'}>Fashion Week Partner</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className={`font-bold uppercase text-[10px] sm:text-xs tracking-wider mb-2.5 ${
-              isDark ? 'text-[#E7C960]' : 'text-white'
-            }`}>
-              Connect & Socials
-            </h4>
-            <div className="flex items-center gap-2.5 pt-0.5">
-              <a href="#contact" className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-all ${
-                isDark ? 'bg-[#D4AF37]/15 border border-[#D4AF37]/30 text-[#E7C960] hover:bg-[#D4AF37]/30' : 'bg-white/10 text-slate-200 hover:text-white hover:bg-white/20'
-              }`} title="Instagram">
-                <Globe className="w-3.5 h-3.5" />
+            <p className="text-sm text-[#E7C960]/90 leading-snug">
+              “Enhancing Beauty, Inspiring Confidence”
+            </p>
+            <div className="flex flex-wrap gap-2 pt-1">
+              <a
+                href="tel:+919994357515"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold border border-[#D4AF37]/25 text-[#E7C960] hover:bg-[#D4AF37]/15 transition-colors"
+              >
+                <Phone className="w-3.5 h-3.5" />
+                Call
               </a>
-              <a href="#contact" className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-all ${
-                isDark ? 'bg-[#D4AF37]/15 border border-[#D4AF37]/30 text-[#E7C960] hover:bg-[#D4AF37]/30' : 'bg-white/10 text-slate-200 hover:text-white hover:bg-white/20'
-              }`} title="Facebook">
-                <Share2 className="w-3.5 h-3.5" />
-              </a>
-              <a href="#contact" className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-all ${
-                isDark ? 'bg-[#D4AF37]/15 border border-[#D4AF37]/30 text-[#E7C960] hover:bg-[#D4AF37]/30' : 'bg-white/10 text-slate-200 hover:text-white hover:bg-white/20'
-              }`} title="WhatsApp">
+              <a
+                href="https://wa.me/919994357515"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 transition-colors"
+              >
                 <MessageCircle className="w-3.5 h-3.5" />
+                WhatsApp
+              </a>
+              <a
+                href="mailto:gvceo23@gmail.com"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-[11px] font-bold border border-white/10 text-stone-300 hover:bg-white/5 transition-colors"
+              >
+                <Mail className="w-3.5 h-3.5" />
+                Email
               </a>
             </div>
           </div>
+
+          {/* Link columns */}
+          <div className="md:col-span-8 grid grid-cols-2 sm:grid-cols-3 gap-8">
+            {columns.map((col) => (
+              <div key={col.title}>
+                <h4 className="font-bold uppercase text-[10px] tracking-[0.18em] text-[#E7C960] mb-3">
+                  {col.title}
+                </h4>
+                <ul className="space-y-2 text-[13px] text-stone-400">
+                  {col.links.map((link) => (
+                    <li key={link.label}>
+                      <a href={link.href} className="hover:text-[#E7C960] transition-colors">
+                        {link.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* Copyright */}
-        <div className={`pt-6 border-t flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500 gap-3 ${
-          isDark ? 'border-[#D4AF37]/20' : 'border-white/5'
-        }`}>
-          <p>© {new Date().getFullYear()} GV Studio Beauty & Academy. All Rights Reserved.</p>
-          <p className="flex items-center gap-1">
-            Crafted with <Heart className={`w-3 h-3 ${isDark ? 'text-[#D4AF37] fill-[#D4AF37]' : 'text-white fill-white'}`} /> for Galla Vidya Beauty Studio
+        <div className="gold-rule" />
+
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-stone-500">
+          <p>© {new Date().getFullYear()} GV Studio Beauty & Academy. All rights reserved.</p>
+          <p className="flex items-center gap-1.5">
+            Crafted with
+            <Heart className="w-3 h-3 text-[#D4AF37] fill-[#D4AF37]" />
+            for Galla Vidya
           </p>
         </div>
-
       </div>
     </footer>
   );

@@ -6,11 +6,10 @@ import MediaGallery from './components/MediaGallery';
 import FounderAndCertificates from './components/FounderAndCertificates';
 import ContactUs from './components/ContactUs';
 import Footer from './components/Footer';
-import CourseCustomizerModal from './components/CourseCustomizerModal';
 import useSmoothScroll from './hooks/useSmoothScroll';
 
 export default function App() {
-  const lenisRef = useSmoothScroll();
+  useSmoothScroll();
 
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -18,8 +17,6 @@ export default function App() {
     }
     return 'dark';
   });
-
-  const [customizerOpen, setCustomizerOpen] = useState(false);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -33,62 +30,27 @@ export default function App() {
     localStorage.setItem('gv_theme', theme);
   }, [theme]);
 
-  // Freeze the page behind the customizer so the modal can't scroll the site.
-  useEffect(() => {
-    const lenis = lenisRef.current;
-    if (!lenis) return;
-    if (customizerOpen) lenis.stop();
-    else lenis.start();
-  }, [customizerOpen, lenisRef]);
-
   const toggleTheme = () => {
-    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
   };
 
   return (
-    <div className={`min-h-screen font-sans selection:bg-slate-300 selection:text-black transition-colors duration-300 bg-transparent ${
-      theme === 'light' ? 'text-slate-900' : 'text-slate-100'
-    }`}>
-      
-      {/* Global Header with Theme Toggle */}
-      <Header 
-        theme={theme}
-        onToggleTheme={toggleTheme}
-        onOpenCustomizer={() => setCustomizerOpen(true)} 
-      />
+    <div
+      className={`min-h-screen font-sans selection:bg-[#D4AF37] selection:text-black transition-colors duration-300 bg-transparent ${
+        theme === 'light' ? 'text-stone-900' : 'text-stone-100'
+      }`}
+    >
+      <Header theme={theme} onToggleTheme={toggleTheme} />
 
       <main>
-        {/* Section 1: Hero Section */}
-        <ScrollHeroCanvas 
-          theme={theme}
-          onOpenCustomizer={() => setCustomizerOpen(true)} 
-        />
-
-        {/* Section 2: Founder Details & Certificate */}
+        <ScrollHeroCanvas theme={theme} />
         <FounderAndCertificates theme={theme} />
-
-        {/* Section 3: Services & Courses */}
-        <ServicesAndCourses 
-          theme={theme}
-          onOpenCustomizer={() => setCustomizerOpen(true)} 
-        />
-
-        {/* Section 4: Showcase Images & Videos */}
+        <ServicesAndCourses theme={theme} />
         <MediaGallery theme={theme} />
-
-        {/* Section 5: Contact Us */}
         <ContactUs theme={theme} />
       </main>
 
-      {/* Global Footer */}
       <Footer theme={theme} />
-
-      {/* Course Customizer Modal */}
-      <CourseCustomizerModal
-        theme={theme}
-        isOpen={customizerOpen}
-        onClose={() => setCustomizerOpen(false)}
-      />
     </div>
   );
 }

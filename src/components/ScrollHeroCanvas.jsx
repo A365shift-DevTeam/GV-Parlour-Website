@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState, useMemo } from 'react';
 import { useIsCompact } from '../hooks/useMediaQuery';
+import openChatbot from '../utils/openChatbot';
 
 export default function ScrollHeroCanvas({ theme }) {
   const isCompact = useIsCompact();
@@ -277,29 +278,26 @@ export default function ScrollHeroCanvas({ theme }) {
     paint(ctx, width, height, Math.floor(progressRef.current * (variantConfig.frameCount - 1)));
   }, [ready, variantConfig, isCompact]);
 
+  const loadPct = Math.min(100, Math.round((loadedCount / Math.max(1, variantConfig.frameCount)) * 100));
+
   return (
-    <section 
-      id="hero" 
-      ref={containerRef} 
+    <section
+      id="hero"
+      ref={containerRef}
       className={`relative w-full ${isCompact ? 'pt-20' : 'pt-0 min-h-[280dvh]'}`}
     >
-      {/* Sticky Stage Pin adhering to Rules §0, §5 & §7.
-          Compact gets no 100dvh pin: the stage hugs the 16/9 plate so there is
-          no dead viewport space between the hero and the next section. */}
+      {/* Sticky Stage Pin — compact hugs 16/9 plate; desktop pins full viewport */}
       <div
         ref={stickyRef}
         className={`w-full overflow-hidden flex flex-col transition-colors duration-300 ${
           isCompact ? 'relative' : 'sticky top-0 h-[100dvh]'
-        } ${
-          isDark ? 'bg-[#09090B]' : 'bg-slate-50'
-        }`}
+        } ${isDark ? 'bg-[#0A0907]' : 'bg-[#F7F2EA]'}`}
       >
-        {/* Rule §4: Lock box against CLS with explicit aspect-ratio plate */}
-        <div className={`relative w-full shrink-0 ${
-          isCompact ? 'aspect-[16/9]' : 'h-full flex-1'
-        }`}>
-          
-          {/* Rule §10: Poster image under canvas for reduced motion / loading state */}
+        <div
+          className={`relative w-full shrink-0 ${
+            isCompact ? 'aspect-[16/9]' : 'h-full flex-1'
+          }`}
+        >
           <img
             src={variantConfig.posterSrc}
             alt="GV Studio Beauty & Cosmetology"
@@ -310,15 +308,72 @@ export default function ScrollHeroCanvas({ theme }) {
             }`}
           />
 
-          {/* Frame Sequence Canvas */}
           {!prefersReducedMotion && (
             <canvas
               ref={canvasRef}
               className="absolute inset-0 w-full h-full z-10 pointer-events-none block"
             />
           )}
-        </div>
 
+          {/* Cinematic vignette + editorial copy */}
+          <div
+            aria-hidden
+            className="absolute inset-0 z-20 pointer-events-none"
+            style={{
+              background: isCompact
+                ? 'linear-gradient(180deg, rgba(10,9,7,0.35) 0%, transparent 35%, rgba(10,9,7,0.75) 100%)'
+                : 'linear-gradient(100deg, rgba(10,9,7,0.72) 0%, rgba(10,9,7,0.25) 48%, rgba(10,9,7,0.45) 100%)',
+            }}
+          />
+
+          <div className="absolute inset-0 z-30 flex flex-col justify-end sm:justify-center pointer-events-none">
+            <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 md:px-10 pb-8 sm:pb-0 pt-24">
+              <div className="max-w-xl space-y-4 sm:space-y-5 animate-fadeIn pointer-events-auto">
+                <p className="section-eyebrow !text-[#E7C960]">
+                  <span className="w-6 h-px bg-[#D4AF37] inline-block" />
+                  Coimbatore · Beauty & Academy
+                </p>
+
+                <h1 className="fluid-hero-title text-white drop-shadow-[0_2px_24px_rgba(0,0,0,0.45)]">
+                  Enhancing Beauty,
+                  <br />
+                  <span className="text-[#E7C960]">Inspiring Confidence</span>
+                </h1>
+
+                <p className="text-sm sm:text-base text-white/75 font-normal max-w-md leading-relaxed">
+                  Premier parlour treatments and certified cosmetology training — founded by Galla Vidya.
+                </p>
+
+                <div className="flex flex-wrap items-center gap-3 pt-1">
+                  <a href="#services-courses" className="btn-gold pointer-events-auto">
+                    Explore Services
+                  </a>
+                  <a
+                    href="#contact"
+                    onClick={openChatbot}
+                    className="btn-ghost !text-[#E7C960] !border-[#D4AF37]/50 !bg-black/30 backdrop-blur-sm pointer-events-auto"
+                  >
+                    Book a Visit
+                  </a>
+                </div>
+
+                {!ready && !prefersReducedMotion && (
+                  <p className="text-[10px] font-semibold tracking-widest uppercase text-white/45 pt-2">
+                    Loading experience · {loadPct}%
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Scroll cue — desktop only */}
+            {!isCompact && (
+              <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/50">
+                <span className="text-[10px] font-bold tracking-[0.25em] uppercase">Scroll</span>
+                <span className="w-px h-10 bg-gradient-to-b from-[#D4AF37] to-transparent animate-soft-pulse" />
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </section>
   );

@@ -1,168 +1,171 @@
-import React, { useState } from 'react';
-import { 
-  Phone, 
-  Mail, 
-  MapPin, 
-  Clock, 
-  MessageSquare, 
-  Send, 
-  CheckCircle2
-} from 'lucide-react';
+import React from 'react';
+import { Phone, Mail, MapPin, Clock, MessageSquare } from 'lucide-react';
 import openChatbot from '../utils/openChatbot';
 
 export default function ContactUs({ theme }) {
-  const [submitted, setSubmitted] = useState(false);
   const isDark = theme !== 'light';
 
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    interest: 'Basic Level Course (2 Weeks)',
-    message: ''
-  });
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({
-        name: '',
-        phone: '',
-        email: '',
-        interest: 'Basic Level Course (2 Weeks)',
-        message: ''
-      });
-    }, 4000);
-  };
-
-  // Only reached when the chatbot widget fails to load — WhatsApp keeps the
-  // button useful instead of leaving it dead.
   const handleWhatsAppFallback = () => {
     const text = encodeURIComponent(
-      `Hello GV Studio! I am interested in booking a course/service.\nName: ${formData.name || 'Client'}\nInterest: ${formData.interest}`
+      'Hello GV Studio! I am interested in booking a course/service.'
     );
     window.open(`https://wa.me/919994357515?text=${text}`, '_blank');
   };
 
+  const cardClass = `p-5 sm:p-6 rounded-[1.4rem] border transition-colors ${
+    isDark
+      ? 'bg-white/[0.03] border-white/10 hover:border-[#D4AF37]/30'
+      : 'bg-white/80 border-stone-200 hover:border-[#D4AF37]/40'
+  }`;
+
+  const iconClass = `w-11 h-11 rounded-xl border flex items-center justify-center shrink-0 ${
+    isDark
+      ? 'bg-[#D4AF37]/12 border-[#D4AF37]/30 text-[#E7C960]'
+      : 'bg-[#D4AF37]/10 border-[#D4AF37]/25 text-[#8A6D1F]'
+  }`;
+
+  const labelClass = `text-[10px] font-bold uppercase tracking-[0.16em] block ${
+    isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'
+  }`;
+
+  const linkClass = `font-semibold text-sm transition-colors ${
+    isDark ? 'text-white hover:text-[#E7C960]' : 'text-stone-900 hover:text-[#8A6D1F]'
+  }`;
+
   return (
-    <section id="contact" className={`py-20 sm:py-28 transition-colors duration-300 relative ${
-      isDark ? 'bg-[#09090B]/40 text-slate-100' : 'bg-white/40 text-slate-900'
-    }`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 relative z-10">
-        
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
-          <div className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-bold uppercase tracking-wider ${
-            isDark ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#E7C960]' : 'bg-slate-100 border-slate-300 text-slate-800'
-          }`}>
-            Get In Touch & Book Now
-          </div>
-
-          <h2 className={`fluid-section-title font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-            Connect With <span className="gold-gradient-text">GV Studio</span>
+    <section
+      id="contact"
+      className={`section-pad transition-colors duration-300 relative ${
+        isDark ? 'text-stone-100' : 'text-stone-900'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 relative z-10 space-y-8 lg:space-y-10">
+        {/* Intro — full width so cards below share one baseline */}
+        <div className="max-w-xl space-y-4">
+          <p className="section-eyebrow">
+            <span className={`w-6 h-px inline-block ${isDark ? 'bg-[#D4AF37]' : 'bg-[#8A6D1F]'}`} />
+            Visit & Book
+          </p>
+          <h2 className={`fluid-section-title ${isDark ? 'text-white' : 'text-stone-900'}`}>
+            Let’s create your{' '}
+            <span className="gold-gradient-text">next look</span>
           </h2>
-
-          <p className={`text-sm sm:text-base font-normal ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-            Have questions about our course modules, custom timings, or parlour services? Reach out to our team directly.
+          <p className={`text-sm sm:text-base leading-relaxed ${isDark ? 'text-stone-400' : 'text-stone-600'}`}>
+            Questions about courses, custom timings, or parlour services? Reach the studio directly
+            — we’ll guide you from enquiry to appointment.
           </p>
         </div>
 
-        {/* Contact Information Box (Centered without enrollment form) */}
-        <div className="max-w-3xl mx-auto">
-          <div className={`p-8 sm:p-10 rounded-3xl border space-y-8 shadow-2xl ${
-            isDark ? 'glass-card border-[#D4AF37]/40 shadow-[0_0_35px_-5px_rgba(212,175,55,0.15)]' : 'bg-white border-slate-200 shadow-xl'
-          }`}>
-            <div className="text-center space-y-2 border-b pb-6 border-[#D4AF37]/30">
-              <h3 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                Contact Information
+        {/* Quick chat + contact cards — tops align on one row */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
+          {/* Quick chat */}
+          <div
+            className={`lg:col-span-5 rounded-[1.6rem] p-6 sm:p-7 border space-y-5 flex flex-col justify-center ${
+              isDark
+                ? 'bg-gradient-to-br from-[#1a1710] to-[#0e0c09] border-[#D4AF37]/35'
+                : 'bg-white border-stone-200 shadow-xl shadow-stone-200/40'
+            }`}
+          >
+            <div>
+              <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-stone-900'}`}>
+                Prefer a quick chat?
               </h3>
-              <p className={`text-xs sm:text-sm font-normal ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-                Get in touch directly via phone, email, or WhatsApp for appointments & course details.
+              <p className={`text-xs sm:text-sm mt-1 ${isDark ? 'text-stone-400' : 'text-stone-600'}`}>
+                Book treatments or course counselling in one message.
               </p>
             </div>
+            <button
+              type="button"
+              onClick={(e) => openChatbot(e, { onFallback: handleWhatsAppFallback })}
+              className="btn-gold w-full !rounded-2xl !py-4"
+            >
+              <MessageSquare className="w-4 h-4" />
+              Inquiry & Booking
+            </button>
+            <a
+              href="https://wa.me/919994357515?text=Hello%20GV%20Studio!"
+              target="_blank"
+              rel="noreferrer"
+              className="btn-ghost w-full !rounded-2xl"
+            >
+              Message on WhatsApp
+            </a>
+          </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-xs sm:text-sm">
-              <div className="flex items-start gap-4">
-                <div className={`w-11 h-11 rounded-xl border flex items-center justify-center shrink-0 ${
-                  isDark ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#E7C960]' : 'bg-slate-100 border-slate-300 text-slate-900'
-                }`}>
+          {/* Contact details — same top edge as quick chat */}
+          <div className="lg:col-span-7 flex flex-col gap-4">
+            {/* Phone + Email */}
+            <div className={`${cardClass} grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-0`}>
+              <div className="flex items-start gap-4 sm:pr-6 sm:border-r sm:border-[#D4AF37]/20">
+                <div className={iconClass}>
                   <Phone className="w-5 h-5" />
                 </div>
-                <div>
-                  <span className={`text-[11px] font-bold uppercase block ${isDark ? 'text-[#D4AF37]' : 'text-slate-500'}`}>Phone / WhatsApp</span>
-                  <a href="tel:+919994357515" className={`font-semibold text-sm transition-colors ${
-                    isDark ? 'text-white hover:text-[#E7C960]' : 'text-slate-900 hover:text-black'
-                  }`}>
+                <div className="min-w-0 space-y-1">
+                  <span className={labelClass}>Phone / WhatsApp</span>
+                  <a href="tel:+919994357515" className={linkClass}>
                     +91 99943 57515
                   </a>
                 </div>
               </div>
 
-              <div className="flex items-start gap-4">
-                <div className={`w-11 h-11 rounded-xl border flex items-center justify-center shrink-0 ${
-                  isDark ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#E7C960]' : 'bg-slate-100 border-slate-300 text-slate-900'
-                }`}>
+              <div className="flex items-start gap-4 sm:pl-6">
+                <div className={iconClass}>
                   <Mail className="w-5 h-5" />
                 </div>
-                <div>
-                  <span className={`text-[11px] font-bold uppercase block ${isDark ? 'text-[#D4AF37]' : 'text-slate-500'}`}>Email Address</span>
-                  <a href="mailto:gvceo23@gmail.com" className={`transition-colors font-medium ${
-                    isDark ? 'text-white hover:text-[#E7C960]' : 'text-slate-900 hover:text-black'
-                  }`}>
+                <div className="min-w-0 space-y-1">
+                  <span className={labelClass}>Email</span>
+                  <a href="mailto:gvceo23@gmail.com" className={`${linkClass} break-all`}>
                     gvceo23@gmail.com
                   </a>
                 </div>
               </div>
-
-              <div className="flex items-start gap-4">
-                <div className={`w-11 h-11 rounded-xl border flex items-center justify-center shrink-0 ${
-                  isDark ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#E7C960]' : 'bg-slate-100 border-slate-300 text-slate-900'
-                }`}>
-                  <MapPin className="w-5 h-5" />
-                </div>
-                <div>
-                  <span className={`text-[11px] font-bold uppercase block ${isDark ? 'text-[#D4AF37]' : 'text-slate-500'}`}>Studio Location</span>
-                  <p className={`font-normal leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                    <strong className={`block ${isDark ? 'text-white' : 'text-slate-900'}`}>Galla Vidya</strong>
-                    Flat No. 23, 4th floor,<br />
-                    The Green Residence Apartment, Meena Estate,<br />
-                    Sowripalayam, Coimbatore 641028<br />
-                    <span className={`text-xs mt-1.5 block font-medium ${isDark ? 'text-[#E7C960]' : 'text-slate-600'}`}>
-                      Landmark: INDIAN BANK
-                    </span>
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className={`w-11 h-11 rounded-xl border flex items-center justify-center shrink-0 ${
-                  isDark ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#E7C960]' : 'bg-slate-100 border-slate-300 text-slate-900'
-                }`}>
-                  <Clock className="w-5 h-5" />
-                </div>
-                <div>
-                  <span className={`text-[11px] font-bold uppercase block ${isDark ? 'text-[#D4AF37]' : 'text-slate-500'}`}>Opening Hours</span>
-                  <p className={`font-normal ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                    Mon – Sun: 9:00 AM – 8:30 PM
-                  </p>
-                </div>
-              </div>
             </div>
 
-            <div className="pt-4 border-t border-[#D4AF37]/20">
-              <button
-                onClick={(e) => openChatbot(e, { onFallback: handleWhatsAppFallback })}
-                className="w-full py-4 rounded-2xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2.5 shadow-lg transition-all bg-[#D4AF37] hover:bg-[#E7C960] text-black hover:shadow-xl hover:scale-[1.01]"
-              >
-                <MessageSquare className="w-4 h-4 fill-black text-black" />
-                Inquiry & Booking Via Chatbot
-              </button>
+            {/* Hours + Location — equal height */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 items-stretch flex-1">
+              <div className={`${cardClass} !p-4 sm:!p-5 h-full flex`}>
+                <div className="flex items-start gap-3 w-full">
+                  <div className={`${iconClass} !w-9 !h-9`}>
+                    <Clock className="w-4 h-4" />
+                  </div>
+                  <div className="space-y-1 min-w-0 flex-1">
+                    <span className={labelClass}>Opening Hours</span>
+                    <p className={`text-sm font-medium leading-snug ${isDark ? 'text-stone-200' : 'text-stone-700'}`}>
+                      Mon – Sun
+                    </p>
+                    <p className={`text-sm leading-snug ${isDark ? 'text-stone-400' : 'text-stone-600'}`}>
+                      9:00 AM – 8:30 PM
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className={`${cardClass} !p-4 sm:!p-5 h-full flex`}>
+                <div className="flex items-start gap-3 w-full">
+                  <div className={`${iconClass} !w-9 !h-9`}>
+                    <MapPin className="w-4 h-4" />
+                  </div>
+                  <div className="space-y-1 min-w-0 flex-1">
+                    <span className={labelClass}>Studio Location</span>
+                    <p className={`text-xs sm:text-sm leading-snug ${isDark ? 'text-stone-300' : 'text-stone-700'}`}>
+                      <strong className={`block ${isDark ? 'text-white' : 'text-stone-900'}`}>
+                        Galla Vidya · GV Studio
+                      </strong>
+                      Flat No. 23, 4th floor, The Green Residence, Meena Estate, Sowripalayam, Coimbatore 641028
+                      <span
+                        className={`block text-[11px] mt-1 font-medium ${
+                          isDark ? 'text-[#E7C960]' : 'text-[#8A6D1F]'
+                        }`}
+                      >
+                        Landmark: Indian Bank
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-
       </div>
     </section>
   );

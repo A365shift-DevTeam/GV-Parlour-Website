@@ -240,14 +240,13 @@ export default function MediaGallery({ theme }) {
   return (
     <section
       id="gallery"
-      className={`py-16 sm:py-28 transition-colors duration-300 relative overflow-hidden ${
-        isDark ? 'bg-[#09090B]/40 text-slate-100' : 'bg-white/40 text-slate-900'
+      className={`section-pad transition-colors duration-300 relative overflow-hidden ${
+        isDark ? 'text-stone-100' : 'text-stone-900'
       }`}
     >
-      {/* Soft gold wash behind the mosaic */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-[420px] opacity-60"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[420px] opacity-50"
         style={{
           background: isDark
             ? 'radial-gradient(60% 80% at 50% 0%, rgba(212,175,55,0.12), transparent 70%)'
@@ -256,33 +255,25 @@ export default function MediaGallery({ theme }) {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 relative z-10">
-        {/* Header */}
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-10 sm:mb-14">
           <div className="max-w-xl space-y-3 sm:space-y-4">
-            <div
-              className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-bold uppercase tracking-wider ${
-                isDark
-                  ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#E7C960]'
-                  : 'bg-slate-100 border-slate-300 text-slate-800'
-              }`}
-            >
+            <p className="section-eyebrow">
               <Sparkles className="w-3.5 h-3.5" />
               Studio Lookbook
-            </div>
+            </p>
 
-            <h2 className={`fluid-section-title font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+            <h2 className={`fluid-section-title ${isDark ? 'text-white' : 'text-stone-900'}`}>
               Real <span className="gold-gradient-text">Transformations</span>
             </h2>
 
-            <p className={`text-sm sm:text-base font-normal leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+            <p className={`text-sm sm:text-base leading-relaxed ${isDark ? 'text-stone-400' : 'text-stone-600'}`}>
               A curated lookbook of bridal glam, hair artistry, and party looks — plus short reels from the chair.
             </p>
           </div>
 
-          {/* Filter pills */}
           <div
             className={`flex flex-wrap items-center gap-1.5 p-1.5 rounded-2xl border self-start lg:self-auto ${
-              isDark ? 'bg-black/50 border-[#D4AF37]/30' : 'bg-white/80 border-slate-200 shadow-sm'
+              isDark ? 'bg-black/50 border-[#D4AF37]/30' : 'bg-white/80 border-stone-200 shadow-sm'
             }`}
             role="tablist"
             aria-label="Gallery filters"
@@ -300,8 +291,8 @@ export default function MediaGallery({ theme }) {
                     active
                       ? 'bg-[#D4AF37] text-black shadow-md'
                       : isDark
-                        ? 'text-slate-300 hover:text-white hover:bg-white/5'
-                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                        ? 'text-stone-300 hover:text-white hover:bg-white/5'
+                        : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
                   }`}
                 >
                   {f.label}
@@ -426,12 +417,12 @@ export default function MediaGallery({ theme }) {
                 >
                   From the chair
                 </p>
-                <h3 className={`text-lg sm:text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                <h3 className={`text-xl sm:text-2xl font-semibold ${isDark ? 'text-white' : 'text-stone-900'}`}>
                   Video Reels
                 </h3>
               </div>
               <span
-                className={`hidden sm:inline text-xs font-medium ${isDark ? 'text-slate-500' : 'text-slate-400'}`}
+                className={`hidden sm:inline text-xs font-medium ${isDark ? 'text-stone-500' : 'text-stone-400'}`}
               >
                 Swipe to explore
               </span>

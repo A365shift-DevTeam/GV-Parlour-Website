@@ -4,12 +4,14 @@
   :root {
     --font-sans: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
 
-    /* Brand accent thread — luxury metallic gold / champagne */
+    /* Brand — champagne gold on warm ink / ivory */
     --gv-gold: 212 175 55;
     --gv-gold-light: 231 201 96;
     --gv-gold-dark: 170 119 28;
     --gv-blush: 224 152 152;
     --gv-orchid: 148 118 176;
+    --gv-ink: 10 9 7;
+    --gv-ivory: 250 247 242;
   }
 
   html.dark {
@@ -20,13 +22,14 @@
 
   html.light {
     color-scheme: light;
-    /* warm ivory rather than cold slate */
     background-color: #FAF7F2;
-    color: #0F172A;
+    color: #1C1917;
   }
 
   body {
     background: transparent;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -36,9 +39,7 @@
 }
 
 /* ------------------------------------------------------------------
-   Site atmosphere layer
-   Painted on <html> pseudo-elements so it sits behind every section
-   and survives the theme toggle with no JSX plumbing.
+   Atmosphere — warm gold washes + film grain
    ------------------------------------------------------------------ */
 html::before,
 html::after {
@@ -56,131 +57,228 @@ html::before {
 
 html.dark::before {
   background-image:
-    /* Rich metallic gold key light, upper left */
-    radial-gradient(110% 80% at 10% -5%, rgba(212, 175, 55, 0.24), transparent 60%),
-    /* Champagne gold fill, upper right */
-    radial-gradient(90% 70% at 92% 8%, rgba(231, 201, 96, 0.18), transparent 60%),
-    /* Deep warm gold bounce, bottom center */
-    radial-gradient(120% 65% at 50% 105%, rgba(170, 119, 28, 0.22), transparent 66%),
-    /* Gold pool mid-page */
-    radial-gradient(65% 45% at 85% 55%, rgba(212, 175, 55, 0.15), transparent 70%),
-    linear-gradient(180deg, #0A0907 0%, #0E0C09 50%, #0A0907 100%);
+    radial-gradient(90% 70% at 8% -8%, rgba(212, 175, 55, 0.18), transparent 58%),
+    radial-gradient(70% 55% at 96% 4%, rgba(231, 201, 96, 0.10), transparent 55%),
+    radial-gradient(100% 50% at 50% 108%, rgba(170, 119, 28, 0.16), transparent 62%),
+    linear-gradient(180deg, #0A0907 0%, #0C0B09 45%, #0A0907 100%);
 }
 
 html.light::before {
   background-image:
-    radial-gradient(105% 75% at 8% -6%, rgb(var(--gv-gold) / 0.22), transparent 58%),
-    radial-gradient(85% 65% at 94% 4%, rgb(var(--gv-blush) / 0.20), transparent 60%),
-    radial-gradient(110% 60% at 50% 104%, rgb(var(--gv-orchid) / 0.16), transparent 66%),
-    radial-gradient(55% 38% at 82% 58%, rgb(var(--gv-gold) / 0.10), transparent 70%),
-    linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #FAF7F2 100%);
+    radial-gradient(95% 70% at 6% -8%, rgb(var(--gv-gold) / 0.16), transparent 55%),
+    radial-gradient(70% 50% at 94% 6%, rgb(var(--gv-blush) / 0.14), transparent 55%),
+    radial-gradient(90% 45% at 50% 110%, rgb(var(--gv-orchid) / 0.10), transparent 60%),
+    linear-gradient(180deg, #FDFBF7 0%, #F8F4EC 50%, #FAF7F2 100%);
 }
 
-/* Fine film grain */
 html::after {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 180px 180px;
 }
 
-html.dark::after { opacity: 0.05; }
-html.light::after { opacity: 0.035; mix-blend-mode: multiply; }
+html.dark::after { opacity: 0.04; }
+html.light::after { opacity: 0.03; mix-blend-mode: multiply; }
 
-/* Fluid typography utility helper */
+/* ------------------------------------------------------------------
+   Typography
+   ------------------------------------------------------------------ */
 .fluid-hero-title {
   font-size: clamp(2.25rem, min(1.2rem + 4.6vw, 0.5rem + 7dvh), 4.25rem);
   line-height: 1.15;
   font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 .fluid-section-title {
   font-size: clamp(1.85rem, min(1.2rem + 3.2vw, 0.8rem + 5dvh), 3rem);
   line-height: 1.2;
   font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 .gold-gradient-text {
-  background: linear-gradient(135deg, #FFF5C0 0%, #E7C960 40%, #D4AF37 70%, #C59A1A 100%);
+  background: linear-gradient(135deg, #FFF5C0 0%, #E7C960 38%, #D4AF37 68%, #C59A1A 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 html.light .gold-gradient-text {
-  background: linear-gradient(135deg, #D4AF37 0%, #C59A1A 50%, #B8860B 100%);
+  background: linear-gradient(135deg, #C9A227 0%, #B8860B 50%, #8A6D1F 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Dark vs Light Glass Panels */
+/* Section eyebrow label */
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+html.dark .section-eyebrow {
+  color: #E7C960;
+}
+
+html.light .section-eyebrow {
+  color: #8A6D1F;
+}
+
+/* Gold hairline divider */
+.gold-rule {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.55), transparent);
+}
+
+html.light .gold-rule {
+  background: linear-gradient(90deg, transparent, rgba(184, 134, 11, 0.45), transparent);
+}
+
+/* Primary CTA */
+.btn-gold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.35rem;
+  border-radius: 9999px;
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: #D4AF37;
+  color: #0A0907;
+  box-shadow: 0 8px 24px -8px rgba(212, 175, 55, 0.55);
+  transition: background 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+}
+
+.btn-gold:hover {
+  background: #E7C960;
+  box-shadow: 0 12px 28px -8px rgba(212, 175, 55, 0.65);
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.35rem;
+  border-radius: 9999px;
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  transition: background 200ms ease, border-color 200ms ease, color 200ms ease;
+}
+
+html.dark .btn-ghost {
+  color: #E7C960;
+  background: rgba(212, 175, 55, 0.08);
+}
+
+html.dark .btn-ghost:hover {
+  background: rgba(212, 175, 55, 0.18);
+  border-color: rgba(212, 175, 55, 0.7);
+}
+
+html.light .btn-ghost {
+  color: #8A6D1F;
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(184, 134, 11, 0.35);
+}
+
+html.light .btn-ghost:hover {
+  background: #fff;
+  border-color: rgba(184, 134, 11, 0.6);
+}
+
+/* Glass surfaces */
 html.dark .glass-panel {
-  background: rgba(16, 15, 12, 0.92);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(212, 175, 55, 0.32);
-  box-shadow: 0 10px 40px -10px rgba(212, 175, 55, 0.15);
+  background: rgba(14, 13, 11, 0.92);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  box-shadow: 0 16px 48px -16px rgba(0, 0, 0, 0.55);
 }
 
 html.light .glass-panel {
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(15, 23, 42, 0.12);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(28, 25, 23, 0.08);
+  box-shadow: 0 16px 40px -16px rgba(28, 25, 23, 0.12);
 }
 
 html.dark .glass-card {
-  background: rgba(20, 18, 14, 0.82);
+  background: rgba(18, 16, 13, 0.78);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(212, 175, 55, 0.28);
-  box-shadow: 0 6px 25px -8px rgba(212, 175, 55, 0.12);
+  border: 1px solid rgba(212, 175, 55, 0.22);
+  box-shadow: 0 8px 28px -12px rgba(0, 0, 0, 0.45);
 }
 
 html.light .glass-card {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.82);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(28, 25, 23, 0.06);
+  box-shadow: 0 8px 24px -12px rgba(28, 25, 23, 0.08);
 }
 
-/* Entrance reveal */
+/* Section shell */
+.section-pad {
+  padding-block: clamp(4rem, 8vw, 7.5rem);
+}
+
+/* Motion */
 @keyframes gvFadeUp {
-  from { opacity: 0; transform: translateY(14px); }
+  from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: none; }
 }
 
+@keyframes gvSoftPulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
 .animate-fadeIn {
-  animation: gvFadeUp 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: gvFadeUp 650ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-soft-pulse {
+  animation: gvSoftPulse 2.4s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-fadeIn { animation: none; }
+  .animate-fadeIn,
+  .animate-soft-pulse {
+    animation: none;
+  }
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
   background: #52525B;
   border-radius: 4px;
 }
 
-html.dark ::-webkit-scrollbar-thumb {
-  background: #8A6D1F;
-  border-radius: 4px;
-}
-html.dark ::-webkit-scrollbar-thumb:hover {
-  background: #D4AF37;
-}
+html.dark ::-webkit-scrollbar-thumb { background: #6B5520; }
+html.dark ::-webkit-scrollbar-thumb:hover { background: #D4AF37; }
 
-/* Hide scrollbar utility for mobile touch carousels */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
+.no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
