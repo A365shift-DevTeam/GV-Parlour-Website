@@ -71,18 +71,44 @@ export default function Header({ theme, onToggleTheme }) {
   };
 
   const iconBtn = `tap-target inline-flex items-center justify-center rounded-full border transition-all active:scale-95 ${
-    isDark
-      ? 'border-white/20 bg-black/25 text-white backdrop-blur-sm hover:bg-black/40'
-      : 'border-stone-300/60 bg-white/50 text-stone-800 backdrop-blur-sm hover:bg-white/80'
+    !scrolled
+      ? 'border-white/20 bg-transparent text-white hover:bg-white/10'
+      : isDark
+        ? 'border-white/20 bg-black/25 text-white backdrop-blur-sm hover:bg-black/40'
+        : 'border-stone-300/80 bg-white/80 text-stone-900 backdrop-blur-md hover:bg-white shadow-xs'
   }`;
+
+  const logoTitleColor = !scrolled
+    ? 'text-white drop-shadow-sm'
+    : isDark
+      ? 'text-white'
+      : 'text-stone-950';
+
+  const logoSubtitleColor = !scrolled
+    ? 'text-[#E7C960]'
+    : isDark
+      ? 'text-[#D4AF37]'
+      : 'text-[#8A6D1F]';
+
+  const navCapsuleClass = !scrolled
+    ? 'border-transparent bg-transparent'
+    : isDark
+      ? 'border-white/10 bg-black/20 backdrop-blur-md'
+      : 'border-stone-300/80 bg-white/70 shadow-xs backdrop-blur-md';
+
+  const navLinkClass = !scrolled
+    ? 'text-white hover:text-[#E7C960] transition-colors'
+    : isDark
+      ? 'text-stone-300 hover:bg-white/10 hover:text-white'
+      : 'text-stone-800 hover:bg-stone-950 hover:text-white';
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 h-20 border-b transition-colors duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 h-20 border-b transition-all duration-300 ${
         scrolled
           ? isDark
             ? 'border-[#D4AF37]/20 bg-[#0A0907]/80 backdrop-blur-xl'
-            : 'border-stone-200/70 bg-[#FAF7F2]/85 backdrop-blur-xl'
+            : 'border-stone-200/80 bg-[#FAF7F2]/90 backdrop-blur-xl shadow-xs'
           : 'border-transparent bg-transparent'
       }`}
     >
@@ -101,29 +127,23 @@ export default function Header({ theme, onToggleTheme }) {
             />
           </div>
           <div className="leading-none">
-            <span className={`block text-sm font-bold sm:text-base ${isDark ? 'text-white' : 'text-stone-900'}`}>
+            <span className={`block text-sm font-bold sm:text-base ${logoTitleColor}`}>
               GV Studio
             </span>
-            <span className={`mt-0.5 block text-[9px] font-semibold uppercase tracking-[0.18em] ${isDark ? 'text-[#D4AF37]' : 'text-stone-500'}`}>
+            <span className={`mt-0.5 block text-[9px] font-bold uppercase tracking-[0.18em] ${logoSubtitleColor}`}>
               Beauty & Academy
             </span>
           </div>
         </a>
 
         {/* md+ nav links */}
-        <nav
-          className={`hidden items-center gap-0.5 rounded-full border px-1.5 py-1 md:flex ${
-            isDark ? 'border-white/10 bg-black/20 backdrop-blur-md' : 'border-stone-200 bg-white/50 backdrop-blur-md'
-          }`}
-        >
+        <nav className={`hidden items-center gap-0.5 rounded-full border px-1.5 py-1 md:flex ${navCapsuleClass}`}>
           {NAV_LINKS.map((link) => (
             <a
               key={link.name}
               href={link.href}
               onClick={(e) => handleNav(e, link.href)}
-              className={`min-h-11 rounded-full px-3.5 text-[12px] font-semibold transition-colors active:opacity-70 ${
-                isDark ? 'text-stone-300 hover:bg-white/10 hover:text-white' : 'text-stone-700 hover:bg-white hover:text-stone-950'
-              }`}
+              className={`min-h-11 rounded-full px-3.5 text-[12px] font-semibold transition-colors active:opacity-70 ${navLinkClass}`}
             >
               <span className="inline-flex min-h-11 items-center">{link.name}</span>
             </a>
@@ -207,7 +227,9 @@ export default function Header({ theme, onToggleTheme }) {
                   href={link.href}
                   onClick={(e) => handleNav(e, link.href)}
                   className={`flex min-h-12 items-center rounded-2xl px-4 text-base font-semibold active:opacity-70 ${
-                    isDark ? 'hover:bg-white/8' : 'hover:bg-white'
+                    isDark
+                      ? 'text-stone-200 hover:bg-white/8 hover:text-white'
+                      : 'text-stone-900 hover:bg-stone-200/70 hover:text-stone-950 font-bold'
                   }`}
                 >
                   {link.name}

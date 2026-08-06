@@ -3,9 +3,25 @@ import useIsMobile from '../hooks/useIsMobile';
 import FounderAndCertificates from './FounderAndCertificates';
 
 const HERO_WEBM = '/assets/gv-studio-hero.webm';
-const HERO_POSTER = '/assets/gv-studio-hero-poster.webp';
+const HERO_POSTER = '/assets/gv-studio-hero-poster.jpg';
 const SCRUB_START = 1.0;
 const ASPECT = 16 / 9;
+/**
+ * Mobile browsers grow/shrink the viewport as the URL bar hides and shows —
+ * usually 60-110px. Re-measuring on that reflows the whole section mid-swipe
+ * (a 90px wobble moves section height by ~315px), which reads as the hero
+ * fighting the scroll. Ignore height-only changes below this; a real rotation
+ * changes the width and is never filtered.
+ */
+const CHROME_WOBBLE_PX = 160;
+const SEEK_TIMEOUT_MS = 800;
+/**
+ * The stage is allowed to stretch past its frozen height to cover a viewport
+ * that grew (URL bar collapsing). Reserve that much extra scroll travel so the
+ * clip still reaches its last frame before the stage unpins. Costs a short
+ * static hold at the end when the stage isn't stretched.
+ */
+const STAGE_STRETCH_RESERVE = 120;
 
 /**
  * Reliable mobile scroll + scrub:
@@ -31,6 +47,8 @@ export default function ScrollHeroCanvas({ theme }) {
   const pendingTimeRef = useRef(null);
   const rafIdRef = useRef(null);
   const markedReadyRef = useRef(false);
+  const lastMeasureRef = useRef(null);
+  const seekTimerRef = useRef(null);
 
   const [ready, setReady] = useState(false);
   const [loadPct, setLoadPct] = useState(0);
@@ -40,11 +58,24 @@ export default function ScrollHeroCanvas({ theme }) {
   const [scrubPx, setScrubPx] = useState(1400);
 
   useLayoutEffect(() => {
-    const measure = () => {
+    const measure = (force = false) => {
+      const w = window.innerWidth;
+      const vh = Math.round(window.innerHeight || 700);
+      const last = lastMeasureRef.current;
+
+      // URL-bar wobble: same width, small height delta → keep the geometry we have
+      if (
+        !force &&
+        last &&
+        last.w === w &&
+        Math.abs(last.vh - vh) < CHROME_WOBBLE_PX
+      ) {
+        return;
+      }
+      lastMeasureRef.current = { w, vh };
+
       const header = document.querySelector('header');
       const nav = header ? Math.round(header.getBoundingClientRect().height) : 80;
-      const vv = window.visualViewport;
-      const vh = Math.round((vv && vv.height) || window.innerHeight || 700);
       const stage = Math.max(vh - nav, 360);
       // Enough travel to scrub full clip before unpin
       const scrub = Math.max(Math.round(stage * 2.5), 900);
@@ -52,14 +83,17 @@ export default function ScrollHeroCanvas({ theme }) {
       setStagePx(stage);
       setScrubPx(scrub);
     };
-    measure();
-    window.addEventListener('resize', measure, { passive: true });
-    window.addEventListener('orientationchange', measure, { passive: true });
-    window.visualViewport?.addEventListener('resize', measure, { passive: true });
+
+    const onResize = () => measure(false);
+    // Rotation always re-measures, even if the height delta looks like chrome
+    const onOrientation = () => measure(true);
+
+    measure(true);
+    window.addEventListener('resize', onResize, { passive: true });
+    window.addEventListener('orientationchange', onOrientation, { passive: true });
     return () => {
-      window.removeEventListener('resize', measure);
-      window.removeEventListener('orientationchange', measure);
-      window.visualViewport?.removeEventListener('resize', measure);
+      window.removeEventListener('resize', onResize);
+      window.removeEventListener('orientationchange', onOrientation);
     };
   }, []);
 
@@ -89,6 +123,17 @@ export default function ScrollHeroCanvas({ theme }) {
     if (Math.abs(video.currentTime - target) < 0.03) return;
 
     seekingRef.current = true;
+    // A seek that never reports back (stall, decode hiccup, dropped range request)
+    // would otherwise latch seekingRef forever and kill scrubbing for good.
+    if (seekTimerRef.current) window.clearTimeout(seekTimerRef.current);
+    seekTimerRef.current = window.setTimeout(() => {
+      seekingRef.current = false;
+      const pending = pendingTimeRef.current;
+      pendingTimeRef.current = null;
+      // Only re-issue if the scroll has moved on; otherwise let the original land
+      if (pending != null && Math.abs(pending - target) >= 0.03) applyTime(pending);
+    }, SEEK_TIMEOUT_MS);
+
     try {
       video.currentTime = target;
     } catch {
@@ -162,6 +207,10 @@ export default function ScrollHeroCanvas({ theme }) {
       }
     };
     const onSeeked = () => {
+      if (seekTimerRef.current) {
+        window.clearTimeout(seekTimerRef.current);
+        seekTimerRef.current = null;
+      }
       seekingRef.current = false;
       if (pendingTimeRef.current != null) {
         const next = pendingTimeRef.current;
@@ -182,7 +231,20 @@ export default function ScrollHeroCanvas({ theme }) {
     video.addEventListener('progress', onProgress);
     video.addEventListener('canplay', onCanPlay);
     video.addEventListener('canplaythrough', onCanPlayThrough);
+    // Any of these can end a seek without a `seeked` — release the latch
+    const releaseSeek = () => {
+      if (seekTimerRef.current) {
+        window.clearTimeout(seekTimerRef.current);
+        seekTimerRef.current = null;
+      }
+      seekingRef.current = false;
+    };
+
     video.addEventListener('seeked', onSeeked);
+    video.addEventListener('stalled', releaseSeek);
+    video.addEventListener('abort', releaseSeek);
+    video.addEventListener('emptied', releaseSeek);
+    video.addEventListener('error', releaseSeek);
     video.addEventListener('error', markReady);
 
     if (video.readyState >= 1) onMeta();
@@ -193,6 +255,11 @@ export default function ScrollHeroCanvas({ theme }) {
     const safety = window.setTimeout(markReady, 4000);
     return () => {
       window.clearTimeout(safety);
+      if (seekTimerRef.current) window.clearTimeout(seekTimerRef.current);
+      video.removeEventListener('stalled', releaseSeek);
+      video.removeEventListener('abort', releaseSeek);
+      video.removeEventListener('emptied', releaseSeek);
+      video.removeEventListener('error', releaseSeek);
       video.removeEventListener('play', blockPlay);
       video.removeEventListener('loadedmetadata', onMeta);
       video.removeEventListener('durationchange', onMeta);
@@ -204,6 +271,28 @@ export default function ScrollHeroCanvas({ theme }) {
     };
   }, [prefersReducedMotion, scrubToProgress, markReady]);
 
+  const syncProgress = useCallback(() => {
+    const container = containerRef.current;
+    const sticky = stickyRef.current;
+    if (!container || !sticky) return;
+
+    // Mobile travel is the frozen scrub distance, never re-derived from the
+    // stage height — the stage stretches to cover a grown viewport, and
+    // measuring it would feed that stretch straight back into the scrub as a
+    // visible frame jump (~0.2s) every time the URL bar moves.
+    let travel;
+    if (isMobile) {
+      travel = Math.max(scrubPx, 1);
+    } else {
+      const padTop = parseFloat(getComputedStyle(container).paddingTop) || 0;
+      travel = Math.max(container.offsetHeight - padTop - sticky.offsetHeight, 1);
+    }
+    const raw = -container.getBoundingClientRect().top / travel;
+    const clamped = Math.max(0, Math.min(1, raw));
+    progressRef.current = clamped;
+    scrubToProgress(clamped);
+  }, [scrubToProgress, isMobile, scrubPx]);
+
   useEffect(() => {
     if (prefersReducedMotion) return;
 
@@ -213,16 +302,7 @@ export default function ScrollHeroCanvas({ theme }) {
       ticking = true;
       rafIdRef.current = requestAnimationFrame(() => {
         ticking = false;
-        const container = containerRef.current;
-        const sticky = stickyRef.current;
-        if (!container || !sticky) return;
-
-        const padTop = parseFloat(getComputedStyle(container).paddingTop) || 0;
-        const travel = Math.max(container.offsetHeight - padTop - sticky.offsetHeight, 1);
-        const raw = -container.getBoundingClientRect().top / travel;
-        const clamped = Math.max(0, Math.min(1, raw));
-        progressRef.current = clamped;
-        scrubToProgress(clamped);
+        syncProgress();
       });
     };
 
@@ -235,9 +315,16 @@ export default function ScrollHeroCanvas({ theme }) {
       window.removeEventListener('resize', handleScroll);
       if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
     };
-  }, [prefersReducedMotion, scrubToProgress, isMobile, stagePx, scrubPx, navPx]);
+  }, [prefersReducedMotion, syncProgress]);
 
-  const fitClass = isMobile ? 'object-contain object-top' : 'object-cover';
+  // Geometry changed (rotation / real viewport change) — re-derive progress from
+  // the committed layout, or the frame stays stuck at the pre-resize position.
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+    syncProgress();
+  }, [prefersReducedMotion, syncProgress, isMobile, stagePx, scrubPx, navPx]);
+
+  const fitClass = isMobile ? 'object-contain object-top' : 'object-cover scale-110 origin-center';
 
   const media = (
     <>
@@ -292,7 +379,7 @@ export default function ScrollHeroCanvas({ theme }) {
 
   if (isMobile) {
     // Fixed pixel heights — document is always scrollable, no dvh races
-    const sectionH = navPx + stagePx + scrubPx;
+    const sectionH = navPx + stagePx + scrubPx + STAGE_STRETCH_RESERVE;
 
     return (
       <section
@@ -311,6 +398,12 @@ export default function ScrollHeroCanvas({ theme }) {
           style={{
             top: navPx,
             height: stagePx,
+            // The stage geometry is frozen in px so the scrub math never moves,
+            // but the URL bar can still collapse and make the viewport TALLER
+            // than the frozen height — which would expose a band under the hero.
+            // dvh lets the stage stretch to cover it. Purely visual: the section
+            // height is fixed inline, so this never changes document height.
+            minHeight: `calc(100dvh - ${navPx}px)`,
           }}
         >
           <div
@@ -347,7 +440,7 @@ export default function ScrollHeroCanvas({ theme }) {
             className="pointer-events-none absolute inset-0 z-20"
             style={{
               background:
-                'linear-gradient(180deg, rgba(10,9,7,0.35) 0%, transparent 28%, transparent 72%, rgba(10,9,7,0.45) 100%)',
+                'linear-gradient(180deg, transparent 0%, transparent 75%, rgba(10,9,7,0.45) 100%)',
             }}
           />
         </div>
