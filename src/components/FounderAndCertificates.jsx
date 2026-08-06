@@ -51,17 +51,17 @@ export default function FounderAndCertificates({ theme }) {
                 
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
                 
-                <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl bg-black/80 backdrop-blur-md border border-white/20 shadow-xl space-y-1 text-white">
+                <div className="absolute bottom-3 left-3 right-3 p-3 sm:bottom-6 sm:left-6 sm:right-6 sm:p-4 rounded-2xl bg-black/85 backdrop-blur-md border border-white/20 shadow-xl space-y-1 text-white">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold uppercase tracking-widest text-slate-300">
+                    <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-[#E7C960]">
                       Founder & Cosmetologist
                     </span>
-                    <Award className="w-4 h-4 text-white" />
+                    <Award className="w-4 h-4 text-[#E7C960]" />
                   </div>
-                  <h3 className="text-xl font-bold text-white">
+                  <h3 className="text-lg sm:text-xl font-bold text-white">
                     Galla Vidya
                   </h3>
-                  <p className="text-[11px] text-slate-300 font-medium">
+                  <p className="text-[10px] sm:text-[11px] text-slate-300 font-medium leading-tight">
                     Hydrafacial Specialist • Certified Nail Technician • Lakme Academy Partner
                   </p>
                 </div>
@@ -70,8 +70,8 @@ export default function FounderAndCertificates({ theme }) {
           </div>
 
           {/* Right Column: Story & Certificate (7 cols) */}
-          <div className="lg:col-span-7 space-y-8">
-            <div className="space-y-4">
+          <div className="lg:col-span-7 space-y-6 sm:space-y-8">
+            <div className="space-y-3 sm:space-y-4">
               <div className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-bold uppercase tracking-wider ${
                 isDark ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#E7C960]' : 'bg-slate-200 border-slate-300 text-slate-800'
               }`}>
@@ -87,17 +87,17 @@ export default function FounderAndCertificates({ theme }) {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
               {[
                 { title: 'Expert Cosmetologist', desc: 'Comprehensive hair, skin & scalp therapy.' },
                 { title: 'Certified Artist', desc: 'Licensed practitioner with master training.' },
                 { title: 'Academy Lead Instructor', desc: 'Empowering students through live practice.' },
               ].map((spec, i) => (
-                <div key={i} className={`p-4 rounded-2xl border space-y-1 shadow-sm ${
+                <div key={i} className={`p-3.5 sm:p-4 rounded-2xl border space-y-1 shadow-sm ${
                   isDark ? 'glass-card border-[#D4AF37]/30' : 'bg-white border-slate-200'
                 }`}>
                   <div className={`flex items-center gap-1.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                    <CheckCircle2 className={`w-4 h-4 ${isDark ? 'text-[#D4AF37]' : 'text-slate-900'}`} />
+                    <CheckCircle2 className={`w-4 h-4 shrink-0 ${isDark ? 'text-[#D4AF37]' : 'text-slate-900'}`} />
                     <h4 className="text-xs font-bold uppercase tracking-wider">
                       {spec.title}
                     </h4>
@@ -110,10 +110,10 @@ export default function FounderAndCertificates({ theme }) {
             </div>
 
             {/* Certificate Highlight Card */}
-            <div className={`p-6 rounded-3xl border shadow-xl relative overflow-hidden group ${
+            <div className={`p-5 sm:p-6 rounded-3xl border shadow-xl relative overflow-hidden group ${
               isDark ? 'glass-card border-[#D4AF37]/40 shadow-[0_0_30px_-5px_rgba(212,175,55,0.2)]' : 'bg-white border-slate-200'
             }`}>
-              <div className="flex flex-col sm:flex-row items-center gap-6">
+              <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
                 
                 <div 
                   onClick={() => setCertModalOpen(true)}
@@ -126,8 +126,11 @@ export default function FounderAndCertificates({ theme }) {
                     alt="Certificate of Recognition - Galla Vidya"
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Maximize2 className="w-6 h-6 text-white" />
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center sm:opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="px-3 py-1.5 rounded-full bg-black/80 backdrop-blur-md border border-white/30 text-white text-xs font-bold flex items-center gap-1.5">
+                      <Maximize2 className="w-3.5 h-3.5 text-[#E7C960]" />
+                      Expand Certificate
+                    </span>
                   </div>
                 </div>
 

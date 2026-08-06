@@ -589,7 +589,7 @@ export default function ServicesAndCourses({ theme, onOpenCustomizer }) {
           />
 
           {/* Service Name Filter Buttons */}
-          <div className="flex items-center justify-center gap-2 sm:gap-3 overflow-x-auto pb-2 pt-1 no-scrollbar flex-wrap">
+          <div className="flex lg:justify-center gap-2 sm:gap-3 overflow-x-auto pb-3 pt-1 no-scrollbar flex-nowrap sm:flex-wrap px-1 -mx-4 sm:mx-0">
             {serviceFilterButtons.map((btn) => {
               const active = activeServiceFilter === btn.id;
               return (

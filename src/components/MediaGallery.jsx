@@ -3,6 +3,7 @@ import { Play, Image as ImageIcon, X, Eye, Video } from 'lucide-react';
 
 export default function MediaGallery({ theme }) {
   const [activeMedia, setActiveMedia] = useState(null);
+  const [mobileTab, setMobileTab] = useState('photos'); // 'photos' | 'reels'
   const isDark = theme !== 'light';
 
   const imagesList = [
@@ -90,13 +91,13 @@ export default function MediaGallery({ theme }) {
   ];
 
   return (
-    <section id="gallery" className={`py-20 sm:py-28 transition-colors duration-300 relative ${
+    <section id="gallery" className={`py-16 sm:py-28 transition-colors duration-300 relative ${
       isDark ? 'bg-[#09090B]/40 text-slate-100' : 'bg-white/40 text-slate-900'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
+        <div className="text-center max-w-3xl mx-auto space-y-3 sm:space-y-4 mb-10 sm:mb-16">
           <div className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-bold uppercase tracking-wider ${
             isDark ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#E7C960]' : 'bg-slate-100 border-slate-300 text-slate-800'
           }`}>
@@ -108,16 +109,46 @@ export default function MediaGallery({ theme }) {
           </h2>
 
           <p className={`text-sm sm:text-base font-normal ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-            Browse through real photos of our parlour services and academy sessions on the left, and watch live video reels on the right.
+            Browse through real photos of our parlour services and academy sessions, or watch live video reels.
           </p>
+
+          {/* Mobile Segmented Switcher (lg:hidden) */}
+          <div className="flex lg:hidden justify-center pt-2">
+            <div className={`p-1 rounded-2xl border flex items-center gap-1 w-full max-w-xs ${
+              isDark ? 'bg-black/60 border-[#D4AF37]/40' : 'bg-slate-100 border-slate-300'
+            }`}>
+              <button
+                onClick={() => setMobileTab('photos')}
+                className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+                  mobileTab === 'photos'
+                    ? 'bg-[#D4AF37] text-black shadow-md'
+                    : isDark ? 'text-slate-300 hover:text-white' : 'text-slate-700 hover:text-black'
+                }`}
+              >
+                <ImageIcon className="w-3.5 h-3.5" />
+                Photos ({imagesList.length})
+              </button>
+              <button
+                onClick={() => setMobileTab('reels')}
+                className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+                  mobileTab === 'reels'
+                    ? 'bg-[#D4AF37] text-black shadow-md'
+                    : isDark ? 'text-slate-300 hover:text-white' : 'text-slate-700 hover:text-black'
+                }`}
+              >
+                <Video className="w-3.5 h-3.5" />
+                Reels ({videosList.length})
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* 2-Column Split Layout: Left side IMAGES | Right side VIDEOS */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
           
           {/* LEFT SIDE: IMAGES (6 cols) */}
-          <div className="lg:col-span-6 space-y-6">
-            <div className={`flex items-center justify-between border-b pb-4 ${
+          <div className={`lg:col-span-6 space-y-6 ${mobileTab === 'photos' ? 'block' : 'hidden lg:block'}`}>
+            <div className={`hidden lg:flex items-center justify-between border-b pb-4 ${
               isDark ? 'border-[#D4AF37]/30' : 'border-slate-200'
             }`}>
               <div className="flex items-center gap-2.5">
@@ -180,8 +211,8 @@ export default function MediaGallery({ theme }) {
           </div>
 
           {/* RIGHT SIDE: VIDEOS & REELS (6 cols) */}
-          <div className="lg:col-span-6 space-y-6">
-            <div className={`flex items-center justify-between border-b pb-4 ${
+          <div className={`lg:col-span-6 space-y-6 ${mobileTab === 'reels' ? 'block' : 'hidden lg:block'}`}>
+            <div className={`hidden lg:flex items-center justify-between border-b pb-4 ${
               isDark ? 'border-[#D4AF37]/30' : 'border-slate-200'
             }`}>
               <div className="flex items-center gap-2.5">
