@@ -13,7 +13,7 @@ import openChatbot from '../utils/openChatbot';
 
 function SectionIntro({ eyebrow, title, accent, sub, isDark, align = 'center' }) {
   return (
-    <div className={`space-y-3 ${align === 'center' ? 'text-center max-w-2xl mx-auto' : 'text-left max-w-xl'}`}>
+    <div className={`space-y-2 ${align === 'center' ? 'text-center max-w-2xl mx-auto' : 'text-left max-w-xl'}`}>
       <p className={`section-eyebrow ${align === 'center' ? 'justify-center' : ''}`}>
         <span className={`w-6 h-px inline-block ${isDark ? 'bg-[#D4AF37]' : 'bg-[#8A6D1F]'}`} />
         {eyebrow}
@@ -30,9 +30,13 @@ function SectionIntro({ eyebrow, title, accent, sub, isDark, align = 'center' })
   );
 }
 
+/* 2 rows × 3 columns on desktop grid */
+const SERVICES_PREVIEW_COUNT = 6;
+
 export default function ServicesAndCourses({ theme }) {
   const isDark = theme !== 'light';
-  const [activeServiceFilter, setActiveServiceFilter] = useState('facial-services');
+  const [activeServiceFilter, setActiveServiceFilter] = useState('all');
+  const [servicesExpanded, setServicesExpanded] = useState(false);
   const [previewMedia, setPreviewMedia] = useState(null);
 
   const serviceFilterButtons = [
@@ -283,15 +287,47 @@ export default function ServicesAndCourses({ theme }) {
   const filteredServices = parlourServicesList.filter(
     (s) => activeServiceFilter === 'all' || s.categoryId === activeServiceFilter
   );
+  const hasMoreServices = filteredServices.length > SERVICES_PREVIEW_COUNT;
+  const visibleServices =
+    servicesExpanded || !hasMoreServices
+      ? filteredServices
+      : filteredServices.slice(0, SERVICES_PREVIEW_COUNT);
+
+  const setServiceFilter = (id) => {
+    setActiveServiceFilter(id);
+    setServicesExpanded(false);
+  };
 
   return (
     <section
       id="services-courses"
-      className={`section-pad transition-colors duration-300 relative ${
-        isDark ? 'bg-[#0A0907] text-stone-100' : 'bg-[#FAF7F2] text-stone-900'
+      className={`py-10 sm:py-12 lg:py-14 transition-colors duration-300 relative overflow-hidden ${
+        isDark ? 'bg-[#0A0907] text-stone-100' : 'bg-[#F0E8D9] text-stone-900'
       }`}
     >
-      <div className="section-wrap relative z-10 space-y-16 sm:space-y-20 lg:space-y-24">
+      {/* Light-theme atmosphere — soft parchment + gold wash (avoids flat white sheet) */}
+      {!isDark && (
+        <>
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5EDE0] to-[#EDE3D2]"
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -left-24 top-0 h-72 w-72 rounded-full bg-[#D4AF37]/12 blur-3xl"
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -right-16 top-1/3 h-80 w-80 rounded-full bg-[#E09898]/10 blur-3xl"
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute bottom-0 left-1/2 h-64 w-[36rem] -translate-x-1/2 rounded-full bg-[#9476B0]/08 blur-3xl"
+          />
+        </>
+      )}
+
+      <div className="section-wrap relative z-10 space-y-8 sm:space-y-10 lg:space-y-12">
         {/* Page intro */}
         <SectionIntro
           eyebrow="Studio & Academy"
@@ -302,47 +338,52 @@ export default function ServicesAndCourses({ theme }) {
         />
 
         {/* Parlour services */}
-        <div className="space-y-8">
-          <div>
-            <p className="section-eyebrow mb-2">
-              <span className={`w-6 h-px inline-block ${isDark ? 'bg-[#D4AF37]' : 'bg-[#8A6D1F]'}`} />
-              Parlour
-            </p>
-            <h3 className={`text-2xl sm:text-3xl font-semibold ${isDark ? 'text-white' : 'text-stone-900'}`}>
-              Our Services
-            </h3>
+        <div className="space-y-5 sm:space-y-6 lg:space-y-7">
+          {/* Title left + filters centered on the same line (sm+) */}
+          <div className="mb-6 sm:mb-8 lg:mb-10 grid grid-cols-1 gap-3 sm:grid-cols-[1fr_auto_1fr] sm:items-end sm:gap-4">
+            <div className="min-w-0">
+              <p className="section-eyebrow mb-1.5">
+                <span className={`w-6 h-px inline-block ${isDark ? 'bg-[#D4AF37]' : 'bg-[#8A6D1F]'}`} />
+                Parlour
+              </p>
+              <h3 className={`text-2xl sm:text-3xl font-semibold leading-none ${isDark ? 'text-white' : 'text-stone-900'}`}>
+                Our Services
+              </h3>
+            </div>
+
+            <div
+              className={`flex justify-self-center gap-1.5 overflow-x-auto no-scrollbar p-1.5 rounded-2xl border w-full sm:w-fit max-w-full min-w-0 ${
+                isDark ? 'bg-black/40 border-[#D4AF37]/25' : 'bg-white/80 border-stone-200'
+              }`}
+            >
+              {serviceFilterButtons.map((btn) => {
+                const active = activeServiceFilter === btn.id;
+                return (
+                  <button
+                    key={btn.id}
+                    type="button"
+                    onClick={() => setServiceFilter(btn.id)}
+                    className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all shrink-0 ${
+                      active
+                        ? 'bg-[#D4AF37] text-black shadow-md'
+                        : isDark
+                          ? 'text-stone-400 hover:text-white hover:bg-white/5'
+                          : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
+                    }`}
+                  >
+                    {btn.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Balances the left title so the filter stays true center */}
+            <div className="hidden sm:block" aria-hidden />
           </div>
 
-          {/* Filters */}
-          <div
-            className={`flex gap-1.5 overflow-x-auto no-scrollbar p-1.5 rounded-2xl border w-full sm:w-fit max-w-full ${
-              isDark ? 'bg-black/40 border-[#D4AF37]/25' : 'bg-white/80 border-stone-200'
-            }`}
-          >
-            {serviceFilterButtons.map((btn) => {
-              const active = activeServiceFilter === btn.id;
-              return (
-                <button
-                  key={btn.id}
-                  type="button"
-                  onClick={() => setActiveServiceFilter(btn.id)}
-                  className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all shrink-0 ${
-                    active
-                      ? 'bg-[#D4AF37] text-black shadow-md'
-                      : isDark
-                        ? 'text-stone-400 hover:text-white hover:bg-white/5'
-                        : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
-                  }`}
-                >
-                  {btn.label}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Service cards — image-forward */}
+          {/* Service cards — image-forward (2 rows by default, then View more) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-            {filteredServices.map((service, i) => (
+            {visibleServices.map((service, i) => (
               <article
                 key={service.id}
                 className={`group rounded-[1.4rem] overflow-hidden border transition-all duration-300 ${
@@ -413,22 +454,45 @@ export default function ServicesAndCourses({ theme }) {
               </article>
             ))}
           </div>
+
+          {hasMoreServices && (
+            <div className="flex justify-center pt-1">
+              <button
+                type="button"
+                onClick={() => setServicesExpanded((v) => !v)}
+                className={`inline-flex min-h-11 items-center gap-2 rounded-full border px-5 text-xs font-bold uppercase tracking-[0.14em] transition-all active:scale-[0.98] ${
+                  isDark
+                    ? 'border-[#D4AF37]/40 bg-white/[0.03] text-[#E7C960] hover:bg-[#D4AF37] hover:text-black'
+                    : 'border-stone-300 bg-white text-stone-800 hover:bg-[#D4AF37] hover:text-black hover:border-[#D4AF37]'
+                }`}
+              >
+                {servicesExpanded
+                  ? 'View less'
+                  : `View more (${filteredServices.length - SERVICES_PREVIEW_COUNT})`}
+                <ChevronRight
+                  className={`h-3.5 w-3.5 transition-transform ${
+                    servicesExpanded ? '-rotate-90' : 'rotate-90'
+                  }`}
+                />
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Courses */}
-        <div className="space-y-8">
-          {/* <div>
-            <p className="section-eyebrow mb-2">
+        <div className="space-y-4 sm:space-y-5">
+          <div>
+            <p className="section-eyebrow mb-1.5">
               <span className={`w-6 h-px inline-block ${isDark ? 'bg-[#D4AF37]' : 'bg-[#8A6D1F]'}`} />
               Academy
             </p>
             <h3 className={`text-2xl sm:text-3xl font-semibold ${isDark ? 'text-white' : 'text-stone-900'}`}>
-              Training Tracks
+              Our Courses
             </h3>
-            <p className={`mt-2 max-w-md text-xs sm:text-sm ${isDark ? 'text-stone-400' : 'text-stone-500'}`}>
+            <p className={`mt-1.5 max-w-md text-xs sm:text-sm ${isDark ? 'text-stone-400' : 'text-stone-500'}`}>
               Theory plus hands-on practicals. Placement support on Standard track.
             </p>
-          </div> */}
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6 items-stretch">
             {courses.map((course, cIdx) => (
@@ -548,8 +612,8 @@ export default function ServicesAndCourses({ theme }) {
         </div>
 
         {/* Expertise / Specializations — original card layout */}
-        <div className="space-y-6 sm:space-y-8">
-          <div className="space-y-2.5 text-center max-w-2xl mx-auto">
+        <div className="space-y-4 sm:space-y-5">
+          <div className="space-y-2 text-center max-w-2xl mx-auto">
             <div>
               <span
                 className={`block text-[10px] font-extrabold uppercase tracking-[0.2em] ${
