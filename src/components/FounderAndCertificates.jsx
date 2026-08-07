@@ -89,7 +89,7 @@ function CertificateCarouselModal({ isDark, open, onClose, index, setIndex }) {
     if (!open || total <= 1 || isPaused) return;
     const id = window.setInterval(() => {
       setIndex((i) => (i + 1) % total);
-    }, 4000);
+    }, 2000);
     return () => window.clearInterval(id);
   }, [open, total, setIndex, index, isPaused]);
 
@@ -223,7 +223,7 @@ function CertificateCarouselModal({ isDark, open, onClose, index, setIndex }) {
                     <img
                       src={cert.src}
                       alt=""
-                      className="h-full w-full object-cover"
+                      className="h-full w-full object-contain bg-black"
                     />
                   </button>
                 );
@@ -271,11 +271,64 @@ export default function FounderAndCertificates({ theme, compact = false }) {
     else if (window.lenis) window.lenis.start();
   }, [certModalOpen]);
 
+  /* Client-provided credential copy only (no extra invented lines) */
   const credentials = [
-    { title: 'Academy Lead Instructor', desc: 'Heads live practicals that build real careers.' },
-    { title: 'Hydrafacial & Skin Expert', desc: 'Certified aesthetician for advanced skin care.' },
-    { title: 'Master Cosmetologist', desc: 'Master-level cosmetology and nail artistry.' },
+    { title: 'Academy Lead Instructor.' },
+    { title: 'Specialized in Hydra Facial and Skin Treatments. [Aesthetician]' },
+    { title: 'Master Cosmetologist and Nail Technician.' },
   ];
+
+  const credentialCards = (
+    <div className="grid-adaptive-3 items-stretch sm:-mx-1.5 sm:w-[calc(100%+0.75rem)] lg:-mx-3 lg:w-[calc(100%+1.5rem)]">
+      {credentials.map((spec, idx) => (
+        <div
+          key={spec.title}
+          className={`group relative flex h-full min-h-[9.5rem] flex-col overflow-hidden rounded-xl border p-4 transition-all duration-300 sm:min-h-[10rem] sm:rounded-2xl sm:p-4 ${
+            isDark
+              ? 'border-white/12 bg-white/[0.03] hover:border-[#D4AF37]/40'
+              : 'border-stone-200 bg-white shadow-sm hover:border-[#D4AF37]/45'
+          }`}
+        >
+          {/* Gold top hairline — same on every card */}
+          <span
+            aria-hidden
+            className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#D4AF37]/70 to-transparent"
+          />
+
+          {/* Identical header on every card */}
+          <div className="flex h-7 shrink-0 items-center justify-between gap-2">
+            <span
+              className={`font-display text-[22px] font-semibold leading-none tracking-tight ${
+                isDark ? 'text-[#D4AF37]/55' : 'text-[#D4AF37]/75'
+              }`}
+            >
+              {String(idx + 1).padStart(2, '0')}
+            </span>
+            <CheckCircle2
+              className={`h-4 w-4 shrink-0 ${isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'}`}
+            />
+          </div>
+
+          <div
+            className={`mt-2.5 mb-3 h-px w-10 shrink-0 ${
+              isDark
+                ? 'bg-gradient-to-r from-[#D4AF37]/80 to-transparent'
+                : 'bg-gradient-to-r from-[#8A6D1F]/70 to-transparent'
+            }`}
+          />
+
+          {/* Top-aligned client text — same start line on all cards so they match */}
+          <h4
+            className={`text-[12px] font-bold uppercase tracking-wider leading-[1.45] sm:text-[13px] ${
+              isDark ? 'text-white' : 'text-stone-900'
+            }`}
+          >
+            {spec.title}
+          </h4>
+        </div>
+      ))}
+    </div>
+  );
 
   const certModal = (
     <CertificateCarouselModal
@@ -357,19 +410,12 @@ export default function FounderAndCertificates({ theme, compact = false }) {
                 />
                 <div className="min-w-0">
                   <h4
-                    className={`text-[11px] font-bold uppercase tracking-wider ${
+                    className={`text-[11px] font-bold uppercase tracking-wider leading-snug ${
                       isDark ? 'text-white' : 'text-stone-900'
                     }`}
                   >
                     {spec.title}
                   </h4>
-                  <p
-                    className={`text-[11px] leading-snug ${
-                      isDark ? 'text-stone-300' : 'text-stone-600'
-                    }`}
-                  >
-                    {spec.desc}
-                  </p>
                 </div>
               </div>
             ))}
@@ -555,73 +601,48 @@ export default function FounderAndCertificates({ theme, compact = false }) {
               </div>
             )}
 
-            <div className="grid-adaptive-3 sm:-mx-1.5 sm:w-[calc(100%+0.75rem)] lg:-mx-3 lg:w-[calc(100%+1.5rem)]">
-              {credentials.map((spec) => (
-                <div
-                  key={spec.title}
-                  className={`min-h-12 space-y-1.5 rounded-xl border p-4 sm:rounded-2xl ${
-                    isDark
-                      ? 'border-white/10 bg-white/[0.03]'
-                      : 'border-stone-200 bg-white shadow-sm'
-                  }`}
-                >
-                  <div className="flex items-start gap-2">
-                    <CheckCircle2
-                      className={`mt-0.5 h-4 w-4 shrink-0 ${isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'}`}
-                    />
-                    <h4
-                      className={`text-[11px] font-bold uppercase tracking-wider leading-snug ${
-                        isDark ? 'text-white' : 'text-stone-900'
-                      }`}
-                    >
-                      {spec.title}
-                    </h4>
-                  </div>
-                  <p
-                    className={`pl-6 text-[11px] leading-relaxed ${
-                      isDark ? 'text-stone-300' : 'text-stone-600'
-                    }`}
-                  >
-                    {spec.desc}
-                  </p>
-                </div>
-              ))}
-            </div>
+            {credentialCards}
 
-            {/* Certificates — compact card + carousel modal */}
+            {/* Certificates — slim showcase strip */}
             <div
-              className={`rounded-xl border p-4 sm:rounded-2xl sm:p-5 ${
+              className={`relative overflow-hidden rounded-xl border sm:rounded-2xl ${
                 isDark
-                  ? 'border-[#D4AF37]/30 bg-gradient-to-br from-[#16140f] to-[#0e0c09]'
+                  ? 'border-[#D4AF37]/35 bg-gradient-to-r from-[#1a1710] via-[#12100c] to-[#0e0c09]'
                   : 'border-stone-200 bg-white shadow-sm'
               }`}
             >
-              <div className="flex flex-col items-center gap-3.5 sm:flex-row sm:gap-4">
+              <span
+                aria-hidden
+                className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#D4AF37]/65 to-transparent"
+              />
+              <div className="flex flex-col items-center gap-3.5 p-3.5 sm:flex-row sm:gap-4 sm:p-4">
                 <button
                   type="button"
                   onClick={() => openCerts(0)}
-                  className={`group relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-xl border transition-transform active:scale-[0.98] sm:w-36 ${
-                    isDark ? 'border-[#D4AF37]/40' : 'border-stone-200'
+                  className={`group relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-lg border p-1.5 transition-transform active:scale-[0.98] sm:w-36 sm:rounded-xl ${
+                    isDark
+                      ? 'border-[#D4AF37]/40 bg-black/50'
+                      : 'border-stone-200 bg-stone-100'
                   }`}
                   aria-label="Open certificate gallery"
                 >
                   <img
                     src={CERTIFICATES[0].src}
                     alt="Certificate of Recognition"
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-contain"
                   />
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/40 sm:opacity-0 sm:group-hover:opacity-100">
-                    <span className="flex min-h-9 items-center gap-1.5 rounded-full border border-[#D4AF37]/40 bg-black/80 px-2.5 text-[10px] font-bold text-white">
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/35 opacity-100 sm:opacity-0 sm:group-hover:opacity-100">
+                    <span className="flex min-h-8 items-center gap-1.5 rounded-full border border-[#D4AF37]/40 bg-black/80 px-2.5 text-[10px] font-bold text-white">
                       <Maximize2 className="h-3 w-3 text-[#E7C960]" />
                       View
                     </span>
                   </div>
-                  <span className="absolute bottom-1.5 right-1.5 rounded-full bg-[#D4AF37] px-1.5 py-0.5 text-[9px] font-extrabold text-black">
+                  <span className="absolute bottom-1.5 right-1.5 rounded-full bg-[#D4AF37] px-1.5 py-0.5 text-[9px] font-extrabold text-black shadow-sm">
                     {CERTIFICATES.length}
                   </span>
                 </button>
 
-                <div className="min-w-0 flex-1 space-y-1.5 text-center sm:text-left">
+                <div className="min-w-0 flex-1 space-y-1 text-center sm:text-left">
                   <div
                     className={`inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.14em] ${
                       isDark ? 'text-[#E7C960]' : 'text-[#8A6D1F]'
@@ -638,7 +659,7 @@ export default function FounderAndCertificates({ theme, compact = false }) {
                     Lakmé Academy · Prime Fashion Week
                   </h3>
                   <p
-                    className={`text-[13px] font-light leading-relaxed ${
+                    className={`text-[12px] font-light leading-relaxed sm:text-[13px] ${
                       isDark ? 'text-stone-400' : 'text-stone-600'
                     }`}
                   >

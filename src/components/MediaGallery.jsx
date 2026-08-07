@@ -7,7 +7,7 @@ const FILTERS = [
   { id: 'bridal', label: 'Bridal' },
   { id: 'hair', label: 'Hair' },
   { id: 'makeup', label: 'Makeup' },
-  { id: 'reels', label: 'Reels' },
+  { id: 'reels', label: 'Videos' },
 ];
 
 /* Layout (All filter):
@@ -24,6 +24,7 @@ const LOOKS = [
     src: '/assets/makeup.webp',
     category: 'bridal',
     featured: true,
+    objectPosition: 'center 30%',
   },
   {
     id: 2,
@@ -32,14 +33,17 @@ const LOOKS = [
     subtitle: 'Modern cuts & professional finish',
     src: '/assets/hair.webp',
     category: 'hair',
+    objectPosition: 'center 25%',
   },
   {
     id: 3,
     kind: 'image',
-    title: 'Festive Radiance',
-    subtitle: 'Traditional makeover & saree drape',
-    src: '/assets/makeup4.webp',
+    title: 'Party Glam',
+    subtitle: 'Editorial full glam look',
+    src: '/assets/makeup3.webp',
     category: 'makeup',
+    /* subject sits mid-left — keep face in frame */
+    objectPosition: '42% 18%',
   },
   {
     id: 4,
@@ -48,22 +52,26 @@ const LOOKS = [
     subtitle: 'Global colour & soft highlights',
     src: '/assets/hair2.webp',
     category: 'hair',
+    objectPosition: 'center 20%',
   },
   {
     id: 5,
     kind: 'image',
-    title: 'Party Glam',
-    subtitle: 'Night-out glow & contour',
-    src: '/assets/makeup3.webp',
+    title: 'Editorial Makeup',
+    subtitle: 'Camera-ready beauty finish',
+    src: '/assets/makeup5.webp',
     category: 'makeup',
+    objectPosition: 'center 22%',
   },
   {
     id: 6,
     kind: 'image',
-    title: 'Eye Detail Art',
-    subtitle: 'Precision liner & lip sculpt',
-    src: '/assets/makeup2.webp',
+    title: 'Set Application',
+    subtitle: 'Behind the chair — live makeover',
+    src: '/assets/makeup4.webp',
     category: 'makeup',
+    /* face is mid-frame; avoid cropping to the raised arm */
+    objectPosition: 'center 48%',
   },
   {
     id: 7,
@@ -72,6 +80,7 @@ const LOOKS = [
     subtitle: 'Everyday elegance, elevated',
     src: '/assets/look.webp',
     category: 'bridal',
+    objectPosition: 'center 20%',
   },
   {
     id: 8,
@@ -80,14 +89,17 @@ const LOOKS = [
     subtitle: 'Full glam transformation',
     src: '/assets/look2.webp',
     category: 'bridal',
+    objectPosition: 'center 25%',
   },
   {
     id: 9,
     kind: 'image',
-    title: 'Editorial Makeup',
-    subtitle: 'Camera-ready beauty finish',
-    src: '/assets/makeup5.webp',
+    title: 'Chair Session',
+    subtitle: 'Artist-led styling in studio',
+    src: '/assets/makeup2.webp',
     category: 'makeup',
+    /* keep both artist + client faces in frame */
+    objectPosition: '55% 20%',
   },
 ];
 
@@ -269,7 +281,7 @@ export default function MediaGallery({ theme }) {
             </h2>
 
             <p className={`text-sm sm:text-base leading-relaxed ${isDark ? 'text-stone-400' : 'text-stone-600'}`}>
-              A curated lookbook of bridal glam, hair artistry, and party looks — plus short reels from the chair.
+              A curated lookbook of bridal glam, hair artistry, and party looks — plus short videos from the chair.
             </p>
           </div>
 
@@ -315,32 +327,13 @@ export default function MediaGallery({ theme }) {
           >
             {filteredLooks.map((img, i) => {
               const isFeatured = filter === 'all' && img.featured;
-              const count = filteredLooks.length;
-              const isLast = i === count - 1;
 
-              // Stretch the last tile across leftover columns so the row never ends half-empty
-              let fillClass = '';
-              if (!isFeatured && isLast) {
-                if (filter === 'all') {
-                  // All view bottom row is always 4 equal tiles on lg — no stretch needed
-                } else {
-                  // Filtered: 2-col mobile / 3-col desktop — expand last tile into leftover cols
-                  const remMobile = count % 2;
-                  const remMd = count % 3;
-                  if (remMobile === 1) fillClass += ' col-span-2';
-                  if (remMd === 1) fillClass += ' md:col-span-3';
-                  else if (remMd === 2) fillClass += ' md:col-span-2';
-                  else if (remMobile === 1) fillClass += ' md:col-span-1';
-                }
-              }
-
-              const spanClass = isFeatured
-                ? 'col-span-2 row-span-2'
-                : fillClass;
+              // Keep equal tiles on filter tabs (no stretched last cell — that skewed crops)
+              const spanClass = isFeatured ? 'col-span-2 row-span-2' : '';
 
               const aspectClass = isFeatured
                 ? 'aspect-[4/5] md:aspect-auto md:h-full'
-                : 'aspect-[4/5]';
+                : 'aspect-[3/4] sm:aspect-[4/5]';
 
               return (
                 <button
@@ -357,7 +350,8 @@ export default function MediaGallery({ theme }) {
                       src={img.src}
                       alt={img.title}
                       loading="lazy"
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                      style={{ objectPosition: img.objectPosition || 'center center' }}
                     />
 
                     {/* Soft bottom veil */}
@@ -407,7 +401,7 @@ export default function MediaGallery({ theme }) {
           </div>
         )}
 
-        {/* Reels strip */}
+        {/* Videos strip */}
         {showReels && (
           <div className={`${showLooks ? 'mt-12 sm:mt-16' : ''} space-y-5`}>
             <div className="flex items-end justify-between gap-4">
@@ -420,7 +414,7 @@ export default function MediaGallery({ theme }) {
                   From the chair
                 </p>
                 <h3 className={`text-xl sm:text-2xl font-semibold ${isDark ? 'text-white' : 'text-stone-900'}`}>
-                  Video Reels
+                  Videos
                 </h3>
               </div>
               <span
@@ -511,7 +505,7 @@ export default function MediaGallery({ theme }) {
               <div className="flex items-center justify-between gap-3 mb-3 sm:mb-4 px-1">
                 <div className="min-w-0">
                   <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-[#E7C960]">
-                    {activeMedia.type === 'video' ? 'Reel' : categoryLabel(activeMedia.category)}
+                    {activeMedia.type === 'video' ? 'Video' : categoryLabel(activeMedia.category)}
                     {lightboxItems.length > 1 && (
                       <span className="text-white/40 font-medium normal-case tracking-normal ml-2">
                         {activeIndex + 1} / {lightboxItems.length}

@@ -70,8 +70,8 @@ export default function App() {
           </>
         )}
         <SectionSeparator theme={theme} icon={Scissors} rotateIcon />
-        <ServicesAndCourses theme={theme} />
-        <SectionSeparator theme={theme} icon={Camera} />
+        {/* <ServicesAndCourses theme={theme} />
+        <SectionSeparator theme={theme} icon={Camera} /> */}
         <MediaGallery theme={theme} />
         <SectionSeparator theme={theme} icon={MapPin} />
         <ContactUs theme={theme} />
