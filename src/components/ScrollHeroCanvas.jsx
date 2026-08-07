@@ -36,23 +36,23 @@ const STAGE_STRETCH_RESERVE = 120;
  * the scrub used, so the visuals are unchanged (NOT public/frames*, which held
  * an older hero creative):
  *   ffmpeg -ss 1.0 -t 6.95 -i media-src/gv-studio-hero.webm \
- *     -vf "fps=10.5,scale=960:-2"  -c:v libwebp -q:v 70 -compression_level 6 public/hero-frames/%08d.webp
+ *     -vf "fps=10.5,scale=1280:-2" -c:v libwebp -q:v 82 -compression_level 4 public/hero-frames/%08d.webp
  *   ffmpeg -ss 1.0 -t 6.95 -i media-src/gv-studio-hero.webm \
- *     -vf "fps=10.5,scale=1600:-2" -c:v libwebp -q:v 70 -compression_level 6 public/hero-frames-lg/%08d.webp
+ *     -vf "fps=10.5,scale=1600:-2" -c:v libwebp -q:v 85 -compression_level 4 public/hero-frames-lg/%08d.webp
  *
- * 73 frames each: 4.4MB at 960x540, 8.4MB at the video's native 1600x900.
- * q70 measures 41.1dB PSNR against a lossless extract; going to q82 costs
- * +3.6MB for no visible gain, because the blocking in the dark gradients is
- * VP9 artifact baked into the source webm and no WebP quality removes it.
- * To trim weight, lower `fps=` (fewer frames) before lowering `-q:v`.
+ * ~73 frames each. SM is 1280-wide (was 960) for sharper mid-size screens;
+ * LG stays at the source’s native 1600x900. WebP q82/q85 reduces encode
+ * mush; any remaining blockiness is VP9 artifact in the source webm and
+ * needs a higher-res master from the client to truly clear.
  *
  * The source webm lives in media-src/ (outside public/) so Vite does not ship
  * 4.2MB of unreferenced video to every visitor.
  */
-const FRAME_COUNT = 75;
+const FRAME_COUNT = 73;
 const FRAME_DIR_SM = '/hero-frames';
 const FRAME_DIR_LG = '/hero-frames-lg';
-const FRAME_WIDTH_SM = 960;
+/** Use LG set once the canvas needs more pixels than this (css width × dpr). */
+const FRAME_WIDTH_SM = 1280;
 const FRAME_SRC = (dir, n) => `${dir}/${String(n).padStart(8, '0')}.webp`;
 const FRAME_INDICES = Array.from({ length: FRAME_COUNT }, (_, i) => i + 1);
 const FRAME_LOAD_CONCURRENCY = 4;
@@ -67,14 +67,12 @@ const DPR_CAP = 2;
  * flood with gold between f18 (progress 0.23) and f28 (0.365), and no text
  * colour survives that, so the copy has to be gone first.
  *
- * Frames 1-8 are missing from public/hero-frames*, which pins the drawn frame
- * to f9 for everything up to progress 0.108 — a static background that gives
- * the dissolve free runway.
+ * Full 1..FRAME_COUNT sequence is present after the quality re-export.
  */
 const COPY_EXIT_START = 0.02;
 const COPY_EXIT_END = 0.18;
-/** Desktop kept the video's `object-cover scale-110` framing; match it. */
-const DESKTOP_ZOOM = 1.1;
+/** Mild cover zoom — lower than 1.1 so we upscale less and stay sharper. */
+const DESKTOP_ZOOM = 1.05;
 
 /**
  * Reliable mobile scroll + scrub:
@@ -176,8 +174,12 @@ export default function ScrollHeroCanvas({ theme }) {
     (src, srcW, srcH) => {
       const canvas = canvasRef.current;
       if (!canvas || !srcW || !srcH) return false;
-      const ctx = canvas.getContext('2d');
+      const ctx = canvas.getContext('2d', { alpha: false });
       if (!ctx) return false;
+
+      // Prefer high-quality resampling when scaling frames up to the canvas
+      ctx.imageSmoothingEnabled = true;
+      if ('imageSmoothingQuality' in ctx) ctx.imageSmoothingQuality = 'high';
 
       const cw = canvas.width;
       const ch = canvas.height;
