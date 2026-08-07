@@ -1,9 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Award, CheckCircle2, ShieldCheck, Maximize2, X } from 'lucide-react';
+import { Award, CheckCircle2, ShieldCheck, Maximize2, X, ChevronDown } from 'lucide-react';
+
+/* Founder philosophy — client-supplied copy, sentence-cased and typo-corrected */
+const PHILOSOPHY_QUOTE_LEAD = 'True mastery isn’t just about executing a flawless look.';
+const PHILOSOPHY_QUOTE_ACCENT = 'It’s about passing the torch.';
+
+const PHILOSOPHY_REST = [
+  'Her philosophy shapes our studio and our culture, ensuring the artistry you receive in our chairs today becomes the standard taught to the leaders of tomorrow. Here, you aren’t just getting a service or a lesson; you’re experiencing an industry legacy in the making.',
+  'Teamwork is our most valuable asset, keeping our clients and students first, while a dedication to education and innovation sustains our growth and keeps us ahead of what the market asks for next.',
+];
 
 export default function FounderAndCertificates({ theme, compact = false }) {
   const [certModalOpen, setCertModalOpen] = useState(false);
+  const [philosophyOpen, setPhilosophyOpen] = useState(false);
   const isDark = theme !== 'light';
 
   useEffect(() => {
@@ -22,9 +32,9 @@ export default function FounderAndCertificates({ theme, compact = false }) {
   }, [certModalOpen]);
 
   const credentials = [
-    { title: 'Expert Cosmetologist', desc: 'Hair, skin & scalp therapy under one roof.' },
-    { title: 'Certified Artist', desc: 'Master training with licensed practice.' },
-    { title: 'Academy Instructor', desc: 'Live practicals that build real careers.' },
+    { title: 'Academy Lead Instructor', desc: 'Heads live practicals that build real careers.' },
+    { title: 'Hydrafacial & Skin Expert', desc: 'Certified aesthetician for advanced skin care.' },
+    { title: 'Master Cosmetologist', desc: 'Master-level cosmetology and nail artistry.' },
   ];
 
   /* Compact sticky layout: dense, flush under video — NO nested scroll */
@@ -45,11 +55,24 @@ export default function FounderAndCertificates({ theme, compact = false }) {
             <h2 className={`text-[28px] font-extrabold leading-tight tracking-tight sm:text-[34px] ${isDark ? 'text-white' : 'text-stone-900'}`}>
               Meet <span className="gold-gradient-text">Galla Vidya</span>
             </h2>
-            <p className={`text-[13px] font-light leading-relaxed ${isDark ? 'text-stone-400' : 'text-stone-600'}`}>
-              Galla Vidya founded{' '}
-              <strong className={isDark ? 'text-[#E7C960]' : 'text-stone-900'}>GV Studio</strong> to bring
-              high-quality treatments and practical cosmetology training under one roof.
-            </p>
+            <figure className="relative pl-3">
+              <span
+                aria-hidden
+                className={`absolute left-0 top-[3px] bottom-[3px] w-[2px] rounded-full ${
+                  isDark
+                    ? 'bg-gradient-to-b from-[#E7C960] via-[#D4AF37]/60 to-transparent'
+                    : 'bg-gradient-to-b from-[#8A6D1F] via-[#8A6D1F]/45 to-transparent'
+                }`}
+              />
+              <blockquote
+                className={`font-display text-[15px] font-bold leading-[1.35] tracking-tight ${
+                  isDark ? 'text-white' : 'text-stone-900'
+                }`}
+              >
+                {PHILOSOPHY_QUOTE_LEAD}{' '}
+                <span className="gold-gradient-text">{PHILOSOPHY_QUOTE_ACCENT}</span>
+              </blockquote>
+            </figure>
           </div>
 
           <div
@@ -213,16 +236,75 @@ export default function FounderAndCertificates({ theme, compact = false }) {
               <h2 className="heading-display">
                 Meet <span className="gold-gradient-text">Galla Vidya</span>
               </h2>
+              {/* Pull-quote: the emotional core of the client's philosophy copy */}
+              <figure className="relative max-w-xl pl-4 sm:pl-5">
+                <span
+                  aria-hidden
+                  className={`absolute left-0 top-1 bottom-1 w-[2px] rounded-full ${
+                    isDark
+                      ? 'bg-gradient-to-b from-[#E7C960] via-[#D4AF37]/55 to-transparent'
+                      : 'bg-gradient-to-b from-[#8A6D1F] via-[#8A6D1F]/40 to-transparent'
+                  }`}
+                />
+                <blockquote
+                  className={`font-display text-[19px] font-bold leading-[1.38] tracking-tight sm:text-[23px] ${
+                    isDark ? 'text-white' : 'text-stone-900'
+                  }`}
+                >
+                  {PHILOSOPHY_QUOTE_LEAD}{' '}
+                  <span className="gold-gradient-text">{PHILOSOPHY_QUOTE_ACCENT}</span>
+                </blockquote>
+              </figure>
+
               <p
                 className={`max-w-xl text-[14px] font-light leading-relaxed sm:text-[15px] ${
                   isDark ? 'text-stone-400' : 'text-stone-600'
                 }`}
               >
-                With a passion for transforming lives through beauty and empowering aspiring artists
-                through hands-on education, Galla Vidya founded{' '}
-                <strong className={isDark ? 'text-[#E7C960]' : 'text-stone-900'}>GV Studio</strong> to
-                bring high-quality treatments and practical cosmetology training under one roof.
+                Our founder{' '}
+                <strong className={isDark ? 'text-[#E7C960]' : 'text-stone-900'}>Galla Vidya</strong>{' '}
+                launched{' '}
+                <strong className={isDark ? 'text-white' : 'text-stone-900'}>GV Studio</strong> with a
+                singular, disruptive vision: to create a sanctuary where clients experience
+                transformative beauty while aspiring artists unlock their full potential.
               </p>
+
+              {/* Remainder of the philosophy — 0fr→1fr grid keeps the reveal height-animated */}
+              <div
+                id="founder-philosophy"
+                className={`grid max-w-xl transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
+                  philosophyOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+                }`}
+              >
+                <div className="overflow-hidden">
+                  <div
+                    className={`space-y-3 pt-4 text-[14px] font-light leading-relaxed sm:text-[15px] ${
+                      isDark ? 'text-stone-400' : 'text-stone-600'
+                    }`}
+                  >
+                    {PHILOSOPHY_REST.map((para) => (
+                      <p key={para.slice(0, 24)}>{para}</p>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setPhilosophyOpen((open) => !open)}
+                aria-expanded={philosophyOpen}
+                aria-controls="founder-philosophy"
+                className={`inline-flex min-h-11 items-center gap-2 font-mono text-[10px] font-medium uppercase tracking-[0.24em] transition-opacity active:opacity-60 sm:text-[11px] ${
+                  isDark ? 'text-[#E7C960]' : 'text-[#8A6D1F]'
+                }`}
+              >
+                {philosophyOpen ? 'Show less' : 'Read the full philosophy'}
+                <ChevronDown
+                  className={`h-4 w-4 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
+                    philosophyOpen ? 'rotate-180' : ''
+                  }`}
+                />
+              </button>
             </div>
 
             {/* Compact: mini founder chip instead of large image */}
