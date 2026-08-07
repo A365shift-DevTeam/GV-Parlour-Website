@@ -48,7 +48,7 @@ const STAGE_STRETCH_RESERVE = 120;
  * The source webm lives in media-src/ (outside public/) so Vite does not ship
  * 4.2MB of unreferenced video to every visitor.
  */
-const FRAME_COUNT = 73;
+const FRAME_COUNT = 75;
 const FRAME_DIR_SM = '/hero-frames';
 const FRAME_DIR_LG = '/hero-frames-lg';
 const FRAME_WIDTH_SM = 960;
