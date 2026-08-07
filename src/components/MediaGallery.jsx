@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
-import { Play, X, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
+import { Play, X, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const FILTERS = [
   { id: 'all', label: 'All' },
@@ -241,7 +241,9 @@ export default function MediaGallery({ theme }) {
     <section
       id="gallery"
       className={`section-pad transition-colors duration-300 relative overflow-hidden ${
-        isDark ? 'text-stone-100' : 'text-stone-900'
+        isDark
+          ? 'bg-[#181510] text-stone-100'
+          : 'bg-[#F0E8D9] text-stone-900'
       }`}
     >
       <div
@@ -258,7 +260,7 @@ export default function MediaGallery({ theme }) {
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-10 sm:mb-14">
           <div className="max-w-xl space-y-3 sm:space-y-4">
             <p className="section-eyebrow">
-              <Sparkles className="w-3.5 h-3.5" />
+              <span className={`inline-block h-px w-6 ${isDark ? 'bg-[#D4AF37]' : 'bg-[#8A6D1F]'}`} />
               Studio Lookbook
             </p>
 

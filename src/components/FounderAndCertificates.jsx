@@ -160,7 +160,9 @@ export default function FounderAndCertificates({ theme, compact = false }) {
     <section
       id="founder"
       className={`relative transition-colors duration-300 section-pad ${
-        isDark ? 'text-stone-100' : 'text-stone-900'
+        isDark
+          ? 'bg-[#181510] text-stone-100'
+          : 'bg-[#F0E8D9] text-stone-900'
       }`}
     >
       <div className="section-wrap relative z-10">

@@ -288,7 +288,7 @@ export default function ServicesAndCourses({ theme }) {
     <section
       id="services-courses"
       className={`section-pad transition-colors duration-300 relative ${
-        isDark ? 'text-stone-100' : 'text-stone-900'
+        isDark ? 'bg-[#0A0907] text-stone-100' : 'bg-[#FAF7F2] text-stone-900'
       }`}
     >
       <div className="section-wrap relative z-10 space-y-16 sm:space-y-20 lg:space-y-24">
@@ -569,13 +569,7 @@ export default function ServicesAndCourses({ theme }) {
             <p className={`text-xs sm:text-sm font-normal ${isDark ? 'text-stone-400' : 'text-stone-600'}`}>
               Where GV Studio goes further than a standard parlour.
             </p>
-            <div
-              className={`h-px w-full bg-gradient-to-r ${
-                isDark
-                  ? 'from-transparent via-[#D4AF37]/50 to-transparent'
-                  : 'from-transparent via-[#D4AF37]/70 to-transparent'
-              }`}
-            />
+            <div className="gold-rule my-3" />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

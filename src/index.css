@@ -421,9 +421,17 @@ html.light .glass-card {
 
 /* Gold rule */
 .gold-rule {
-  height: 1px;
+  height: 1.5px;
   width: 100%;
-  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.55), transparent);
+  border: none;
+}
+html.dark .gold-rule {
+  background: linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.4) 15%, rgba(231, 201, 96, 0.85) 50%, rgba(212, 175, 55, 0.4) 85%, transparent 100%);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+}
+html.light .gold-rule {
+  background: linear-gradient(90deg, transparent 0%, rgba(184, 134, 11, 0.35) 15%, rgba(138, 109, 31, 0.75) 50%, rgba(184, 134, 11, 0.35) 85%, transparent 100%);
+  box-shadow: 0 0 6px rgba(184, 134, 11, 0.2);
 }
 
 /* Motion */

@@ -36,7 +36,7 @@ export default function ContactUs({ theme }) {
     <section
       id="contact"
       className={`section-pad transition-colors duration-300 relative ${
-        isDark ? 'text-stone-100' : 'text-stone-900'
+        isDark ? 'bg-[#0A0907] text-stone-100' : 'bg-[#FAF7F2] text-stone-900'
       }`}
     >
       <div className="section-wrap relative z-10 space-y-8 lg:space-y-10">
