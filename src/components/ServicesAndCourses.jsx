@@ -295,11 +295,125 @@ export default function ServicesAndCourses({ theme }) {
         {/* Page intro */}
         <SectionIntro
           eyebrow="Studio & Academy"
-          title="Courses &"
-          accent="Services"
-          sub="Certified training tracks and a full parlour menu — designed for real results and real careers."
+          title="Services &"
+          accent="Courses"
+          sub="A full parlour menu and certified training tracks — designed for real results and real careers."
           isDark={isDark}
         />
+
+        {/* Parlour services */}
+        <div className="space-y-8">
+          <div>
+            <p className="section-eyebrow mb-2">
+              <span className={`w-6 h-px inline-block ${isDark ? 'bg-[#D4AF37]' : 'bg-[#8A6D1F]'}`} />
+              Parlour
+            </p>
+            <h3 className={`text-2xl sm:text-3xl font-semibold ${isDark ? 'text-white' : 'text-stone-900'}`}>
+              Our Services
+            </h3>
+          </div>
+
+          {/* Filters */}
+          <div
+            className={`flex gap-1.5 overflow-x-auto no-scrollbar p-1.5 rounded-2xl border w-full sm:w-fit max-w-full ${
+              isDark ? 'bg-black/40 border-[#D4AF37]/25' : 'bg-white/80 border-stone-200'
+            }`}
+          >
+            {serviceFilterButtons.map((btn) => {
+              const active = activeServiceFilter === btn.id;
+              return (
+                <button
+                  key={btn.id}
+                  type="button"
+                  onClick={() => setActiveServiceFilter(btn.id)}
+                  className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all shrink-0 ${
+                    active
+                      ? 'bg-[#D4AF37] text-black shadow-md'
+                      : isDark
+                        ? 'text-stone-400 hover:text-white hover:bg-white/5'
+                        : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
+                  }`}
+                >
+                  {btn.label}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Service cards — image-forward */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+            {filteredServices.map((service, i) => (
+              <article
+                key={service.id}
+                className={`group rounded-[1.4rem] overflow-hidden border transition-all duration-300 ${
+                  isDark
+                    ? 'border-white/10 hover:border-[#D4AF37]/40 bg-white/[0.02]'
+                    : 'border-stone-200 hover:border-[#D4AF37]/45 bg-white shadow-sm'
+                } animate-fadeIn`}
+                style={{ animationDelay: `${Math.min(i, 8) * 35}ms` }}
+              >
+                <button
+                  type="button"
+                  onClick={() =>
+                    setPreviewMedia({
+                      src: service.src,
+                      title: service.title,
+                      desc: service.desc,
+                      badge: service.badge,
+                    })
+                  }
+                  className="relative aspect-[16/10] w-full overflow-hidden text-left"
+                >
+                  <img
+                    src={service.src}
+                    alt={service.title}
+                    loading="lazy"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent" />
+                  <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-black/65 backdrop-blur-md border border-[#D4AF37]/35 text-[#E7C960] text-[10px] font-bold uppercase tracking-wider">
+                    {service.badge}
+                  </span>
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="w-10 h-10 rounded-full bg-black/70 border border-[#D4AF37]/40 flex items-center justify-center text-[#E7C960]">
+                      <Eye className="w-4 h-4" />
+                    </span>
+                  </div>
+                </button>
+
+                <div className="p-5 space-y-3">
+                  <div>
+                    <span
+                      className={`text-[10px] font-bold uppercase tracking-[0.16em] ${
+                        isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'
+                      }`}
+                    >
+                      {service.categoryName}
+                    </span>
+                    <h4 className={`text-lg font-semibold mt-0.5 ${isDark ? 'text-white' : 'text-stone-900'}`}>
+                      {service.title}
+                    </h4>
+                    <p className={`text-xs leading-relaxed mt-1.5 ${isDark ? 'text-stone-400' : 'text-stone-600'}`}>
+                      {service.desc}
+                    </p>
+                  </div>
+                  <a
+                    href="#contact"
+                    onClick={openChatbot}
+                    className={`w-full py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-[0.12em] flex items-center justify-center gap-2 border transition-all ${
+                      isDark
+                        ? 'border-[#D4AF37]/30 text-[#E7C960] hover:bg-[#D4AF37] hover:text-black'
+                        : 'border-stone-200 text-stone-800 hover:bg-[#D4AF37] hover:text-black hover:border-[#D4AF37]'
+                    }`}
+                  >
+                    Book Service
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
 
         {/* Courses */}
         <div className="space-y-8">
@@ -430,120 +544,6 @@ export default function ServicesAndCourses({ theme }) {
             <a href="#contact" className="btn-ghost shrink-0">
               Enquire for Custom
             </a>
-          </div>
-        </div>
-
-        {/* Parlour services */}
-        <div className="space-y-8">
-          <div>
-            <p className="section-eyebrow mb-2">
-              <span className={`w-6 h-px inline-block ${isDark ? 'bg-[#D4AF37]' : 'bg-[#8A6D1F]'}`} />
-              Parlour
-            </p>
-            <h3 className={`text-2xl sm:text-3xl font-semibold ${isDark ? 'text-white' : 'text-stone-900'}`}>
-              Treatment Menu
-            </h3>
-          </div>
-
-          {/* Filters */}
-          <div
-            className={`flex gap-1.5 overflow-x-auto no-scrollbar p-1.5 rounded-2xl border w-full sm:w-fit max-w-full ${
-              isDark ? 'bg-black/40 border-[#D4AF37]/25' : 'bg-white/80 border-stone-200'
-            }`}
-          >
-            {serviceFilterButtons.map((btn) => {
-              const active = activeServiceFilter === btn.id;
-              return (
-                <button
-                  key={btn.id}
-                  type="button"
-                  onClick={() => setActiveServiceFilter(btn.id)}
-                  className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all shrink-0 ${
-                    active
-                      ? 'bg-[#D4AF37] text-black shadow-md'
-                      : isDark
-                        ? 'text-stone-400 hover:text-white hover:bg-white/5'
-                        : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
-                  }`}
-                >
-                  {btn.label}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Service cards — image-forward */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-            {filteredServices.map((service, i) => (
-              <article
-                key={service.id}
-                className={`group rounded-[1.4rem] overflow-hidden border transition-all duration-300 ${
-                  isDark
-                    ? 'border-white/10 hover:border-[#D4AF37]/40 bg-white/[0.02]'
-                    : 'border-stone-200 hover:border-[#D4AF37]/45 bg-white shadow-sm'
-                } animate-fadeIn`}
-                style={{ animationDelay: `${Math.min(i, 8) * 35}ms` }}
-              >
-                <button
-                  type="button"
-                  onClick={() =>
-                    setPreviewMedia({
-                      src: service.src,
-                      title: service.title,
-                      desc: service.desc,
-                      badge: service.badge,
-                    })
-                  }
-                  className="relative aspect-[16/10] w-full overflow-hidden text-left"
-                >
-                  <img
-                    src={service.src}
-                    alt={service.title}
-                    loading="lazy"
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent" />
-                  <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-black/65 backdrop-blur-md border border-[#D4AF37]/35 text-[#E7C960] text-[10px] font-bold uppercase tracking-wider">
-                    {service.badge}
-                  </span>
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span className="w-10 h-10 rounded-full bg-black/70 border border-[#D4AF37]/40 flex items-center justify-center text-[#E7C960]">
-                      <Eye className="w-4 h-4" />
-                    </span>
-                  </div>
-                </button>
-
-                <div className="p-5 space-y-3">
-                  <div>
-                    <span
-                      className={`text-[10px] font-bold uppercase tracking-[0.16em] ${
-                        isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'
-                      }`}
-                    >
-                      {service.categoryName}
-                    </span>
-                    <h4 className={`text-lg font-semibold mt-0.5 ${isDark ? 'text-white' : 'text-stone-900'}`}>
-                      {service.title}
-                    </h4>
-                    <p className={`text-xs leading-relaxed mt-1.5 ${isDark ? 'text-stone-400' : 'text-stone-600'}`}>
-                      {service.desc}
-                    </p>
-                  </div>
-                  <a
-                    href="#contact"
-                    onClick={openChatbot}
-                    className={`w-full py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-[0.12em] flex items-center justify-center gap-2 border transition-all ${
-                      isDark
-                        ? 'border-[#D4AF37]/30 text-[#E7C960] hover:bg-[#D4AF37] hover:text-black'
-                        : 'border-stone-200 text-stone-800 hover:bg-[#D4AF37] hover:text-black hover:border-[#D4AF37]'
-                    }`}
-                  >
-                    Book Service
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </a>
-                </div>
-              </article>
-            ))}
           </div>
         </div>
 

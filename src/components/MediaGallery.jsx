@@ -265,7 +265,7 @@ export default function MediaGallery({ theme }) {
             </p>
 
             <h2 className={`fluid-section-title ${isDark ? 'text-white' : 'text-stone-900'}`}>
-              Real <span className="gold-gradient-text">Transformations</span>
+              <span className="gold-gradient-text">Gallery</span>
             </h2>
 
             <p className={`text-sm sm:text-base leading-relaxed ${isDark ? 'text-stone-400' : 'text-stone-600'}`}>
