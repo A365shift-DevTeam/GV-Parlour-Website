@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback, useLayoutEffect } from 'react';
+import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import useIsMobile from '../hooks/useIsMobile';
 import FounderAndCertificates from './FounderAndCertificates';
 
@@ -56,6 +57,22 @@ const FRAME_SRC = (dir, n) => `${dir}/${String(n).padStart(8, '0')}.webp`;
 const FRAME_INDICES = Array.from({ length: FRAME_COUNT }, (_, i) => i + 1);
 const FRAME_LOAD_CONCURRENCY = 4;
 const DPR_CAP = 2;
+
+/**
+ * Hero copy dissolve window, expressed in scrub progress.
+ *
+ * The sequence is a brand reveal: it opens on an empty gold ring and ends on
+ * the GV Studio logo lockup, so the copy sits inside the ring and clears out
+ * before the reveal lands. The end point is not a taste call — the frames
+ * flood with gold between f18 (progress 0.23) and f28 (0.365), and no text
+ * colour survives that, so the copy has to be gone first.
+ *
+ * Frames 1-8 are missing from public/hero-frames*, which pins the drawn frame
+ * to f9 for everything up to progress 0.108 — a static background that gives
+ * the dissolve free runway.
+ */
+const COPY_EXIT_START = 0.02;
+const COPY_EXIT_END = 0.18;
 /** Desktop kept the video's `object-cover scale-110` framing; match it. */
 const DESKTOP_ZOOM = 1.1;
 
@@ -85,6 +102,7 @@ export default function ScrollHeroCanvas({ theme }) {
   const loadedRef = useRef([]);
   const drawnIndexRef = useRef(-1);
   const posterImgRef = useRef(null);
+  const overlayRef = useRef(null);
 
   const [ready, setReady] = useState(false);
   const [loadPct, setLoadPct] = useState(0);
@@ -92,6 +110,7 @@ export default function ScrollHeroCanvas({ theme }) {
   const [navPx, setNavPx] = useState(80);
   const [stagePx, setStagePx] = useState(600);
   const [scrubPx, setScrubPx] = useState(1400);
+  const [hasScrolled, setHasScrolled] = useState(false);
 
   useLayoutEffect(() => {
     const measure = (force = false) => {
@@ -221,6 +240,20 @@ export default function ScrollHeroCanvas({ theme }) {
     const clamped = Math.max(0, Math.min(1, raw));
     progressRef.current = clamped;
     drawFrameForProgress(clamped);
+
+    // Dissolve the hero copy as the reveal begins. Written straight to a CSS
+    // custom property rather than routed through state — the overlay would
+    // otherwise re-render the whole section on every scroll frame.
+    const exit = Math.max(
+      0,
+      Math.min(1, (clamped - COPY_EXIT_START) / (COPY_EXIT_END - COPY_EXIT_START))
+    );
+    overlayRef.current?.style.setProperty('--hero-exit', String(exit));
+
+    // State gates interactivity only, so a half-faded CTA is never clickable
+    // or tabbable. React bails out when the boolean is unchanged, so this is
+    // free on the frames where it does not flip.
+    setHasScrolled(exit > 0.85);
   }, [drawFrameForProgress, isMobile, scrubPx]);
 
   // Size the canvas backing store to its CSS box (DPR-capped) and repaint.
@@ -403,6 +436,176 @@ export default function ScrollHeroCanvas({ theme }) {
     </>
   );
 
+  /**
+   * Hero copy — "the mirror".
+   *
+   * The canvas already delivers the wordmark at full scale at the end of the
+   * scrub, so the overlay deliberately does NOT repeat it at display size:
+   * the brand appears once, small and letterspaced, for orientation and as
+   * the page h1, and the large type carries the proposition instead. The copy
+   * sits inside the ring like a reflection, then dissolves so the reveal it
+   * used to sit on top of actually lands.
+   */
+  const desktopCopy = (
+    <div
+      className="hero-copy pointer-events-auto relative z-10 flex w-full max-w-[44rem] flex-col items-center px-6 text-center"
+    >
+      {/* The header lockup already reads "GV Studio / Beauty & Academy" a few
+          hundred px away, so the brand gets one line here, not two — flanked
+          by hairlines instead of stacked under a kicker that would echo it. */}
+      <h1
+        className="hero-in flex w-full max-w-md items-center justify-center gap-5"
+        style={{ animationDelay: '140ms' }}
+      >
+        <span className="hero-rule w-14 shrink-0 sm:w-20" />
+        <span className="hero-brand hero-gold text-[12px] tracking-[0.46em] whitespace-nowrap sm:text-[13px]">
+          GV&nbsp;Studio
+        </span>
+        <span className="hero-rule hero-rule-r w-14 shrink-0 sm:w-20" />
+      </h1>
+
+      <p
+        className="hero-display hero-in mt-6 text-[clamp(1.9rem,4.2vw,3.25rem)]"
+        style={{ animationDelay: '380ms' }}
+      >
+        Transforming Looks,
+        <br />
+        <span className="hero-gold">Inspiring Careers</span>
+      </p>
+
+      <p
+        className="hero-in mt-7 max-w-md text-sm leading-relaxed font-light text-stone-300/90"
+        style={{ animationDelay: '520ms' }}
+      >
+        Coimbatore &amp; Pollachi&rsquo;s luxury beauty parlour and certified academy —
+        HD bridal makeovers, advanced skin therapies, and hands-on career training.
+      </p>
+
+      <div
+        className="hero-in mt-9 flex flex-wrap items-center justify-center gap-x-8 gap-y-4"
+        style={{ animationDelay: '660ms' }}
+      >
+        <a href="#contact" className="btn-gold !px-7 !py-3.5">
+          Book Appointment
+          <ArrowRight className="h-4 w-4" />
+        </a>
+        {/* Deliberately not a second pill — a text link keeps one clear
+            primary action and reads more editorial than a matched pair. */}
+        <a
+          href="#services-courses"
+          className="group font-mono text-[11px] tracking-[0.22em] text-[#f4e6bd]/85 uppercase transition-colors hover:text-[#e7c960]"
+        >
+          <span className="border-b border-[#d4af37]/40 pb-1.5 transition-colors group-hover:border-[#e7c960]">
+            Explore Courses
+          </span>
+          <ArrowUpRight className="ml-2 inline h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+        </a>
+      </div>
+
+      <div
+        className="hero-in mt-10 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 font-mono text-[9px] tracking-[0.26em] text-[#f4e6bd]/65 uppercase"
+        style={{ animationDelay: '800ms' }}
+      >
+        <span>Bridal</span>
+        <span className="text-[#d4af37]/60">&bull;</span>
+        <span>Skin &amp; Hair</span>
+        <span className="text-[#d4af37]/60">&bull;</span>
+        <span>Certified Courses</span>
+      </div>
+    </div>
+  );
+
+  const mobileCopy = (
+    <div
+      className="hero-copy pointer-events-auto relative z-10 flex w-full flex-col items-center px-5 text-center"
+    >
+      <h1
+        className="hero-in flex items-center justify-center gap-3"
+        style={{ animationDelay: '140ms' }}
+      >
+        <span className="hero-rule w-8 shrink-0" />
+        <span className="hero-brand hero-gold text-[10px] tracking-[0.4em] whitespace-nowrap">
+          GV&nbsp;Studio
+        </span>
+        <span className="hero-rule hero-rule-r w-8 shrink-0" />
+      </h1>
+
+      <p
+        className="hero-display hero-in mt-2.5 text-[clamp(1.25rem,6.2vw,1.75rem)]"
+        style={{ animationDelay: '380ms' }}
+      >
+        Transforming Looks,
+        <br />
+        <span className="hero-gold">Inspiring Careers</span>
+      </p>
+
+      {/* One action only. The band is ~219px tall at 390px wide, and the
+          supporting copy plus course CTA both live in the sections below. */}
+      <a
+        href="#contact"
+        className="btn-gold hero-in mt-4 !px-6 !py-2.5 !text-[10px]"
+        style={{ animationDelay: '520ms' }}
+      >
+        Book Appointment
+        <ArrowRight className="h-3.5 w-3.5" />
+      </a>
+    </div>
+  );
+
+  const heroOverlay = (
+    <div
+      ref={overlayRef}
+      className="hero-overlay pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center"
+      // Desktop centres inside a 100dvh stage that the fixed header overlaps,
+      // which left the copy sitting above the ring's optical centre. Padding
+      // the header's height re-centres it in the visible area and in the ring.
+      style={isMobile ? undefined : { paddingTop: navPx }}
+      // inert, not aria-hidden + pointer-events: pointer-events leaves the
+      // CTAs in the tab order, so a faded-out link would still be focusable
+      // inside an aria-hidden subtree. inert removes the subtree from both
+      // the a11y tree and the tab order in one go.
+      // React 19 types inert as a real boolean; the older empty-string idiom
+      // is rejected at runtime and silently treated as false.
+      inert={hasScrolled}
+    >
+      <div
+        aria-hidden
+        className={`absolute inset-0 ${isMobile ? 'hero-scrim-m' : 'hero-scrim'}`}
+      />
+
+      {isMobile ? mobileCopy : desktopCopy}
+
+      {/* Edge rails — vertical mono set in the dark side bands of the early
+          frames. Desktop only: the mobile band has no margins to spare. */}
+      {!isMobile && (
+        <>
+          {/* hero-copy and hero-in must sit on SEPARATE elements: hero-in is a
+              fill-mode:both animation, and its `to` keyframe (opacity 1,
+              transform none) outranks hero-copy's scroll-driven declarations
+              in the cascade — putting both on one node silently kills the
+              exit fade. */}
+          <div className="hero-copy absolute bottom-10 left-8 xl:left-12">
+            <div
+              className="hero-in flex flex-col items-center gap-3"
+              style={{ animationDelay: '940ms' }}
+            >
+              <span className="hero-rail">Scroll</span>
+              <span className="hero-rail-track relative h-14">
+                <span className="hero-bead absolute -left-px" style={{ '--bead-travel': '56px' }} />
+              </span>
+            </div>
+          </div>
+
+          <div className="hero-copy absolute top-1/2 right-8 -translate-y-1/2 xl:right-12">
+            <div className="hero-in" style={{ animationDelay: '940ms' }}>
+              <span className="hero-rail">Coimbatore &nbsp;&bull;&nbsp; Pollachi</span>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+
   if (isMobile) {
     // Fixed pixel heights — document is always scrollable, no dvh races
     const sectionH = navPx + stagePx + scrubPx + STAGE_STRETCH_RESERVE;
@@ -437,6 +640,7 @@ export default function ScrollHeroCanvas({ theme }) {
             style={{ aspectRatio: String(ASPECT) }}
           >
             {media}
+            {heroOverlay}
           </div>
 
           {/* Founder flush under video — no black gap, no nested scroll */}
@@ -461,9 +665,10 @@ export default function ScrollHeroCanvas({ theme }) {
       >
         <div className="relative h-full w-full">
           {media}
+          {heroOverlay}
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-0 z-20"
+            className="pointer-events-none absolute inset-0 z-10"
             style={{
               background:
                 'linear-gradient(180deg, transparent 0%, transparent 75%, rgba(10,9,7,0.45) 100%)',

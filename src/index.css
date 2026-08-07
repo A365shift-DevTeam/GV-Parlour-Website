@@ -517,6 +517,183 @@ html.light .gold-rule {
   }
 }
 
+/* ------------------------------------------------------------------
+   Hero — "The Mirror"
+   ------------------------------------------------------------------
+   The hero canvas is a 75-frame brand reveal: it opens on an empty gold
+   ring and ends on the GV Studio logo lockup. The copy therefore sits
+   INSIDE the ring like a reflection, and dissolves as you scroll so the
+   reveal lands unobstructed.
+
+   Frame audit (progress = index/74) drives every number below:
+     f9  (0 -> 0.108, static — frames 1-8 are 404s)  dark, ring empty
+     f18 (0.23)                                      still dark, ring lit
+     f28 (0.365)                                     gold floods the frame
+   So the dissolve MUST complete before ~0.20. See --hero-exit mapping in
+   ScrollHeroCanvas.jsx.
+   ------------------------------------------------------------------ */
+
+/* Scroll-driven dissolve. --hero-exit (0 -> 1) is written straight to this
+   wrapper from the scroll rAF, so the fade never costs a React render, and
+   inherits down to the scrim and the copy column.
+   Initialised to 0 here: on the reduced-motion path nothing ever writes it
+   and the copy must stay fully visible. */
+.hero-overlay {
+  --hero-exit: 0;
+}
+
+/* Radial scrim: darkens the ring interior for legibility while leaving the
+   light rays, drapery and marble fully visible. Replaces the full-bleed
+   blur that used to hide the artwork the whole animation was built for. */
+.hero-scrim {
+  opacity: calc(1 - var(--hero-exit));
+  background:
+    radial-gradient(
+      62% 66% at 50% 46%,
+      rgba(6, 5, 4, 0.9) 0%,
+      rgba(6, 5, 4, 0.8) 38%,
+      rgba(6, 5, 4, 0.5) 64%,
+      rgba(6, 5, 4, 0.16) 84%,
+      rgba(6, 5, 4, 0) 100%
+    ),
+    linear-gradient(180deg, rgba(6, 5, 4, 0.55) 0%, rgba(6, 5, 4, 0) 22%);
+}
+
+/* Mobile is a ~219px 16:9 band, not a stage — the ring renders about 140px
+   wide, so there is no interior to sit inside. Copy goes full width over a
+   vertical scrim weighted to the middle, leaving the drapery reflection at
+   the bottom edge visible. */
+.hero-scrim-m {
+  opacity: calc(1 - var(--hero-exit));
+  background: linear-gradient(
+    180deg,
+    rgba(6, 5, 4, 0.62) 0%,
+    rgba(6, 5, 4, 0.78) 34%,
+    rgba(6, 5, 4, 0.76) 68%,
+    rgba(6, 5, 4, 0.38) 100%
+  );
+}
+
+.hero-copy {
+  opacity: calc(1 - var(--hero-exit));
+  /* Blur + scale are scoped to this column, never the full-bleed wrapper —
+     a viewport-sized blur re-rasterises on every scroll frame. */
+  transform: translateY(calc(var(--hero-exit) * -34px))
+    scale(calc(1 - var(--hero-exit) * 0.05));
+  filter: blur(calc(var(--hero-exit) * 8px));
+  will-change: opacity, transform, filter;
+}
+
+/* Hero-local gold. NOT .gold-gradient-text — that has an html.light override
+   that renders near-brown, which is unreadable over this always-dark canvas. */
+.hero-gold {
+  background: linear-gradient(102deg, #fff4cd 0%, #f2d98d 28%, #d4af37 62%, #b8860b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* The masthead line — the site's existing display face, so the hero speaks in
+   the same voice as every section below it. */
+.hero-display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  color: #fdf8ec;
+  text-wrap: balance;
+}
+
+.hero-brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* Hairline rules that flank the kicker */
+.hero-rule {
+  height: 1px;
+  background: linear-gradient(90deg, rgba(212, 175, 55, 0) 0%, rgba(212, 175, 55, 0.75) 100%);
+}
+.hero-rule-r {
+  background: linear-gradient(90deg, rgba(212, 175, 55, 0.75) 0%, rgba(212, 175, 55, 0) 100%);
+}
+
+/* Edge rails — vertical mono type in the dark side bands of the early frames */
+.hero-rail {
+  writing-mode: vertical-rl;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: rgba(244, 230, 189, 0.66);
+  /* The rails sit outside the radial scrim, and how much gold drapery reaches
+     the edges shifts with viewport aspect (cover-fit + DESKTOP_ZOOM). The
+     shadow keeps them legible on the bright crops. */
+  text-shadow: 0 1px 6px rgba(6, 5, 4, 0.9);
+}
+
+.hero-rail-track {
+  width: 1px;
+  background: linear-gradient(180deg, rgba(212, 175, 55, 0.45), rgba(212, 175, 55, 0));
+}
+
+/* A gold bead falling down the rail — an ambient invitation to scroll that
+   does not bounce like the stock chevron it replaces. */
+.hero-bead {
+  width: 3px;
+  height: 3px;
+  border-radius: 9999px;
+  background: #e7c960;
+  box-shadow: 0 0 8px 1px rgba(231, 201, 96, 0.8);
+  animation: gvHeroBead 2.6s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+}
+
+@keyframes gvHeroBead {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  18%,
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(var(--bead-travel, 56px));
+  }
+}
+
+/* Staggered entrance. One orchestrated page-load reveal beats scattered
+   micro-interactions, so every hero element rides this with a delay. */
+@keyframes gvHeroIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+    filter: blur(7px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+
+.hero-in {
+  animation: gvHeroIn 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-in,
+  .hero-bead {
+    animation: none;
+  }
+  .hero-copy {
+    filter: none;
+    transform: none;
+  }
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
