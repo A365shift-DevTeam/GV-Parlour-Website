@@ -303,20 +303,18 @@ export default function ServicesAndCourses({ theme }) {
 
         {/* Courses */}
         <div className="space-y-8">
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-            <div>
-              <p className="section-eyebrow mb-2">
-                <span className={`w-6 h-px inline-block ${isDark ? 'bg-[#D4AF37]' : 'bg-[#8A6D1F]'}`} />
-                Academy
-              </p>
-              <h3 className={`text-2xl sm:text-3xl font-semibold ${isDark ? 'text-white' : 'text-stone-900'}`}>
-                Training Tracks
-              </h3>
-            </div>
-            <p className={`text-xs sm:text-sm max-w-sm ${isDark ? 'text-stone-500' : 'text-stone-500'}`}>
+          {/* <div>
+            <p className="section-eyebrow mb-2">
+              <span className={`w-6 h-px inline-block ${isDark ? 'bg-[#D4AF37]' : 'bg-[#8A6D1F]'}`} />
+              Academy
+            </p>
+            <h3 className={`text-2xl sm:text-3xl font-semibold ${isDark ? 'text-white' : 'text-stone-900'}`}>
+              Training Tracks
+            </h3>
+            <p className={`mt-2 max-w-md text-xs sm:text-sm ${isDark ? 'text-stone-400' : 'text-stone-500'}`}>
               Theory plus hands-on practicals. Placement support on Standard track.
             </p>
-          </div>
+          </div> */}
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6 items-stretch">
             {courses.map((course, cIdx) => (
@@ -437,16 +435,14 @@ export default function ServicesAndCourses({ theme }) {
 
         {/* Parlour services */}
         <div className="space-y-8">
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-            <div>
-              <p className="section-eyebrow mb-2">
-                <span className={`w-6 h-px inline-block ${isDark ? 'bg-[#D4AF37]' : 'bg-[#8A6D1F]'}`} />
-                Parlour
-              </p>
-              <h3 className={`text-2xl sm:text-3xl font-semibold ${isDark ? 'text-white' : 'text-stone-900'}`}>
-                Treatment Menu
-              </h3>
-            </div>
+          <div>
+            <p className="section-eyebrow mb-2">
+              <span className={`w-6 h-px inline-block ${isDark ? 'bg-[#D4AF37]' : 'bg-[#8A6D1F]'}`} />
+              Parlour
+            </p>
+            <h3 className={`text-2xl sm:text-3xl font-semibold ${isDark ? 'text-white' : 'text-stone-900'}`}>
+              Treatment Menu
+            </h3>
           </div>
 
           {/* Filters */}
