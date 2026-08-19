@@ -43,6 +43,9 @@ export default function Footer({ theme }) {
                 <img
                   src="/assets/logo_dark.webp"
                   alt="GV Studio"
+                  width="40"
+                  height="40"
+                  loading="lazy"
                   className="h-full w-full scale-[1.04] rounded-full bg-black object-cover"
                 />
               </div>

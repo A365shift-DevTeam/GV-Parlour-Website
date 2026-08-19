@@ -123,6 +123,8 @@ export default function Header({ theme, onToggleTheme }) {
             <img
               src="/assets/logo_dark.webp"
               alt="GV Studio"
+              width="40"
+              height="40"
               className="h-full w-full scale-[1.04] rounded-full object-cover bg-black"
             />
           </div>

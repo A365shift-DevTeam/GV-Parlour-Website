@@ -84,7 +84,9 @@ export default function useSmoothScroll() {
       rafId = requestAnimationFrame(raf);
     };
 
-    setup();
+    let initRaf = requestAnimationFrame(() => {
+      setup();
+    });
     window.addEventListener('resize', setup, { passive: true });
     window.addEventListener('orientationchange', setup, { passive: true });
 
@@ -99,6 +101,7 @@ export default function useSmoothScroll() {
     window.addEventListener('touchstart', onTouch, { passive: true });
 
     return () => {
+      if (initRaf) cancelAnimationFrame(initRaf);
       window.removeEventListener('resize', setup);
       window.removeEventListener('orientationchange', setup);
       window.removeEventListener('touchstart', onTouch);

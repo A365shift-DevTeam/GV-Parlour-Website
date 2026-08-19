@@ -349,7 +349,10 @@ export default function MediaGallery({ theme }) {
                     <img
                       src={img.src}
                       alt={img.title}
+                      width="600"
+                      height="750"
                       loading="lazy"
+                      decoding="async"
                       className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
                       style={{ objectPosition: img.objectPosition || 'center center' }}
                     />
@@ -440,7 +443,10 @@ export default function MediaGallery({ theme }) {
                       <img
                         src={vid.poster}
                         alt={vid.title}
+                        width="360"
+                        height="560"
                         loading="lazy"
+                        decoding="async"
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10" />
@@ -542,6 +548,8 @@ export default function MediaGallery({ theme }) {
                     <img
                       src={activeMedia.src}
                       alt={activeMedia.title}
+                      width="1200"
+                      height="800"
                       className="w-full h-full object-contain max-h-[75vh]"
                     />
                   )}

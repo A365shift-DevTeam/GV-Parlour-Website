@@ -10,16 +10,61 @@
       name="description"
       content="GV Studio - Enhancing Beauty, Inspiring Confidence. Premier Beauty Parlour & Cosmetology Academy founded by Galla Vidya."
     />
+    <!-- Preload critical hero poster for immediate FCP/LCP -->
+    <link rel="preload" as="image" href="/assets/gv-studio-hero-poster.jpg" fetchpriority="high" />
+
+    <!-- Non-blocking Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
+      rel="preload"
+      as="style"
       href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
-      rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+      />
+    </noscript>
   </head>
   <body class="bg-transparent font-sans antialiased selection:bg-[#D4AF37] selection:text-black">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
-   <script id="messenger-widget-b" src="https://cdn.express-chat.com/website-bot.js" defer>6a6b23320a83074da20d4ead,6a265e6bd0e284361759a74d</script>
+    <!-- Chatbot script deferred until user interaction or idle to prevent TBT and main thread lockup -->
+    <script>
+      (function() {
+        var loaded = false;
+        function loadBot() {
+          if (loaded) return;
+          loaded = true;
+          window.removeEventListener('scroll', loadBot);
+          window.removeEventListener('pointerdown', loadBot);
+          window.removeEventListener('touchstart', loadBot);
+          window.removeEventListener('keydown', loadBot);
+          var s = document.createElement('script');
+          s.id = 'messenger-widget-b';
+          s.src = 'https://cdn.express-chat.com/website-bot.js';
+          s.textContent = '6a6b23320a83074da20d4ead,6a265e6bd0e284361759a74d';
+          document.body.appendChild(s);
+        }
+        window.__loadChatbot = loadBot;
+        window.addEventListener('scroll', loadBot, { passive: true, once: true });
+        window.addEventListener('pointerdown', loadBot, { passive: true, once: true });
+        window.addEventListener('touchstart', loadBot, { passive: true, once: true });
+        window.addEventListener('keydown', loadBot, { passive: true, once: true });
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(function() { setTimeout(loadBot, 3500); });
+        } else {
+          setTimeout(loadBot, 4000);
+        }
+      })();
+    </script>
   </body>
 </html>

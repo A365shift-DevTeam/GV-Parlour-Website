@@ -3,12 +3,8 @@ import { useState, useEffect } from 'react';
 export const MOBILE_MAX = 1024;
 
 function readIsMobile() {
-  if (typeof window === 'undefined') return true;
-  return (
-    window.matchMedia(`(max-width: ${MOBILE_MAX - 0.02}px)`).matches ||
-    window.matchMedia('(pointer: coarse)').matches ||
-    'ontouchstart' in window
-  );
+  if (typeof window === 'undefined') return false;
+  return window.matchMedia(`(max-width: ${MOBILE_MAX - 0.02}px)`).matches;
 }
 
 /** true for phones / touch — default true so Lenis never boots first paint on mobile */

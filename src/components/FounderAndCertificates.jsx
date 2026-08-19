@@ -170,6 +170,8 @@ function CertificateCarouselModal({ isDark, open, onClose, index, setIndex }) {
             key={current.id}
             src={current.src}
             alt={current.title}
+            width="800"
+            height="600"
             className="max-h-[58dvh] w-full rounded-xl object-contain sm:max-h-[64dvh] animate-fadeIn"
           />
 
@@ -222,7 +224,10 @@ function CertificateCarouselModal({ isDark, open, onClose, index, setIndex }) {
                   >
                     <img
                       src={cert.src}
-                      alt=""
+                      alt={cert.title}
+                      width="96"
+                      height="64"
+                      loading="lazy"
                       className="h-full w-full object-contain bg-black"
                     />
                   </button>
@@ -433,7 +438,10 @@ export default function FounderAndCertificates({ theme, compact = false }) {
                 <img
                   key={cert.id}
                   src={cert.src}
-                  alt=""
+                  alt={cert.title}
+                  width="56"
+                  height="48"
+                  loading="lazy"
                   className="absolute h-12 w-14 rounded-lg border border-[#D4AF37]/30 object-cover shadow-md"
                   style={{
                     left: i * 4,
@@ -487,6 +495,9 @@ export default function FounderAndCertificates({ theme, compact = false }) {
                 <img
                   src="/assets/founder.webp"
                   alt="Galla Vidya - Founder & Master Cosmetologist"
+                  width="800"
+                  height="1000"
+                  loading="lazy"
                   className="absolute inset-0 h-full w-full object-cover object-top"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent" />
@@ -588,7 +599,10 @@ export default function FounderAndCertificates({ theme, compact = false }) {
               >
                 <img
                   src="/assets/founder.webp"
-                  alt=""
+                  alt="Galla Vidya"
+                  width="56"
+                  height="56"
+                  loading="lazy"
                   className="h-14 w-14 shrink-0 rounded-xl object-cover object-top"
                 />
                 <div className="min-w-0">
@@ -629,6 +643,9 @@ export default function FounderAndCertificates({ theme, compact = false }) {
                   <img
                     src={CERTIFICATES[0].src}
                     alt="Certificate of Recognition"
+                    width="144"
+                    height="108"
+                    loading="lazy"
                     className="h-full w-full object-contain"
                   />
                   <div className="absolute inset-0 flex items-center justify-center bg-black/35 opacity-100 sm:opacity-0 sm:group-hover:opacity-100">

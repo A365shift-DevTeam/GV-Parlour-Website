@@ -72,6 +72,10 @@ function scrollToContact() {
 export default function openChatbot(e, { onFallback } = {}) {
   if (e) e.preventDefault();
 
+  if (typeof window.__loadChatbot === 'function') {
+    window.__loadChatbot();
+  }
+
   if (tryOpenChatbot()) return;
 
   const startedAt = Date.now();

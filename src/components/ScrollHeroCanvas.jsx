@@ -305,13 +305,16 @@ export default function ScrollHeroCanvas({ theme }) {
     loadedRef.current = FRAME_INDICES.map(() => false);
     drawnIndexRef.current = -1;
 
-    // Poster covers the canvas until the first real frame lands
+    // Poster covers the canvas immediately and clears loader
     const poster = new Image();
     poster.src = HERO_POSTER;
     posterImgRef.current = poster;
     poster.decode().catch(() => null).then(() => {
-      if (cancelled || drawnIndexRef.current >= 0) return;
-      paint(poster, poster.naturalWidth, poster.naturalHeight);
+      if (cancelled) return;
+      if (drawnIndexRef.current < 0) {
+        paint(poster, poster.naturalWidth, poster.naturalHeight);
+      }
+      markReady();
     });
 
     let cursor = 0;
@@ -344,13 +347,36 @@ export default function ScrollHeroCanvas({ theme }) {
         .catch(() => settle());
     };
 
-    for (let c = 0; c < FRAME_LOAD_CONCURRENCY; c++) loadNext();
+    // Stagger frame sequence fetching to idle time to avoid main thread contention during initial paint
+    let idleId = null;
+    const startFrameLoads = () => {
+      if (cancelled) return;
+      for (let c = 0; c < FRAME_LOAD_CONCURRENCY; c++) loadNext();
+    };
 
-    // Never let a slow network keep the loader up indefinitely
-    const safety = window.setTimeout(markReady, 4000);
+    if ('requestIdleCallback' in window) {
+      idleId = requestIdleCallback(() => startFrameLoads(), { timeout: 1500 });
+    } else {
+      idleId = window.setTimeout(startFrameLoads, 300);
+    }
+
+    const onInitialScroll = () => {
+      startFrameLoads();
+      window.removeEventListener('scroll', onInitialScroll);
+    };
+    window.addEventListener('scroll', onInitialScroll, { passive: true, once: true });
+
+    // Safety timeout
+    const safety = window.setTimeout(markReady, 2000);
     return () => {
       cancelled = true;
       window.clearTimeout(safety);
+      if (typeof idleId === 'number') {
+        window.clearTimeout(idleId);
+      } else if (idleId && 'cancelIdleCallback' in window) {
+        window.cancelIdleCallback(idleId);
+      }
+      window.removeEventListener('scroll', onInitialScroll);
     };
   }, [isMobile, prefersReducedMotion, paint, drawFrameForProgress, markReady]);
 
@@ -425,6 +451,8 @@ export default function ScrollHeroCanvas({ theme }) {
       ) : (
         <canvas
           ref={canvasRef}
+          width={1920}
+          height={1080}
           aria-label="GV Studio"
           role="img"
           className="pointer-events-none absolute inset-0 h-full w-full"
