@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Volume2 } from 'lucide-react';
+import { Volume2, VolumeX } from 'lucide-react';
 
 const AUDIO_SRC = '/GV%20Audio.mp3';
 
@@ -64,7 +64,11 @@ export default function FloatingAudioButton() {
         title={actionLabel}
         onClick={toggleAudio}
       >
-        <Volume2 aria-hidden="true" strokeWidth={2.2} />
+        {isPlaying ? (
+          <Volume2 aria-hidden="true" strokeWidth={2.2} />
+        ) : (
+          <VolumeX aria-hidden="true" strokeWidth={2.2} />
+        )}
       </button>
     </div>
   );
