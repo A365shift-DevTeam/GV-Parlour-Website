@@ -8,6 +8,7 @@ import FounderAndCertificates from './components/FounderAndCertificates';
 import ContactUs from './components/ContactUs';
 import Footer from './components/Footer';
 import SectionSeparator from './components/SectionSeparator';
+import FloatingAudioButton from './components/FloatingAudioButton';
 import useSmoothScroll from './hooks/useSmoothScroll';
 import useIsMobile from './hooks/useIsMobile';
 
@@ -79,6 +80,7 @@ export default function App() {
 
       <SectionSeparator theme={theme} icon={Heart} />
       <Footer theme={theme} />
+      <FloatingAudioButton />
     </div>
   );
 }
