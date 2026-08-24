@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Volume2, VolumeX } from 'lucide-react';
+import { Volume2 } from 'lucide-react';
 
 const AUDIO_SRC = '/GV%20Audio.mp3';
 
@@ -38,7 +38,7 @@ export default function FloatingAudioButton() {
   const actionLabel = hasError
     ? 'Audio unavailable. Try again'
     : isPlaying
-      ? 'Pause GV Studio audio'
+      ? 'Stop GV Studio audio'
       : 'Play GV Studio audio';
 
   return (
@@ -64,10 +64,11 @@ export default function FloatingAudioButton() {
         title={actionLabel}
         onClick={toggleAudio}
       >
+        <span className="audio-fab-wave" aria-hidden="true" />
         {isPlaying ? (
-          <Volume2 aria-hidden="true" strokeWidth={2.2} />
+          <span className="audio-fab-stop" aria-hidden="true" />
         ) : (
-          <VolumeX aria-hidden="true" strokeWidth={2.2} />
+          <Volume2 aria-hidden="true" strokeWidth={2} />
         )}
       </button>
     </div>

@@ -508,35 +508,36 @@ html.light .gold-rule {
   transition: width 200ms ease-out;
 }
 
-/* Floating audio control — aligned above the Express Chat widget. */
+/* Floating audio control — gold concentric speaker, above the chat widget. */
 .audio-fab-wrap {
   position: fixed;
   right: 2rem;
   bottom: calc(7rem + env(safe-area-inset-bottom, 0px));
   z-index: 2147483001;
-  width: 4rem;
-  height: 4rem;
+  width: 3.25rem;
+  height: 3.25rem;
   pointer-events: none;
 }
 
 .audio-fab {
+  --audio-ring: rgb(var(--gv-gold) / 0.42);
+  --audio-ring-outer: rgb(var(--gv-gold) / 0.26);
+  --audio-glow: rgb(var(--gv-gold) / 0.35);
   position: relative;
   display: grid;
-  width: 4rem;
-  height: 4rem;
+  width: 3.25rem;
+  height: 3.25rem;
   place-items: center;
   padding: 0;
-  border: 1px solid rgba(108, 216, 75, 0.48);
+  border: 1.5px solid rgb(var(--gv-gold) / 0.55);
   border-radius: 9999px;
-  color: #70d84f;
+  color: #d4af37;
   background:
-    radial-gradient(circle at 50% 45%, rgba(20, 40, 46, 0.96) 0 44%, rgba(4, 15, 27, 0.98) 72%),
-    #06101d;
+    radial-gradient(circle at 50% 42%, #1a1710 0 48%, #0a0907 76%);
   box-shadow:
-    0 0 0 8px rgba(70, 181, 64, 0.08),
-    0 0 0 16px rgba(70, 181, 64, 0.035),
-    0 10px 28px rgba(0, 0, 0, 0.42),
-    inset 0 0 0 2px rgba(95, 126, 174, 0.28);
+    0 0 14px rgb(var(--gv-gold) / 0.22),
+    0 8px 22px rgba(0, 0, 0, 0.38),
+    inset 0 0 10px rgb(var(--gv-gold) / 0.08);
   cursor: pointer;
   pointer-events: auto;
   transition:
@@ -548,41 +549,63 @@ html.light .gold-rule {
 }
 
 .audio-fab::before,
-.audio-fab::after {
+.audio-fab::after,
+.audio-fab-wave {
   content: "";
   position: absolute;
-  inset: -0.45rem;
-  border: 2.5px solid rgba(102, 238, 79, 0.72);
+  inset: 0;
+  border: 1.5px solid rgb(var(--gv-gold) / 0.7);
   border-radius: inherit;
-  box-shadow:
-    0 0 8px rgba(83, 225, 65, 0.62),
-    inset 0 0 8px rgba(83, 225, 65, 0.35);
+  box-shadow: 0 0 10px var(--audio-glow);
   pointer-events: none;
-}
-
-.audio-fab::before {
-  animation: gvAudioPulse 1.55s ease-out infinite;
+  z-index: 0;
+  animation: gvAudioWave 1.8s ease-out infinite;
 }
 
 .audio-fab::after {
-  border-color: rgba(102, 238, 79, 0.58);
-  animation: gvAudioPulse 1.55s 0.52s ease-out infinite;
+  border-color: rgb(var(--gv-gold) / 0.55);
+  animation-delay: 0.6s;
+}
+
+.audio-fab-wave {
+  content: none;
+  border-color: rgb(var(--gv-gold) / 0.4);
+  animation-delay: 1.2s;
+}
+
+.audio-fab svg,
+.audio-fab-stop {
+  position: relative;
+  z-index: 1;
 }
 
 .audio-fab svg {
-  width: 1.65rem;
-  height: 1.65rem;
-  filter: drop-shadow(0 0 5px rgba(112, 216, 79, 0.35));
+  width: 1.25rem;
+  height: 1.25rem;
+  filter: drop-shadow(0 0 6px rgb(var(--gv-gold) / 0.55));
+}
+
+.audio-fab-stop {
+  width: 0.72rem;
+  height: 0.72rem;
+  border-radius: 0.16rem;
+  background: currentColor;
+  box-shadow: 0 0 8px rgb(var(--gv-gold) / 0.5);
 }
 
 .audio-fab:hover {
-  color: #8aee68;
-  border-color: rgba(126, 234, 91, 0.72);
+  color: #e7c960;
+  border-color: rgb(var(--gv-gold-light) / 0.78);
   box-shadow:
-    0 0 0 8px rgba(70, 181, 64, 0.12),
-    0 0 0 16px rgba(70, 181, 64, 0.05),
-    0 12px 30px rgba(0, 0, 0, 0.48),
-    inset 0 0 0 2px rgba(95, 126, 174, 0.32);
+    0 0 18px rgb(var(--gv-gold) / 0.32),
+    0 10px 24px rgba(0, 0, 0, 0.42),
+    inset 0 0 12px rgb(var(--gv-gold) / 0.12);
+}
+
+.audio-fab:hover::before,
+.audio-fab:hover::after,
+.audio-fab:hover .audio-fab-wave {
+  border-color: rgb(var(--gv-gold-light) / 0.8);
 }
 
 .audio-fab:active {
@@ -591,52 +614,51 @@ html.light .gold-rule {
 
 .audio-fab:focus-visible {
   outline: 2px solid #e7c960;
-  outline-offset: 5px;
+  outline-offset: 8px;
 }
 
-.audio-fab.is-playing::before {
-  animation-duration: 1.2s;
+.audio-fab.is-playing::before,
+.audio-fab.is-playing::after,
+.audio-fab.is-playing .audio-fab-wave {
+  animation-duration: 1.25s;
 }
 
 .audio-fab.is-playing::after {
-  animation-duration: 1.2s;
-  animation-delay: 0.4s;
+  animation-delay: 0.42s;
 }
 
-.audio-fab.is-playing svg {
-  animation: gvSpeakerVibrate 340ms ease-in-out infinite;
+.audio-fab.is-playing .audio-fab-wave {
+  animation-delay: 0.84s;
 }
 
 .audio-fab.has-error {
   color: #e7c960;
-  border-color: rgba(231, 201, 96, 0.58);
+  border-color: rgb(var(--gv-gold-light) / 0.7);
 }
 
-@keyframes gvAudioPulse {
+html.light .audio-fab {
+  color: #aa771c;
+  border-color: rgb(var(--gv-gold) / 0.62);
+  background:
+    radial-gradient(circle at 50% 42%, #fffdf8 0 48%, #f4eee0 76%);
+  box-shadow:
+    0 0 14px rgb(var(--gv-gold) / 0.18),
+    0 8px 20px rgba(28, 25, 23, 0.1),
+    inset 0 0 8px rgb(var(--gv-gold) / 0.08);
+}
+
+html.light .audio-fab svg {
+  filter: drop-shadow(0 0 5px rgb(var(--gv-gold) / 0.4));
+}
+
+@keyframes gvAudioWave {
   0% {
-    opacity: 1;
-    transform: scale(0.78);
+    opacity: 0.9;
+    transform: scale(1);
   }
-  72%,
   100% {
     opacity: 0;
-    transform: scale(1.62);
-  }
-}
-
-@keyframes gvSpeakerVibrate {
-  0%,
-  100% {
-    transform: translateX(0) rotate(0deg) scale(1);
-  }
-  25% {
-    transform: translateX(-1.5px) rotate(-2deg) scale(1.04);
-  }
-  50% {
-    transform: translateX(1px) rotate(1.5deg) scale(1.08);
-  }
-  75% {
-    transform: translateX(-0.5px) rotate(-1deg) scale(1.04);
+    transform: scale(1.95);
   }
 }
 
@@ -654,8 +676,22 @@ html.light .gold-rule {
   .hero-loader-dot,
   .audio-fab::before,
   .audio-fab::after,
-  .audio-fab.is-playing svg {
+  .audio-fab-wave {
     animation: none;
+  }
+
+  .audio-fab::before {
+    inset: -0.52rem;
+    opacity: 0.7;
+  }
+
+  .audio-fab::after {
+    inset: -1.02rem;
+    opacity: 0.4;
+  }
+
+  .audio-fab-wave {
+    display: none;
   }
 }
 
