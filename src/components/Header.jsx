@@ -121,7 +121,7 @@ export default function Header({ theme, onToggleTheme }) {
         >
           <div className="h-9 w-9 overflow-hidden rounded-full bg-gradient-to-br from-[#E7C960] to-[#8A6D1F] p-[1.5px] sm:h-10 sm:w-10">
             <img
-              src="/assets/logo_dark.webp"
+              src="/assets/logo_dark.jpg"
               alt="GV Studio"
               width="40"
               height="40"

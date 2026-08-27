@@ -41,7 +41,7 @@ export default function Footer({ theme }) {
             <div className="flex items-center gap-3">
               <div className="h-10 w-10 shrink-0 overflow-hidden rounded-full bg-gradient-to-br from-[#E7C960] to-[#8A6D1F] p-[1.5px] shadow-sm">
                 <img
-                  src="/assets/logo_dark.webp"
+                  src="/assets/logo_dark.jpg"
                   alt="GV Studio"
                   width="40"
                   height="40"
