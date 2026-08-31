@@ -1,0 +1,9 @@
+# Allow all web crawlers and search engine bots
+User-agent: *
+Allow: /
+
+# Disallow build / internal artifacts if any
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://gvstudio.in/sitemap.xml

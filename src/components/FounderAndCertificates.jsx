@@ -147,7 +147,7 @@ function CertificateCarouselModal({ isDark, open, onClose, index, setIndex }) {
             </p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
-            {current.pdfUrl && (
+            {/* {current.pdfUrl && (
               <a
                 href={current.pdfUrl}
                 target="_blank"
@@ -162,7 +162,7 @@ function CertificateCarouselModal({ isDark, open, onClose, index, setIndex }) {
                 <ExternalLink className="h-3.5 w-3.5" />
                 <span className="hidden sm:inline">View PDF</span>
               </a>
-            )}
+            )} */}
             <button
               type="button"
               onClick={onClose}

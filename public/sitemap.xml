@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://gvstudio.in/</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://gvstudio.in/assets/founder.webp</image:loc>
+      <image:title>Galla Vidya - Founder of GV Studio</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://gvstudio.in/assets/certificate-1.webp</image:loc>
+      <image:title>Lakme Academy Advanced Beauty Therapy Certification</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://gvstudio.in/assets/certificate-2.webp</image:loc>
+      <image:title>Lakme Academy Nail Technician Certification</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://gvstudio.in/assets/certificate-3.webp</image:loc>
+      <image:title>Prime Fashion Week Hair and Makeup Partner</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://gvstudio.in/assets/certificate-4.webp</image:loc>
+      <image:title>The Cover Girl Masterclass Lakme Academy ELLE</image:title>
+    </image:image>
+  </url>
+</urlset>
