@@ -266,39 +266,41 @@ export default function MediaGallery({ theme }) {
             Studio Lookbook
           </p>
 
-          <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+          <div className="relative flex flex-wrap items-center justify-between gap-4">
             <h2 className={`fluid-section-title leading-none ${isDark ? 'text-white' : 'text-stone-900'}`}>
               <span className="gold-gradient-text">Gallery</span>
             </h2>
 
-            <div
-              className={`inline-flex items-center gap-1 p-1 rounded-2xl border ${
-                isDark ? 'bg-black/50 border-[#D4AF37]/30' : 'bg-white/80 border-stone-200 shadow-sm'
-              }`}
-              role="tablist"
-              aria-label="Gallery filters"
-            >
-              {FILTERS.map((f) => {
-                const active = filter === f.id;
-                return (
-                  <button
-                    key={f.id}
-                    type="button"
-                    role="tab"
-                    aria-selected={active}
-                    onClick={() => setFilter(f.id)}
-                    className={`px-3.5 sm:px-4 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                      active
-                        ? 'bg-[#D4AF37] text-black shadow-md'
-                        : isDark
-                          ? 'text-stone-300 hover:text-white hover:bg-white/5'
-                          : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
-                    }`}
-                  >
-                    {f.label}
-                  </button>
-                );
-              })}
+            <div className="sm:absolute sm:left-1/2 sm:-translate-x-1/2">
+              <div
+                className={`inline-flex items-center gap-1 p-1 rounded-2xl border ${
+                  isDark ? 'bg-black/50 border-[#D4AF37]/30' : 'bg-white/80 border-stone-200 shadow-sm'
+                }`}
+                role="tablist"
+                aria-label="Gallery filters"
+              >
+                {FILTERS.map((f) => {
+                  const active = filter === f.id;
+                  return (
+                    <button
+                      key={f.id}
+                      type="button"
+                      role="tab"
+                      aria-selected={active}
+                      onClick={() => setFilter(f.id)}
+                      className={`px-3.5 sm:px-4 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                        active
+                          ? 'bg-[#D4AF37] text-black shadow-md'
+                          : isDark
+                            ? 'text-stone-300 hover:text-white hover:bg-white/5'
+                            : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
+                      }`}
+                    >
+                      {f.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
