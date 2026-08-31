@@ -3,14 +3,11 @@ import { createPortal } from 'react-dom';
 import { Play, X, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const FILTERS = [
-  { id: 'all', label: 'All' },
-  { id: 'bridal', label: 'Bridal' },
-  { id: 'hair', label: 'Hair' },
-  { id: 'makeup', label: 'Makeup' },
-  { id: 'reels', label: 'Videos' },
+  { id: 'images', label: 'Pictures' },
+  { id: 'videos', label: 'Videos' },
 ];
 
-/* Layout (All filter):
+/* Layout:
  *  md 3-col: hero 2×2 + 2 side tiles, then 2 full rows of 3
  *  lg 4-col: hero 2×2 + 4 side tiles, then 1 full row of 4
  * No orphan cells — every slot is filled.
@@ -147,54 +144,48 @@ const REELS = [
 ];
 
 export default function MediaGallery({ theme }) {
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState('images');
   const [activeIndex, setActiveIndex] = useState(null);
   const isDark = theme !== 'light';
 
   const filteredLooks = useMemo(() => {
-    if (filter === 'all') return LOOKS;
-    if (filter === 'reels') return [];
-    return LOOKS.filter((item) => item.category === filter);
+    if (filter === 'images') return LOOKS;
+    return [];
   }, [filter]);
 
   const filteredReels = useMemo(() => {
-    if (filter === 'all' || filter === 'reels') return REELS;
-    return REELS.filter((item) => item.category === filter);
+    if (filter === 'videos') return REELS;
+    return [];
   }, [filter]);
 
-  const showLooks = filter !== 'reels' && filteredLooks.length > 0;
-  const showReels = (filter === 'all' || filter === 'reels' || filteredReels.length > 0) && filteredReels.length > 0;
+  const showLooks = filter === 'images';
+  const showReels = filter === 'videos';
 
-  // Flat list for lightbox navigation (looks first, then reels when visible)
+  // Flat list for lightbox navigation
   const lightboxItems = useMemo(() => {
-    const items = [];
     if (showLooks) {
-      filteredLooks.forEach((img) => {
-        items.push({
-          type: 'image',
-          id: img.id,
-          title: img.title,
-          subtitle: img.subtitle,
-          src: img.src,
-          category: img.category,
-        });
-      });
+      return filteredLooks.map((img) => ({
+        type: 'image',
+        id: img.id,
+        title: img.title,
+        subtitle: img.subtitle,
+        src: img.src,
+        category: img.category,
+      }));
     }
     if (showReels) {
-      filteredReels.forEach((vid) => {
-        items.push({
-          type: 'video',
-          id: vid.id,
-          title: vid.title,
-          subtitle: vid.subtitle,
-          src: vid.src,
-          poster: vid.poster,
-          duration: vid.duration,
-          category: vid.category,
-        });
-      });
+      return filteredReels.map((vid) => ({
+        type: 'video',
+        id: vid.id,
+        title: vid.title,
+        subtitle: vid.subtitle,
+        src: vid.src,
+        poster: vid.poster,
+        duration: vid.duration,
+        category: vid.category,
+      }));
     }
-    return items;
+    return [];
   }, [filteredLooks, filteredReels, showLooks, showReels]);
 
   const activeMedia = activeIndex != null ? lightboxItems[activeIndex] : null;
@@ -269,68 +260,59 @@ export default function MediaGallery({ theme }) {
       />
 
       <div className="section-wrap relative z-10">
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-10 sm:mb-14">
-          <div className="max-w-xl space-y-3 sm:space-y-4">
-            <p className="section-eyebrow">
-              <span className={`inline-block h-px w-6 ${isDark ? 'bg-[#D4AF37]' : 'bg-[#8A6D1F]'}`} />
-              Studio Lookbook
-            </p>
+        <div className="space-y-3 sm:space-y-4 mb-8 sm:mb-12">
+          <p className="section-eyebrow">
+            <span className={`inline-block h-px w-6 ${isDark ? 'bg-[#D4AF37]' : 'bg-[#8A6D1F]'}`} />
+            Studio Lookbook
+          </p>
 
-            <h2 className={`fluid-section-title ${isDark ? 'text-white' : 'text-stone-900'}`}>
+          <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+            <h2 className={`fluid-section-title leading-none ${isDark ? 'text-white' : 'text-stone-900'}`}>
               <span className="gold-gradient-text">Gallery</span>
             </h2>
 
-            <p className={`text-sm sm:text-base leading-relaxed ${isDark ? 'text-stone-400' : 'text-stone-600'}`}>
-              A curated lookbook of bridal glam, hair artistry, and party looks — plus short videos from the chair.
-            </p>
+            <div
+              className={`inline-flex items-center gap-1 p-1 rounded-2xl border ${
+                isDark ? 'bg-black/50 border-[#D4AF37]/30' : 'bg-white/80 border-stone-200 shadow-sm'
+              }`}
+              role="tablist"
+              aria-label="Gallery filters"
+            >
+              {FILTERS.map((f) => {
+                const active = filter === f.id;
+                return (
+                  <button
+                    key={f.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={active}
+                    onClick={() => setFilter(f.id)}
+                    className={`px-3.5 sm:px-4 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                      active
+                        ? 'bg-[#D4AF37] text-black shadow-md'
+                        : isDark
+                          ? 'text-stone-300 hover:text-white hover:bg-white/5'
+                          : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
+                    }`}
+                  >
+                    {f.label}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
-          <div
-            className={`flex flex-wrap items-center gap-1.5 p-1.5 rounded-2xl border self-start lg:self-auto ${
-              isDark ? 'bg-black/50 border-[#D4AF37]/30' : 'bg-white/80 border-stone-200 shadow-sm'
-            }`}
-            role="tablist"
-            aria-label="Gallery filters"
-          >
-            {FILTERS.map((f) => {
-              const active = filter === f.id;
-              return (
-                <button
-                  key={f.id}
-                  type="button"
-                  role="tab"
-                  aria-selected={active}
-                  onClick={() => setFilter(f.id)}
-                  className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
-                    active
-                      ? 'bg-[#D4AF37] text-black shadow-md'
-                      : isDark
-                        ? 'text-stone-300 hover:text-white hover:bg-white/5'
-                        : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
-                  }`}
-                >
-                  {f.label}
-                </button>
-              );
-            })}
-          </div>
+          <p className={`text-sm sm:text-base leading-relaxed max-w-xl ${isDark ? 'text-stone-400' : 'text-stone-600'}`}>
+            A curated lookbook of bridal glam, hair artistry, and party looks — plus short videos from the chair.
+          </p>
         </div>
 
-        {/* Editorial photo mosaic — every grid cell filled (no empty slots) */}
+        {/* Image Mosaic */}
         {showLooks && (
-          <div
-            className={`grid gap-2.5 sm:gap-3 lg:gap-4 auto-rows-fr ${
-              filter === 'all'
-                ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
-                : 'grid-cols-2 md:grid-cols-3'
-            }`}
-          >
+          <div className="grid gap-2.5 sm:gap-3 lg:gap-4 auto-rows-fr grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {filteredLooks.map((img, i) => {
-              const isFeatured = filter === 'all' && img.featured;
-
-              // Keep equal tiles on filter tabs (no stretched last cell — that skewed crops)
+              const isFeatured = img.featured;
               const spanClass = isFeatured ? 'col-span-2 row-span-2' : '';
-
               const aspectClass = isFeatured
                 ? 'aspect-[4/5] md:aspect-auto md:h-full'
                 : 'aspect-[3/4] sm:aspect-[4/5]';
@@ -340,7 +322,7 @@ export default function MediaGallery({ theme }) {
                   key={img.id}
                   type="button"
                   onClick={() => openLook(img.id)}
-                  className={`group relative overflow-hidden rounded-2xl sm:rounded-3xl text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] focus-visible:ring-offset-2 ${
+                  className={`group relative overflow-hidden rounded-2xl sm:rounded-3xl text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] focus-visible:ring-offset-2 cursor-pointer ${
                     isDark ? 'focus-visible:ring-offset-[#09090B]' : 'focus-visible:ring-offset-white'
                   } ${spanClass} animate-fadeIn`}
                   style={{ animationDelay: `${Math.min(i, 8) * 45}ms` }}
@@ -404,78 +386,54 @@ export default function MediaGallery({ theme }) {
           </div>
         )}
 
-        {/* Videos strip */}
+        {/* Videos Grid */}
         {showReels && (
-          <div className={`${showLooks ? 'mt-12 sm:mt-16' : ''} space-y-5`}>
-            <div className="flex items-end justify-between gap-4">
-              <div>
-                <p
-                  className={`text-[11px] font-bold uppercase tracking-[0.18em] mb-1 ${
-                    isDark ? 'text-[#E7C960]' : 'text-[#B8860B]'
-                  }`}
-                >
-                  From the chair
-                </p>
-                <h3 className={`text-xl sm:text-2xl font-semibold ${isDark ? 'text-white' : 'text-stone-900'}`}>
-                  Videos
-                </h3>
-              </div>
-              <span
-                className={`hidden sm:inline text-xs font-medium ${isDark ? 'text-stone-500' : 'text-stone-400'}`}
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 lg:gap-5 animate-fadeIn">
+            {filteredReels.map((vid, i) => (
+              <button
+                key={vid.id}
+                type="button"
+                onClick={() => openReel(vid.id)}
+                className={`group relative rounded-2xl sm:rounded-3xl overflow-hidden text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] cursor-pointer ${
+                  isDark ? 'ring-1 ring-[#D4AF37]/25' : 'ring-1 ring-stone-200 shadow-md'
+                }`}
+                style={{ animationDelay: `${i * 60}ms` }}
               >
-                Swipe to explore
-              </span>
-            </div>
+                <div className="relative aspect-[9/14] overflow-hidden">
+                  <img
+                    src={vid.poster}
+                    alt={vid.title}
+                    width="360"
+                    height="560"
+                    loading="lazy"
+                    decoding="async"
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10" />
 
-            <div className="-mx-4 sm:-mx-6 md:-mx-10 px-4 sm:px-6 md:px-10">
-              <div className="flex gap-3 sm:gap-4 overflow-x-auto no-scrollbar pb-2 snap-x snap-mandatory">
-                {filteredReels.map((vid, i) => (
-                  <button
-                    key={vid.id}
-                    type="button"
-                    onClick={() => openReel(vid.id)}
-                    className={`group relative shrink-0 w-[42vw] max-w-[200px] sm:w-[180px] sm:max-w-none snap-start rounded-2xl sm:rounded-3xl overflow-hidden text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] animate-fadeIn ${
-                      isDark ? 'ring-1 ring-[#D4AF37]/25' : 'ring-1 ring-slate-200 shadow-md'
-                    }`}
-                    style={{ animationDelay: `${i * 60}ms` }}
-                  >
-                    <div className="relative aspect-[9/14] overflow-hidden">
-                      <img
-                        src={vid.poster}
-                        alt={vid.title}
-                        width="360"
-                        height="560"
-                        loading="lazy"
-                        decoding="async"
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10" />
-
-                      {/* Play */}
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-12 h-12 rounded-full bg-[#D4AF37] text-black flex items-center justify-center shadow-lg shadow-black/30 group-hover:scale-110 transition-transform duration-300">
-                          <Play className="w-5 h-5 fill-black ml-0.5" />
-                        </div>
-                      </div>
-
-                      {/* Duration */}
-                      <span className="absolute top-3 right-3 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-sm text-[10px] font-bold text-white/90 border border-white/10">
-                        {vid.duration}
-                      </span>
-
-                      <div className="absolute bottom-0 left-0 right-0 p-3.5 space-y-0.5">
-                        <span className="text-[9px] font-bold uppercase tracking-wider text-[#E7C960]">
-                          {categoryLabel(vid.category)}
-                        </span>
-                        <h4 className="text-sm font-bold text-white leading-snug line-clamp-2">
-                          {vid.title}
-                        </h4>
-                      </div>
+                  {/* Play Button */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-full bg-[#D4AF37] text-black flex items-center justify-center shadow-lg shadow-black/30 group-hover:scale-110 transition-transform duration-300">
+                      <Play className="w-5 h-5 fill-black ml-0.5" />
                     </div>
-                  </button>
-                ))}
-              </div>
-            </div>
+                  </div>
+
+                  {/* Duration Badge */}
+                  <span className="absolute top-3 right-3 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-sm text-[10px] font-bold text-white/90 border border-white/10">
+                    {vid.duration}
+                  </span>
+
+                  <div className="absolute bottom-0 left-0 right-0 p-3.5 sm:p-4 space-y-0.5">
+                    <span className="text-[9px] font-bold uppercase tracking-wider text-[#E7C960]">
+                      {categoryLabel(vid.category)}
+                    </span>
+                    <h4 className="text-sm font-bold text-white leading-snug line-clamp-2">
+                      {vid.title}
+                    </h4>
+                  </div>
+                </div>
+              </button>
+            ))}
           </div>
         )}
 
