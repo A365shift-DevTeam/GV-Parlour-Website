@@ -9,6 +9,7 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
+  ExternalLink,
 } from 'lucide-react';
 
 /* Founder philosophy — client-supplied copy, sentence-cased and typo-corrected */
@@ -21,37 +22,40 @@ const PHILOSOPHY_REST = [
 ];
 
 /*
- * Certificate gallery — replace each `src` with the real scan when the client provides files.
- * Drop files into public/assets/ as certificate-1.webp … certificate-4.webp (or keep custom names).
+ * Certificate gallery — Client credentials and official certifications
  */
 const CERTIFICATES = [
   {
-    id: 'lakme-pfw',
-    src: '/assets/certificate.webp',
-    title: 'Lakmé Academy · Prime Fashion Week',
-    subtitle: 'Hair & Makeup Partner',
-    issuer: 'Lakmé Academy',
+    id: 'lakme-advanced-beauty-therapy',
+    src: '/assets/certificate-1.webp',
+    pdfUrl: '/assets/Certificate 1.pdf',
+    title: 'Certificate of Merit · Advanced Beauty Therapy',
+    subtitle: '574 Hours Professional Course · Coimbatore-Peelamedu',
+    issuer: 'Lakmé Academy Powered by Aptech · MEL Training',
   },
   {
-    id: 'academy-lead',
-    src: '/assets/certificate.webp',
-    title: 'Academy Lead Instructor',
-    subtitle: 'Certified training leadership',
-    issuer: 'Lakmé Academy',
+    id: 'lakme-nail-technician',
+    src: '/assets/certificate-2.webp',
+    pdfUrl: '/assets/Certificate 2.pdf',
+    title: 'Certificate of Merit · Nail Technician',
+    subtitle: '120 Hours Professional Course · Bengaluru-Jayanagar',
+    issuer: 'Lakmé Academy Powered by Aptech · MEL Training',
   },
   {
-    id: 'hydrafacial',
-    src: '/assets/certificate.webp',
-    title: 'Hydrafacial & Skin Expert',
-    subtitle: 'Advanced aesthetician certification',
-    issuer: 'Industry Certification',
+    id: 'prime-fashion-week',
+    src: '/assets/certificate-3.webp',
+    pdfUrl: '/assets/Certificate 3.pdf',
+    title: 'Prime Fashion Week · Certificate of Recognition',
+    subtitle: 'Hair & Makeup Partner · Season 2 Bangalore',
+    issuer: 'Lakmé Academy & Prime Fashion',
   },
   {
-    id: 'master-cosmo',
-    src: '/assets/certificate.webp',
-    title: 'Master Cosmetologist',
-    subtitle: 'Cosmetology & nail artistry',
-    issuer: 'Professional Credential',
+    id: 'cover-girl-masterclass',
+    src: '/assets/certificate-4.webp',
+    pdfUrl: '/assets/Certificate 4.pdf',
+    title: 'The Cover Girl Masterclass · Certificate of Participation',
+    subtitle: 'Fashion Styling Masterclass by Anisha Jain',
+    issuer: 'Lakmé Academy & ELLE',
   },
 ];
 
@@ -142,18 +146,36 @@ function CertificateCarouselModal({ isDark, open, onClose, index, setIndex }) {
               {current.issuer ? ` · ${current.issuer}` : ''}
             </p>
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className={`tap-target shrink-0 rounded-full border p-2.5 active:scale-95 ${
-              isDark
-                ? 'border-[#D4AF37]/35 bg-black/60 text-[#E7C960]'
-                : 'border-stone-200 bg-stone-100 text-stone-800'
-            }`}
-            aria-label="Close"
-          >
-            <X className="h-5 w-5" />
-          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            {current.pdfUrl && (
+              <a
+                href={current.pdfUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`tap-target flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-all active:scale-95 ${
+                  isDark
+                    ? 'border-[#D4AF37]/40 bg-[#D4AF37]/10 text-[#E7C960] hover:bg-[#D4AF37]/20'
+                    : 'border-[#D4AF37]/50 bg-[#D4AF37]/10 text-[#8A6D1F] hover:bg-[#D4AF37]/20'
+                }`}
+                title="View original PDF document"
+              >
+                <ExternalLink className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">View PDF</span>
+              </a>
+            )}
+            <button
+              type="button"
+              onClick={onClose}
+              className={`tap-target shrink-0 rounded-full border p-2.5 active:scale-95 ${
+                isDark
+                  ? 'border-[#D4AF37]/35 bg-black/60 text-[#E7C960]'
+                  : 'border-stone-200 bg-stone-100 text-stone-800'
+              }`}
+              aria-label="Close"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
         </div>
 
         {/* Stage — hover pauses auto-advance */}
@@ -673,7 +695,7 @@ export default function FounderAndCertificates({ theme, compact = false }) {
                       isDark ? 'text-white' : 'text-stone-900'
                     }`}
                   >
-                    Lakmé Academy · Prime Fashion Week
+                    Lakmé Academy & Industry Accreditations
                   </h3>
                   <p
                     className={`text-[12px] font-light leading-relaxed sm:text-[13px] ${
@@ -681,11 +703,11 @@ export default function FounderAndCertificates({ theme, compact = false }) {
                     }`}
                   >
                     Awarded to{' '}
-                    <strong className={isDark ? 'text-white' : 'text-stone-900'}>Galla Vidya</strong> as{' '}
+                    <strong className={isDark ? 'text-white' : 'text-stone-900'}>Galla Vidya</strong> across{' '}
                     <span className={isDark ? 'text-[#E7C960]' : 'text-[#8A6D1F]'}>
-                      Hair & Makeup Partner
+                      Advanced Beauty Therapy, Nail Artistry & Fashion Week
                     </span>
-                    {' '}· {CERTIFICATES.length} certificates
+                    {' '}· {CERTIFICATES.length} verified certificates
                   </p>
                   <button
                     type="button"
