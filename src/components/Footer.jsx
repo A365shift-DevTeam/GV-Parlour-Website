@@ -1,7 +1,7 @@
 import React from 'react';
 import { Heart, MessageCircle, Phone, Mail, MapPin, Clock } from 'lucide-react';
 
-export default function Footer({ theme }) {
+export default function Footer({ theme, onOpenLegal }) {
   const isDark = theme !== 'light';
 
   const academyLinks = [
@@ -22,6 +22,8 @@ export default function Footer({ theme }) {
     { label: 'Founder & Story', href: '#founder' },
     { label: 'Lookbook & Gallery', href: '#gallery' },
     { label: 'Contact & Location', href: '#contact' },
+    { label: 'Terms & Conditions', action: 'terms' },
+    { label: 'Privacy Policy', action: 'privacy' },
   ];
 
   return (
@@ -144,19 +146,31 @@ export default function Footer({ theme }) {
           {/* Studio (Cols 8-9 on lg) */}
           <div className="sm:col-span-1 md:col-span-1 lg:col-span-2 space-y-3">
             <h4 className={`text-xs font-bold uppercase tracking-[0.16em] ${isDark ? 'text-[#E7C960]' : 'text-[#8A6D1F]'}`}>
-              Studio
+              Studio & Legal
             </h4>
             <ul className="space-y-2 text-xs sm:text-sm">
               {studioLinks.map((link) => (
                 <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className={`inline-flex items-center transition-all duration-200 hover:translate-x-1 ${
-                      isDark ? 'text-stone-400 hover:text-[#E7C960]' : 'text-stone-600 hover:text-[#8A6D1F]'
-                    }`}
-                  >
-                    {link.label}
-                  </a>
+                  {link.action ? (
+                    <button
+                      type="button"
+                      onClick={() => onOpenLegal?.(link.action)}
+                      className={`inline-flex items-center text-left transition-all duration-200 hover:translate-x-1 ${
+                        isDark ? 'text-stone-400 hover:text-[#E7C960]' : 'text-stone-600 hover:text-[#8A6D1F]'
+                      }`}
+                    >
+                      {link.label}
+                    </button>
+                  ) : (
+                    <a
+                      href={link.href}
+                      className={`inline-flex items-center transition-all duration-200 hover:translate-x-1 ${
+                        isDark ? 'text-stone-400 hover:text-[#E7C960]' : 'text-stone-600 hover:text-[#8A6D1F]'
+                      }`}
+                    >
+                      {link.label}
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>
@@ -197,15 +211,31 @@ export default function Footer({ theme }) {
         <div className={`h-px w-full ${isDark ? 'bg-gradient-to-r from-transparent via-[#D4AF37]/30 to-transparent' : 'bg-gradient-to-r from-transparent via-[#8A6D1F]/25 to-transparent'}`} />
 
         {/* Bottom Bar */}
-        <div className="flex flex-col items-center justify-between gap-3 text-xs sm:flex-row">
+        <div className="flex flex-col items-center justify-between gap-4 text-xs sm:flex-row">
           <p className={isDark ? 'text-stone-500' : 'text-stone-600'}>
             © {new Date().getFullYear()} GV Studio Beauty & Academy. All rights reserved.
           </p>
-          {/* <p className={`flex items-center gap-1.5 ${isDark ? 'text-stone-400' : 'text-stone-700'}`}>
-            <span>Crafted with</span>
-            <Heart className="h-3.5 w-3.5 fill-[#D4AF37] text-[#D4AF37] inline" />
-            <span>for Galla Vidya</span>
-          </p> */}
+          <div className="flex items-center gap-3 sm:gap-4 text-[11px] font-medium">
+            <button
+              type="button"
+              onClick={() => onOpenLegal?.('terms')}
+              className={`transition-colors underline-offset-4 hover:underline cursor-pointer ${
+                isDark ? 'text-stone-400 hover:text-[#E7C960]' : 'text-stone-600 hover:text-[#8A6D1F]'
+              }`}
+            >
+              Terms & Conditions
+            </button>
+            <span className={isDark ? 'text-stone-700' : 'text-stone-300'}>•</span>
+            <button
+              type="button"
+              onClick={() => onOpenLegal?.('privacy')}
+              className={`transition-colors underline-offset-4 hover:underline cursor-pointer ${
+                isDark ? 'text-stone-400 hover:text-[#E7C960]' : 'text-stone-600 hover:text-[#8A6D1F]'
+              }`}
+            >
+              Privacy Policy
+            </button>
+          </div>
         </div>
       </div>
     </footer>

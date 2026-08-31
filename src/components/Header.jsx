@@ -29,7 +29,7 @@ function scrollToTarget(targetId) {
   window.scrollTo({ top, behavior: 'smooth' });
 }
 
-export default function Header({ theme, onToggleTheme }) {
+export default function Header({ theme, onToggleTheme, onOpenLegal }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const isDark = theme === 'dark';
@@ -255,6 +255,30 @@ export default function Header({ theme, onToggleTheme }) {
               <span className="mb-0.5 block font-semibold text-stone-400">Studio · Coimbatore</span>
               Flat No. 23, 4th floor, The Green Residence, Meena Estate, Sowripalayam 641028
             </p>
+
+            <div className="flex items-center gap-3 pt-1 text-[11px] text-stone-400">
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileOpen(false);
+                  onOpenLegal?.('terms');
+                }}
+                className="hover:underline hover:text-[#D4AF37] cursor-pointer"
+              >
+                Terms & Conditions
+              </button>
+              <span>•</span>
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileOpen(false);
+                  onOpenLegal?.('privacy');
+                }}
+                className="hover:underline hover:text-[#D4AF37] cursor-pointer"
+              >
+                Privacy Policy
+              </button>
+            </div>
           </div>
         </div>
       )}
