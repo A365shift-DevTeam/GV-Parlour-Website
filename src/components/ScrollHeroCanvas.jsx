@@ -36,9 +36,9 @@ const STAGE_STRETCH_RESERVE = 120;
  * the scrub used, so the visuals are unchanged (NOT public/frames*, which held
  * an older hero creative):
  *   ffmpeg -ss 1.0 -t 6.95 -i media-src/gv-studio-hero.webm \
- *     -vf "fps=10.5,scale=1280:-2" -c:v libwebp -q:v 82 -compression_level 4 public/hero-frames/%08d.webp
+ *     -vf "fps=10.5,scale=1280:-2" -c:v libwebp -q:v 82 -compression_level 4 media-src/hero-frames/%08d.webp
  *   ffmpeg -ss 1.0 -t 6.95 -i media-src/gv-studio-hero.webm \
- *     -vf "fps=10.5,scale=1600:-2" -c:v libwebp -q:v 85 -compression_level 4 public/hero-frames-lg/%08d.webp
+ *     -vf "fps=10.5,scale=1600:-2" -c:v libwebp -q:v 85 -compression_level 4 media-src/hero-frames-lg/%08d.webp
  *
  * ~73 frames each. SM is 1280-wide (was 960) for sharper mid-size screens;
  * LG stays at the source’s native 1600x900. WebP q82/q85 reduces encode
@@ -49,8 +49,21 @@ const STAGE_STRETCH_RESERVE = 120;
  * 4.2MB of unreferenced video to every visitor.
  */
 const FRAME_COUNT = 73;
-const FRAME_DIR_SM = '/hero-frames';
-const FRAME_DIR_LG = '/hero-frames-lg';
+/**
+ * Frames are served from Cloudinary's CDN, uploaded by
+ * scripts/upload-frames-cloudinary.mjs. Delivered untransformed: q_auto would
+ * re-encode and undo the q82/q85 tuning above. The cloud name is public (it is
+ * in every URL), so it defaults here and a host build without .env.local still
+ * works. VITE_USE_CLOUDINARY=false serves /hero-frames* from public/ instead —
+ * copy the sets back from media-src/ first.
+ */
+const CLOUDINARY_CLOUD = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'dghhdz3et';
+const USE_CLOUDINARY = import.meta.env.VITE_USE_CLOUDINARY !== 'false' && !!CLOUDINARY_CLOUD;
+const FRAME_BASE = USE_CLOUDINARY
+  ? `https://res.cloudinary.com/${CLOUDINARY_CLOUD}/image/upload/gv-studio`
+  : '';
+const FRAME_DIR_SM = `${FRAME_BASE}/hero-frames`;
+const FRAME_DIR_LG = `${FRAME_BASE}/hero-frames-lg`;
 /** Use LG set once the canvas needs more pixels than this (css width × dpr). */
 const FRAME_WIDTH_SM = 1280;
 const FRAME_SRC = (dir, n) => `${dir}/${String(n).padStart(8, '0')}.webp`;
