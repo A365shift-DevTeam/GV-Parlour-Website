@@ -32,7 +32,8 @@ const SETS = ['hero-frames', 'hero-frames-lg'];
 const FOLDER = 'gv-studio';
 const CONCURRENCY = 5;
 
-// Frames live in media-src/ (kept out of the Vite build); fall back to public/.
+// Frames are not kept in the repo (they live on Cloudinary). To re-upload,
+// regenerate them into media-src/ with the ffmpeg commands in ScrollHeroCanvas.jsx.
 async function findSetDir(set) {
   for (const base of ['media-src', 'public']) {
     const dir = path.join(ROOT, base, set);
@@ -41,7 +42,7 @@ async function findSetDir(set) {
       if (files.length) return { dir, files };
     } catch {}
   }
-  throw new Error(`No frames found for ${set}`);
+  throw new Error(`No frames found for ${set} — regenerate them into media-src/${set}/ first`);
 }
 
 async function uploadOne(dir, set, file) {

@@ -45,8 +45,9 @@ const STAGE_STRETCH_RESERVE = 120;
  * mush; any remaining blockiness is VP9 artifact in the source webm and
  * needs a higher-res master from the client to truly clear.
  *
- * The source webm lives in media-src/ (outside public/) so Vite does not ship
- * 4.2MB of unreferenced video to every visitor.
+ * Neither the frames nor the source webm are kept in the repo any more — the
+ * frames are served from Cloudinary. To re-export, restore the webm from git
+ * history first: git show a954f7d^:media-src/gv-studio-hero.webm > media-src/gv-studio-hero.webm
  */
 const FRAME_COUNT = 73;
 /**
@@ -55,7 +56,7 @@ const FRAME_COUNT = 73;
  * re-encode and undo the q82/q85 tuning above. The cloud name is public (it is
  * in every URL), so it defaults here and a host build without .env.local still
  * works. VITE_USE_CLOUDINARY=false serves /hero-frames* from public/ instead —
- * copy the sets back from media-src/ first.
+ * the frames are not in the repo, so regenerate them there first.
  */
 const CLOUDINARY_CLOUD = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'dghhdz3et';
 const USE_CLOUDINARY = import.meta.env.VITE_USE_CLOUDINARY !== 'false' && !!CLOUDINARY_CLOUD;
