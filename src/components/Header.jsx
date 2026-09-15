@@ -5,7 +5,7 @@ import openChatbot from '../utils/openChatbot';
 const NAV_LINKS = [
   { name: 'Home', href: '#hero' },
   { name: 'Founder', href: '#founder' },
-  { name: 'Services', href: '#services-courses' },
+  // { name: 'Services', href: '#services-courses' },
   { name: 'Lookbook', href: '#gallery' },
   { name: 'Contact', href: '#contact' },
 ];
