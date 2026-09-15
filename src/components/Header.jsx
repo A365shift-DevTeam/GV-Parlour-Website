@@ -133,7 +133,7 @@ export default function Header({ theme, onToggleTheme, onOpenLegal }) {
               GV Studio
             </span>
             <span className={`mt-0.5 block text-[9px] font-bold uppercase tracking-[0.18em] ${logoSubtitleColor}`}>
-              Beauty & Academy
+             PASSION MEETS PROFESSION
             </span>
           </div>
         </a>

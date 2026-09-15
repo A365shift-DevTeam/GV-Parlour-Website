@@ -521,7 +521,7 @@ export default function ScrollHeroCanvas({ theme }) {
         className="hero-in mt-7 max-w-md text-sm leading-relaxed font-light text-stone-300/90"
         style={{ animationDelay: '520ms' }}
       >
-        Coimbatore &amp; Pollachi&rsquo;s luxury beauty parlour and certified academy —
+        Coimbatore &rsquo;s luxury beauty parlour and certified academy —
         HD bridal makeovers, advanced skin therapies, and hands-on career training.
       </p>
 
@@ -642,7 +642,7 @@ export default function ScrollHeroCanvas({ theme }) {
 
           <div className="hero-copy absolute top-1/2 right-8 -translate-y-1/2 xl:right-12">
             <div className="hero-in" style={{ animationDelay: '940ms' }}>
-              <span className="hero-rail">Coimbatore &nbsp;&bull;&nbsp; Pollachi</span>
+              <span className="hero-rail">Coimbatore &nbsp;</span>
             </div>
           </div>
         </>

@@ -56,7 +56,7 @@ export default function Footer({ theme, onOpenLegal }) {
                   GV Studio
                 </span>
                 <span className="block text-[10px] uppercase tracking-[0.2em] font-semibold text-[#D4AF37]">
-                  Beauty & Academy
+                 PASSION MEETS PROFESSION
                 </span>
               </div>
             </div>
@@ -213,7 +213,7 @@ export default function Footer({ theme, onOpenLegal }) {
         {/* Bottom Bar */}
         <div className="flex flex-col items-center justify-between gap-4 text-xs sm:flex-row">
           <p className={isDark ? 'text-stone-500' : 'text-stone-600'}>
-            © {new Date().getFullYear()} GV Studio Beauty & Academy. All rights reserved.
+            © {new Date().getFullYear()} GV Studio PASSION MEETS PROFESSION. All rights reserved.
           </p>
           <div className="flex items-center gap-3 sm:gap-4 text-[11px] font-medium">
             <button

@@ -95,7 +95,7 @@ export default function LegalPage({ initialTab = 'terms', onBack, theme, onToggl
                 GV Studio
               </span>
               <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-[#D4AF37]">
-                Beauty & Academy
+                PASSION MEETS PROFESSION
               </span>
             </div>
           </div>
@@ -513,7 +513,7 @@ export default function LegalPage({ initialTab = 'terms', onBack, theme, onToggl
 
         {/* Footer info */}
         <div className="pt-6 border-t border-white/10 text-center text-xs text-stone-500">
-          © {new Date().getFullYear()} GV Studio Beauty & Academy · Flat No. 23, 4th Floor, The Green Residence, Sowripalayam, Coimbatore - 641028
+          © {new Date().getFullYear()} GV Studio PASSION MEETS PROFESSION · Flat No. 23, 4th Floor, The Green Residence, Sowripalayam, Coimbatore - 641028
         </div>
       </main>
     </div>
