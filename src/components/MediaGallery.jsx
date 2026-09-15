@@ -18,7 +18,7 @@ const LOOKS = [
     id: 1,
     kind: 'image',
     title: 'Bridal HD Makeover',
-    subtitle: 'Flawless bridal & event makeup',
+    // subtitle: 'Flawless bridal & event makeup',
     src: '/assets/makeup.webp',
     category: 'bridal',
     featured: true,
@@ -27,8 +27,8 @@ const LOOKS = [
   {
     id: 2,
     kind: 'image',
-    title: 'Layer Cut & Style',
-    subtitle: 'Modern cuts & professional finish',
+    title: 'Global hair colour',
+    // subtitle: 'Modern cuts & professional finish',
     src: '/assets/hair.webp',
     category: 'hair',
     objectPosition: 'center 25%',
@@ -36,8 +36,8 @@ const LOOKS = [
   {
     id: 3,
     kind: 'image',
-    title: 'Party Glam',
-    subtitle: 'Editorial full glam look',
+    title: 'Makeover partner',
+    // subtitle: 'Editorial full glam look',
     src: '/assets/makeup3.webp',
     category: 'makeup',
     /* subject sits mid-left — keep face in frame */
@@ -46,8 +46,8 @@ const LOOKS = [
   {
     id: 4,
     kind: 'image',
-    title: 'Balayage Colour',
-    subtitle: 'Global colour & soft highlights',
+    title: 'Haircut',
+    // subtitle: 'Global colour & soft highlights',
     src: '/assets/hair2.webp',
     category: 'hair',
     objectPosition: 'center 20%',
@@ -56,7 +56,7 @@ const LOOKS = [
     id: 5,
     kind: 'image',
     title: 'Editorial Makeup',
-    subtitle: 'Camera-ready beauty finish',
+    // subtitle: 'Camera-ready beauty finish',
     src: '/assets/makeup5.webp',
     category: 'makeup',
     objectPosition: 'center 22%',
@@ -64,8 +64,8 @@ const LOOKS = [
   {
     id: 6,
     kind: 'image',
-    title: 'Set Application',
-    subtitle: 'Behind the chair — live makeover',
+    title: 'Glam Look',
+    // subtitle: 'Behind the chair — live makeover',
     src: '/assets/makeup4.webp',
     category: 'makeup',
     /* face is mid-frame; avoid cropping to the raised arm */
@@ -74,8 +74,8 @@ const LOOKS = [
   {
     id: 7,
     kind: 'image',
-    title: 'Soft Glam Look',
-    subtitle: 'Everyday elegance, elevated',
+    title: ' Hairstyling',
+    // subtitle: 'Everyday elegance, elevated',
     src: '/assets/look.webp',
     category: 'bridal',
     objectPosition: 'center 20%',
@@ -83,8 +83,8 @@ const LOOKS = [
   {
     id: 8,
     kind: 'image',
-    title: 'Studio Signature',
-    subtitle: 'Full glam transformation',
+    title: 'Haircut',
+    // subtitle: 'Full glam transformation',
     src: '/assets/look2.webp',
     category: 'bridal',
     objectPosition: 'center 25%',
@@ -93,7 +93,7 @@ const LOOKS = [
     id: 9,
     kind: 'image',
     title: 'Chair Session',
-    subtitle: 'Artist-led styling in studio',
+    // subtitle: 'Artist-led styling in studio',
     src: '/assets/makeup2.webp',
     category: 'makeup',
     /* keep both artist + client faces in frame */
