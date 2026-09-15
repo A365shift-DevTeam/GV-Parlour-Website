@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback, useLayoutEffect } from 'react';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import useIsMobile from '../hooks/useIsMobile';
+import openChatbot from '../utils/openChatbot';
 import FounderAndCertificates from './FounderAndCertificates';
 
 const HERO_POSTER = '/assets/gv-studio-hero-poster.jpg';
@@ -529,7 +530,7 @@ export default function ScrollHeroCanvas({ theme }) {
         className="hero-in mt-9 flex flex-wrap items-center justify-center gap-x-8 gap-y-4"
         style={{ animationDelay: '660ms' }}
       >
-        <a href="#contact" className="btn-gold !px-7 !py-3.5">
+        <a href="#contact" onClick={openChatbot} className="btn-gold !px-7 !py-3.5">
           Book Appointment
           <ArrowRight className="h-4 w-4" />
         </a>
@@ -537,6 +538,7 @@ export default function ScrollHeroCanvas({ theme }) {
             primary action and reads more editorial than a matched pair. */}
         <a
           href="#services-courses"
+          onClick={openChatbot}
           className="group font-mono text-[11px] tracking-[0.22em] text-[#f4e6bd]/85 uppercase transition-colors hover:text-[#e7c960]"
         >
           <span className="border-b border-[#d4af37]/40 pb-1.5 transition-colors group-hover:border-[#e7c960]">
@@ -587,6 +589,7 @@ export default function ScrollHeroCanvas({ theme }) {
           supporting copy plus course CTA both live in the sections below. */}
       <a
         href="#contact"
+        onClick={openChatbot}
         className="btn-gold hero-in mt-4 !px-6 !py-2.5 !text-[10px]"
         style={{ animationDelay: '520ms' }}
       >
