@@ -4,7 +4,8 @@ import { Play, X, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const FILTERS = [
   { id: 'images', label: 'Pictures' },
-  { id: 'videos', label: 'Videos' },
+  // Hidden until the client supplies real videos — uncomment to restore the tab.
+  // { id: 'videos', label: 'Videos' },
 ];
 
 /* Layout:
@@ -271,6 +272,7 @@ export default function MediaGallery({ theme }) {
               <span className="gold-gradient-text">Gallery</span>
             </h2>
 
+            {FILTERS.length > 1 && (
             <div className="sm:absolute sm:left-1/2 sm:-translate-x-1/2">
               <div
                 className={`inline-flex items-center gap-1 p-1 rounded-2xl border ${
@@ -302,10 +304,11 @@ export default function MediaGallery({ theme }) {
                 })}
               </div>
             </div>
+            )}
           </div>
 
           <p className={`text-sm sm:text-base leading-relaxed max-w-xl ${isDark ? 'text-stone-400' : 'text-stone-600'}`}>
-            A curated lookbook of bridal glam, hair artistry, and party looks — plus short videos from the chair.
+            A curated lookbook of bridal glam, hair artistry, and party looks.
           </p>
         </div>
 
