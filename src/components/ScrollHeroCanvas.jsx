@@ -4,7 +4,9 @@ import useIsMobile from '../hooks/useIsMobile';
 import openChatbot from '../utils/openChatbot';
 import FounderAndCertificates from './FounderAndCertificates';
 
-const HERO_POSTER = '/assets/gv-studio-hero-poster.jpg';
+// WebP variant from scripts/make-image-variants.mjs (~half the .jpg). Also
+// preloaded in index.html — keep the two paths in sync.
+const HERO_POSTER = '/assets/sized/gv-studio-hero-poster-1280.webp';
 const ASPECT = 16 / 9;
 /**
  * Mobile browsers grow/shrink the viewport as the URL bar hides and shows —
@@ -344,9 +346,13 @@ export default function ScrollHeroCanvas({ theme }) {
       const settle = () => {
         if (cancelled) return;
         done += 1;
-        setLoadPct(Math.round((done / FRAME_INDICES.length) * 100));
+        // The % only shows until the loader clears (3 frames or the poster).
+        // Past that, every setState re-rendered the whole hero — founder panel
+        // included — once per frame, ~70 long tasks on a throttled phone.
+        if (!markedReadyRef.current) {
+          setLoadPct(Math.round((done / FRAME_INDICES.length) * 100));
+        }
         if (done >= 3) markReady();
-        if (done >= FRAME_INDICES.length) setLoadPct(100);
         // Repaint if this frame is a better match than what's on screen
         drawFrameForProgress(progressRef.current);
         loadNext();

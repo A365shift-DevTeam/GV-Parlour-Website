@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { Play, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { sizedSrc, sizedSrcSet } from '../utils/sizedImage';
 
 const FILTERS = [
   { id: 'images', label: 'Pictures' },
@@ -334,7 +335,13 @@ export default function MediaGallery({ theme }) {
                 >
                   <div className={`relative w-full h-full overflow-hidden ${aspectClass}`}>
                     <img
-                      src={img.src}
+                      src={sizedSrc(img.src, 480)}
+                      srcSet={sizedSrcSet(img.src, [480, 800])}
+                      sizes={
+                        isFeatured
+                          ? '(min-width: 1024px) 592px, (min-width: 768px) 66vw, 100vw'
+                          : '(min-width: 1024px) 288px, (min-width: 768px) 33vw, 50vw'
+                      }
                       alt={img.title}
                       width="600"
                       height="750"

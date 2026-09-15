@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "upload:frames": "node --env-file=.env.local scripts/upload-frames-cloudinary.mjs"
+    "upload:frames": "node --env-file=.env.local scripts/upload-frames-cloudinary.mjs",
+    "images:variants": "node scripts/make-image-variants.mjs"
   },
   "keywords": [],
   "author": "",

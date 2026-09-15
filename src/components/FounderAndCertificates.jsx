@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import { createPortal } from 'react-dom';
 import {
   Award,
@@ -11,6 +11,7 @@ import {
   ChevronRight,
   ExternalLink,
 } from 'lucide-react';
+import { sizedSrc, sizedSrcSet } from '../utils/sizedImage';
 
 /* Founder philosophy — client-supplied copy, sentence-cased and typo-corrected */
 const PHILOSOPHY_QUOTE_LEAD = 'True mastery isn’t just about executing a flawless look.';
@@ -245,7 +246,7 @@ function CertificateCarouselModal({ isDark, open, onClose, index, setIndex }) {
                     }`}
                   >
                     <img
-                      src={cert.src}
+                      src={sizedSrc(cert.src, 320)}
                       alt={cert.title}
                       width="96"
                       height="64"
@@ -281,7 +282,7 @@ function CertificateCarouselModal({ isDark, open, onClose, index, setIndex }) {
   );
 }
 
-export default function FounderAndCertificates({ theme, compact = false }) {
+function FounderAndCertificates({ theme, compact = false }) {
   const [certModalOpen, setCertModalOpen] = useState(false);
   const [certIndex, setCertIndex] = useState(0);
   const [philosophyOpen, setPhilosophyOpen] = useState(false);
@@ -326,7 +327,7 @@ export default function FounderAndCertificates({ theme, compact = false }) {
           <div className="flex h-7 shrink-0 items-center justify-between gap-2">
             <span
               className={`font-display text-[22px] font-semibold leading-none tracking-tight ${
-                isDark ? 'text-[#D4AF37]/55' : 'text-[#D4AF37]/75'
+                isDark ? 'text-[#D4AF37]/80' : 'text-[#8A6D1F]'
               }`}
             >
               {String(idx + 1).padStart(2, '0')}
@@ -345,13 +346,13 @@ export default function FounderAndCertificates({ theme, compact = false }) {
           />
 
           {/* Top-aligned client text — same start line on all cards so they match */}
-          <h4
+          <h3
             className={`text-[12px] font-bold uppercase tracking-wider leading-[1.45] sm:text-[13px] ${
               isDark ? 'text-white' : 'text-stone-900'
             }`}
           >
             {spec.title}
-          </h4>
+          </h3>
         </div>
       ))}
     </div>
@@ -411,7 +412,7 @@ export default function FounderAndCertificates({ theme, compact = false }) {
             }`}
           >
             <img
-              src="/assets/founder.webp"
+              src={sizedSrc('/assets/founder.webp', 160)}
               alt=""
               className="h-12 w-12 shrink-0 rounded-xl object-cover object-top"
             />
@@ -420,7 +421,7 @@ export default function FounderAndCertificates({ theme, compact = false }) {
               <p className={`truncate text-sm font-bold ${isDark ? 'text-white' : 'text-stone-900'}`}>
                 Galla Vidya
               </p>
-              <p className="truncate text-[11px] text-stone-500">Lakmé Academy Partner</p>
+              <p className={`truncate text-[11px] ${isDark ? 'text-stone-400' : 'text-stone-500'}`}>Lakmé Academy Partner</p>
             </div>
           </div>
 
@@ -436,13 +437,13 @@ export default function FounderAndCertificates({ theme, compact = false }) {
                   className={`mt-0.5 h-4 w-4 shrink-0 ${isDark ? 'text-[#D4AF37]' : 'text-[#8A6D1F]'}`}
                 />
                 <div className="min-w-0">
-                  <h4
+                  <h3
                     className={`text-[11px] font-bold uppercase tracking-wider leading-snug ${
                       isDark ? 'text-white' : 'text-stone-900'
                     }`}
                   >
                     {spec.title}
-                  </h4>
+                  </h3>
                 </div>
               </div>
             ))}
@@ -459,7 +460,7 @@ export default function FounderAndCertificates({ theme, compact = false }) {
               {CERTIFICATES.slice(0, 3).map((cert, i) => (
                 <img
                   key={cert.id}
-                  src={cert.src}
+                  src={sizedSrc(cert.src, 320)}
                   alt={cert.title}
                   width="56"
                   height="48"
@@ -478,7 +479,7 @@ export default function FounderAndCertificates({ theme, compact = false }) {
               <p className={`text-[11px] font-bold ${isDark ? 'text-[#E7C960]' : 'text-[#8A6D1F]'}`}>
                 {CERTIFICATES.length} Verified Certificates
               </p>
-              <p className="text-[11px] text-stone-500">Tap to browse gallery</p>
+              <p className={`text-[11px] ${isDark ? 'text-stone-400' : 'text-stone-500'}`}>Tap to browse gallery</p>
             </div>
             <Maximize2 className={`h-4 w-4 shrink-0 ${isDark ? 'text-[#E7C960]' : 'text-stone-400'}`} />
           </button>
@@ -516,6 +517,8 @@ export default function FounderAndCertificates({ theme, compact = false }) {
               >
                 <img
                   src="/assets/founder.webp"
+                  srcSet={`${sizedSrcSet('/assets/founder.webp', [800])}, /assets/founder.webp 1254w`}
+                  sizes="(min-width: 1280px) 568px, 45vw"
                   alt="Galla Vidya - Founder & Master Cosmetologist"
                   width="800"
                   height="1000"
@@ -528,7 +531,7 @@ export default function FounderAndCertificates({ theme, compact = false }) {
                     <Award className="h-4 w-4 shrink-0" />
                     <span className="label !text-[#E7C960]">Founder</span>
                   </div>
-                  <h3 className="text-[28px] font-bold leading-tight sm:text-[32px]">Galla Vidya</h3>
+                  <p className="font-display text-[28px] font-bold leading-tight tracking-[-0.02em] sm:text-[32px]">Galla Vidya</p>
                 </div>
               </div>
             </div>
@@ -620,7 +623,7 @@ export default function FounderAndCertificates({ theme, compact = false }) {
                 }`}
               >
                 <img
-                  src="/assets/founder.webp"
+                  src={sizedSrc('/assets/founder.webp', 160)}
                   alt="Galla Vidya"
                   width="56"
                   height="56"
@@ -632,7 +635,7 @@ export default function FounderAndCertificates({ theme, compact = false }) {
                   <p className={`truncate text-sm font-bold ${isDark ? 'text-white' : 'text-stone-900'}`}>
                     Galla Vidya
                   </p>
-                  <p className="truncate text-[11px] text-stone-500">Lakmé Academy Partner</p>
+                  <p className={`truncate text-[11px] ${isDark ? 'text-stone-400' : 'text-stone-500'}`}>Lakmé Academy Partner</p>
                 </div>
               </div>
             )}
@@ -660,10 +663,10 @@ export default function FounderAndCertificates({ theme, compact = false }) {
                       ? 'border-[#D4AF37]/40 bg-black/50'
                       : 'border-stone-200 bg-stone-100'
                   }`}
-                  aria-label="Open certificate gallery"
+                  aria-label={`View ${CERTIFICATES.length} certificates`}
                 >
                   <img
-                    src={CERTIFICATES[0].src}
+                    src={sizedSrc(CERTIFICATES[0].src, 320)}
                     alt="Certificate of Recognition"
                     width="144"
                     height="108"
@@ -730,3 +733,7 @@ export default function FounderAndCertificates({ theme, compact = false }) {
     </section>
   );
 }
+
+// On mobile this renders inside the hero's sticky stage, so without memo every
+// hero state change (loader, measure, scroll gating) re-rendered it too.
+export default memo(FounderAndCertificates);

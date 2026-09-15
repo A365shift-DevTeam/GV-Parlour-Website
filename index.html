@@ -143,34 +143,25 @@
     </script>
 
     <!-- Preload critical hero poster for immediate FCP/LCP -->
-    <link rel="preload" as="image" href="/assets/gv-studio-hero-poster.jpg" fetchpriority="high" />
+    <link rel="preload" as="image" type="image/webp" href="/assets/sized/gv-studio-hero-poster-1280.webp" fetchpriority="high" />
 
-    <!-- Non-blocking Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Self-hosted fonts (@font-face in src/index.css), preloaded so they land
+         before React's first render. Loaded late from Google Fonts, each file
+         arriving re-laid-out the whole page — measured as most of the mobile
+         blocking time and the late hero LCP. -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/inter-latin-var.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/plus-jakarta-sans-latin-var.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/dm-mono-latin-400.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/dm-mono-latin-500.woff2" crossorigin />
     <link rel="preconnect" href="https://res.cloudinary.com" />
-    <link
-      rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
-      media="print"
-      onload="this.media='all'"
-    />
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
-      />
-    </noscript>
   </head>
   <body class="bg-transparent font-sans antialiased selection:bg-[#D4AF37] selection:text-black">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
-    <!-- Chatbot script deferred until user interaction or idle to prevent TBT and main thread lockup -->
+    <!-- Chatbot script waits for the first user interaction. No idle timer: the
+         widget pulls ~800 KiB of third-party JS and fonts, and loading it
+         unprompted costs every visitor that (and the page's load metrics) whether
+         or not they ever chat. openChatbot() also calls window.__loadChatbot. -->
     <script>
       (function() {
         var loaded = false;
@@ -192,11 +183,6 @@
         window.addEventListener('pointerdown', loadBot, { passive: true, once: true });
         window.addEventListener('touchstart', loadBot, { passive: true, once: true });
         window.addEventListener('keydown', loadBot, { passive: true, once: true });
-        if ('requestIdleCallback' in window) {
-          requestIdleCallback(function() { setTimeout(loadBot, 3500); });
-        } else {
-          setTimeout(loadBot, 4000);
-        }
       })();
     </script>
   </body>

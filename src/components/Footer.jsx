@@ -43,7 +43,7 @@ export default function Footer({ theme, onOpenLegal }) {
             <div className="flex items-center gap-3">
               <div className="h-10 w-10 shrink-0 overflow-hidden rounded-full bg-gradient-to-br from-[#E7C960] to-[#8A6D1F] p-[1.5px] shadow-sm">
                 <img
-                  src="/assets/logo_dark.jpg"
+                  src="/assets/sized/logo_dark-96.webp"
                   alt="GV Studio"
                   width="40"
                   height="40"
@@ -212,7 +212,7 @@ export default function Footer({ theme, onOpenLegal }) {
 
         {/* Bottom Bar */}
         <div className="flex flex-col items-center justify-between gap-4 text-xs sm:flex-row">
-          <p className={isDark ? 'text-stone-500' : 'text-stone-600'}>
+          <p className={isDark ? 'text-stone-400' : 'text-stone-600'}>
             © {new Date().getFullYear()} GV Studio PASSION MEETS PROFESSION. All rights reserved.
           </p>
           <div className="flex items-center gap-3 sm:gap-4 text-[11px] font-medium">
