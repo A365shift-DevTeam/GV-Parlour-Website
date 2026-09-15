@@ -5,17 +5,18 @@ export default function Footer({ theme, onOpenLegal }) {
   const isDark = theme !== 'light';
 
   const academyLinks = [
-    { label: 'Basic · 2 Weeks', href: '#services-courses' },
-    { label: 'Standard · 3 Months', href: '#services-courses' },
-    { label: 'Advanced · 6 Months', href: '#services-courses' },
+    { label: 'Basic', href: '#services-courses' },
+    { label: 'Standard', href: '#services-courses' },
+    { label: 'Advanced', href: '#services-courses' },
     { label: 'Custom Syllabus', href: '#services-courses' },
   ];
 
   const parlourLinks = [
-    { label: 'Facial & Skin', href: '#services-courses' },
-    { label: 'Hair Cut & Colour', href: '#services-courses' },
-    { label: 'Hair Spa & Care', href: '#services-courses' },
-    { label: 'Nails & Grooming', href: '#services-courses' },
+    { label: 'Hydrafacial', href: '#services-courses' },
+    { label: 'Skin Treatment', href: '#services-courses' },
+    { label: 'Nail', href: '#services-courses' },
+    { label: 'Hair', href: '#services-courses' },
+    { label: 'Makeup', href: '#services-courses' },
   ];
 
   const studioLinks = [
@@ -125,7 +126,7 @@ export default function Footer({ theme, onOpenLegal }) {
           {/* Parlour (Cols 6-7 on lg) */}
           <div className="sm:col-span-1 md:col-span-1 lg:col-span-2 space-y-3">
             <h4 className={`text-xs font-bold uppercase tracking-[0.16em] ${isDark ? 'text-[#E7C960]' : 'text-[#8A6D1F]'}`}>
-              Parlour
+              Salon Services
             </h4>
             <ul className="space-y-2 text-xs sm:text-sm">
               {parlourLinks.map((link) => (
