@@ -51,7 +51,7 @@ export default function ContactUs({ theme }) {
             <span className="gold-gradient-text">next look</span>
           </h2>
           <p className={`text-sm sm:text-base leading-relaxed ${isDark ? 'text-stone-400' : 'text-stone-600'}`}>
-            Questions about courses, custom timings, or parlour services? Reach the studio directly
+            Questions about courses, custom timings, or salon services? Reach the studio directly
             — we’ll guide you from enquiry to appointment.
           </p>
         </div>

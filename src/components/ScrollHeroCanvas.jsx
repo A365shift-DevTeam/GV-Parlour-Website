@@ -528,7 +528,7 @@ export default function ScrollHeroCanvas({ theme }) {
         className="hero-in mt-7 max-w-md text-sm leading-relaxed font-light text-stone-300/90"
         style={{ animationDelay: '520ms' }}
       >
-        Coimbatore &rsquo;s luxury beauty parlour and certified academy —
+        Coimbatore &rsquo;s premier salon and certified academy —
         HD bridal makeovers, advanced skin therapies, and hands-on career training.
       </p>
 

@@ -333,7 +333,7 @@ export default function ServicesAndCourses({ theme }) {
           eyebrow="Studio & Academy"
           title="Services &"
           accent="Courses"
-          sub="A full parlour menu and certified training tracks — designed for real results and real careers."
+          sub="A full salon menu and certified training tracks — designed for real results and real careers."
           isDark={isDark}
         />
 
@@ -344,7 +344,7 @@ export default function ServicesAndCourses({ theme }) {
             <div className="min-w-0">
               <p className="section-eyebrow mb-1.5">
                 <span className={`w-6 h-px inline-block ${isDark ? 'bg-[#D4AF37]' : 'bg-[#8A6D1F]'}`} />
-                Parlour
+                Salon
               </p>
               <h3 className={`text-2xl sm:text-3xl font-semibold leading-none ${isDark ? 'text-white' : 'text-stone-900'}`}>
                 Our Services
@@ -627,7 +627,7 @@ export default function ServicesAndCourses({ theme }) {
               </h3>
             </div>
             <p className={`text-xs sm:text-sm font-normal ${isDark ? 'text-stone-400' : 'text-stone-600'}`}>
-              Where GV Studio goes further than a standard parlour.
+              Where GV Studio goes further than a standard salon.
             </p>
             <div className="gold-rule my-3" />
           </div>
