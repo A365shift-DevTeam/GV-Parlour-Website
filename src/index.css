@@ -62,7 +62,7 @@
 
 @layer base {
   :root {
-    --nav-height: 5rem; /* 80px fixed navbar */
+    --nav-height: 5rem; /* fallback; live height is measured from the header */
 
     --gv-gold: 212 175 55;
     --gv-gold-light: 231 201 96;

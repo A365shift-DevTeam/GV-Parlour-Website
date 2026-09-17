@@ -100,7 +100,7 @@ export default function App() {
 
   return (
     <div
-      className={`min-h-screen overflow-x-clip font-sans antialiased selection:bg-[#D4AF37] selection:text-black ${
+      className={`min-h-screen font-sans antialiased selection:bg-[#D4AF37] selection:text-black ${
         theme === 'light' ? 'text-stone-900' : 'text-stone-100'
       }`}
     >
