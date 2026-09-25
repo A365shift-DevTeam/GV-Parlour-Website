@@ -10,6 +10,11 @@ import {
   ChevronLeft,
   ChevronRight,
   ExternalLink,
+  GraduationCap,
+  Sparkles,
+  Languages,
+  Star,
+  Quote,
 } from 'lucide-react';
 import { sizedSrc, sizedSrcSet } from '../utils/sizedImage';
 
@@ -285,6 +290,7 @@ function CertificateCarouselModal({ isDark, open, onClose, index, setIndex }) {
 function FounderAndCertificates({ theme, compact = false }) {
   const [certModalOpen, setCertModalOpen] = useState(false);
   const [certIndex, setCertIndex] = useState(0);
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [philosophyOpen, setPhilosophyOpen] = useState(false);
   const isDark = theme !== 'light';
 
@@ -295,9 +301,18 @@ function FounderAndCertificates({ theme, compact = false }) {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    if (certModalOpen && window.lenis) window.lenis.stop();
+    if ((certModalOpen || reviewModalOpen) && window.lenis) window.lenis.stop();
     else if (window.lenis) window.lenis.start();
-  }, [certModalOpen]);
+  }, [certModalOpen, reviewModalOpen]);
+
+  useEffect(() => {
+    if (!reviewModalOpen) return;
+    const onKey = (e) => {
+      if (e.key === 'Escape') setReviewModalOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [reviewModalOpen]);
 
   /* Client-provided credential copy only (no extra invented lines) */
   const credentials = [
@@ -425,6 +440,47 @@ function FounderAndCertificates({ theme, compact = false }) {
             </div>
           </div>
 
+          {/* Compact experience & languages */}
+          <div className="grid grid-cols-2 gap-2">
+            <div
+              className={`rounded-xl border p-2 ${
+                isDark ? 'border-white/10 bg-white/[0.03]' : 'border-stone-200 bg-white'
+              }`}
+            >
+              <div className="flex items-center gap-1 text-[10px] font-bold text-[#D4AF37]">
+                <GraduationCap className="h-3 w-3 shrink-0" />
+                <span>10 Yrs</span>
+              </div>
+              <p className={`mt-0.5 truncate text-[10px] font-medium ${isDark ? 'text-stone-200' : 'text-stone-800'}`}>
+                English &amp; Hindi Classes
+              </p>
+            </div>
+            <div
+              className={`rounded-xl border p-2 ${
+                isDark ? 'border-white/10 bg-white/[0.03]' : 'border-stone-200 bg-white'
+              }`}
+            >
+              <div className="flex items-center gap-1 text-[10px] font-bold text-[#D4AF37]">
+                <Sparkles className="h-3 w-3 shrink-0" />
+                <span>3 Yrs</span>
+              </div>
+              <p className={`mt-0.5 truncate text-[10px] font-medium ${isDark ? 'text-stone-200' : 'text-stone-800'}`}>
+                Cosmetologist &amp; Aesthetician
+              </p>
+            </div>
+          </div>
+
+          <div
+            className={`flex items-center gap-1.5 rounded-xl border px-2.5 py-1.5 text-[10px] ${
+              isDark ? 'border-white/10 bg-white/[0.03] text-stone-300' : 'border-stone-200 bg-white text-stone-700'
+            }`}
+          >
+            <Languages className={`h-3.5 w-3.5 shrink-0 ${isDark ? 'text-[#E7C960]' : 'text-[#8A6D1F]'}`} />
+            <span className="truncate">
+              <strong className={isDark ? 'text-white' : 'text-stone-900'}>Languages:</strong> Telugu, Tamil, Malayalam, Kannada, Hindi, English
+            </span>
+          </div>
+
           <div className="grid grid-cols-1 gap-2">
             {credentials.map((spec) => (
               <div
@@ -500,7 +556,7 @@ function FounderAndCertificates({ theme, compact = false }) {
       }`}
     >
       <div className="section-wrap relative z-10">
-        <div className="grid-adaptive-2 items-center">
+        <div className="grid-adaptive-2 items-start">
           {/* Portrait */}
           <div className="relative mx-auto w-full max-w-md lg:max-w-none">
             <div className="relative">
@@ -532,6 +588,182 @@ function FounderAndCertificates({ theme, compact = false }) {
                     <span className="label !text-[#E7C960]">Founder</span>
                   </div>
                   <p className="font-display text-[28px] font-bold leading-tight tracking-[-0.02em] sm:text-[32px]">Galla Vidya</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Founder Experience & Languages details below image */}
+            <div className="mt-5 space-y-3 sm:mt-6 sm:space-y-3.5">
+              {/* Experience Stats Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {/* 10 Years: Spoken English & Hindi Classes */}
+                <div
+                  className={`group relative overflow-hidden rounded-xl border p-2.5 transition-all duration-300 sm:rounded-2xl sm:p-3 ${
+                    isDark
+                      ? 'border-white/10 bg-white/[0.03] hover:border-[#D4AF37]/45 hover:bg-white/[0.05]'
+                      : 'border-stone-200 bg-white shadow-sm hover:border-[#D4AF37]/45'
+                  }`}
+                >
+                  <span
+                    aria-hidden
+                    className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#D4AF37]/70 to-transparent"
+                  />
+                  <span
+                    className={`block text-right text-[9px] font-bold uppercase tracking-wider sm:text-[10px] ${
+                      isDark ? 'text-stone-400' : 'text-stone-500'
+                    }`}
+                  >
+                    Language Coaching
+                  </span>
+
+                  <div className="mt-1 flex items-baseline gap-1.5">
+                    <span
+                      className={`font-display text-2xl font-extrabold tracking-tight sm:text-3xl ${
+                        isDark ? 'text-white' : 'text-stone-900'
+                      }`}
+                    >
+                      10
+                    </span>
+                    <span className="gold-gradient-text font-display text-sm font-bold uppercase tracking-wider sm:text-base">
+                      Years
+                    </span>
+                  </div>
+
+                  <p
+                    className={`mt-0.5 text-xs font-bold leading-snug sm:text-[13px] ${
+                      isDark ? 'text-stone-200' : 'text-stone-800'
+                    }`}
+                  >
+                    Spoken English &amp; Hindi Classes
+                  </p>
+
+                  <p
+                    className={`mt-1 text-[11px] leading-tight ${
+                      isDark ? 'text-stone-400' : 'text-stone-500'
+                    }`}
+                  >
+                    Years of experience in spoken English &amp; Hindi classes are 10 years
+                  </p>
+                </div>
+
+                {/* 3 Years: Cosmetologist & Aesthetician */}
+                <div
+                  className={`group relative overflow-hidden rounded-xl border p-2.5 transition-all duration-300 sm:rounded-2xl sm:p-3 ${
+                    isDark
+                      ? 'border-white/10 bg-white/[0.03] hover:border-[#D4AF37]/45 hover:bg-white/[0.05]'
+                      : 'border-stone-200 bg-white shadow-sm hover:border-[#D4AF37]/45'
+                  }`}
+                >
+                  <span
+                    aria-hidden
+                    className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#D4AF37]/70 to-transparent"
+                  />
+                  <span
+                    className={`block text-right text-[9px] font-bold uppercase tracking-wider sm:text-[10px] ${
+                      isDark ? 'text-stone-400' : 'text-stone-500'
+                    }`}
+                  >
+                    Clinical Beauty
+                  </span>
+
+                  <div className="mt-1 flex items-baseline gap-1.5">
+                    <span
+                      className={`font-display text-2xl font-extrabold tracking-tight sm:text-3xl ${
+                        isDark ? 'text-white' : 'text-stone-900'
+                      }`}
+                    >
+                      3
+                    </span>
+                    <span className="gold-gradient-text font-display text-sm font-bold uppercase tracking-wider sm:text-base">
+                      Years
+                    </span>
+                  </div>
+
+                  <p
+                    className={`mt-0.5 text-xs font-bold leading-snug sm:text-[13px] ${
+                      isDark ? 'text-stone-200' : 'text-stone-800'
+                    }`}
+                  >
+                    Cosmetologist &amp; Aesthetician
+                  </p>
+
+                  <p
+                    className={`mt-1 text-[11px] leading-tight ${
+                      isDark ? 'text-stone-400' : 'text-stone-500'
+                    }`}
+                  >
+                    As a cosmetologist and aesthetician: 3 years
+                  </p>
+                </div>
+              </div>
+
+              {/* Languages I Speak Card */}
+              <div
+                className={`group relative overflow-hidden rounded-xl border p-3.5 transition-all duration-300 sm:rounded-2xl sm:p-4 ${
+                  isDark
+                    ? 'border-white/10 bg-white/[0.03] hover:border-[#D4AF37]/45 hover:bg-white/[0.05]'
+                    : 'border-stone-200 bg-white shadow-sm hover:border-[#D4AF37]/45'
+                }`}
+              >
+                <span
+                  aria-hidden
+                  className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#D4AF37]/70 to-transparent"
+                />
+
+                <div className="flex items-center justify-between gap-2 mb-2.5">
+                  <h4
+                    className={`text-xs font-bold uppercase tracking-wider sm:text-[13px] ${
+                      isDark ? 'text-white' : 'text-stone-900'
+                    }`}
+                  >
+                    Languages I Speak
+                  </h4>
+
+                  <span
+                    className={`rounded-full px-2 py-0.5 text-[10px] font-bold tracking-wide shrink-0 ${
+                      isDark
+                        ? 'border border-[#D4AF37]/30 bg-[#D4AF37]/15 text-[#E7C960]'
+                        : 'border border-[#8A6D1F]/30 bg-[#8A6D1F]/15 text-[#8A6D1F]'
+                    }`}
+                  >
+                    6 Languages
+                  </span>
+                </div>
+
+                <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                  {[
+                    { name: 'Telugu', native: 'తెలుగు' },
+                    { name: 'Tamil', native: 'தமிழ்' },
+                    { name: 'Malayalam', native: 'മലയാളം' },
+                    { name: 'Kannada', native: 'ಕನ್ನಡ' },
+                    { name: 'Hindi', native: 'हिन्दी' },
+                    { name: 'English' },
+                  ].map((lang) => (
+                    <span
+                      key={lang.name}
+                      className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs font-medium transition-all duration-200 ${
+                        isDark
+                          ? 'border-white/10 bg-white/[0.04] text-stone-200 hover:border-[#D4AF37]/50 hover:bg-white/[0.08] hover:text-white'
+                          : 'border-stone-200 bg-stone-50 text-stone-700 hover:border-[#D4AF37]/50 hover:bg-stone-100 hover:text-stone-900'
+                      }`}
+                    >
+                      <span
+                        className={`h-1.5 w-1.5 rounded-full ${
+                          isDark ? 'bg-[#D4AF37]' : 'bg-[#8A6D1F]'
+                        }`}
+                      />
+                      <span className="font-semibold">{lang.name}</span>
+                      {lang.native && (
+                        <span
+                          className={`text-[10px] opacity-60 ${
+                            isDark ? 'text-stone-400' : 'text-stone-500'
+                          }`}
+                        >
+                          ({lang.native})
+                        </span>
+                      )}
+                    </span>
+                  ))}
                 </div>
               </div>
             </div>
@@ -725,11 +957,172 @@ function FounderAndCertificates({ theme, compact = false }) {
                 </div>
               </div>
             </div>
+
+            {/* Student Review Showcase */}
+            <div
+              className={`relative overflow-hidden rounded-xl border sm:rounded-2xl transition-all duration-300 ${
+                isDark
+                  ? 'border-[#D4AF37]/35 bg-gradient-to-r from-[#1a1710] via-[#12100c] to-[#0e0c09]'
+                  : 'border-stone-200 bg-white shadow-sm'
+              }`}
+            >
+              <span
+                aria-hidden
+                className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#D4AF37]/65 to-transparent"
+              />
+              <div className="flex flex-col items-center gap-3.5 p-3.5 sm:flex-row sm:gap-4 sm:p-4">
+                <button
+                  type="button"
+                  onClick={() => setReviewModalOpen(true)}
+                  className={`group relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-lg border p-1 transition-transform active:scale-[0.98] sm:w-36 sm:rounded-xl ${
+                    isDark
+                      ? 'border-[#D4AF37]/40 bg-black/50'
+                      : 'border-stone-200 bg-stone-100'
+                  }`}
+                  aria-label="View student review from Novya"
+                >
+                  <img
+                    src="/assets/GV studio review.webp"
+                    alt="Student review by Novya from Malaysia"
+                    width="144"
+                    height="108"
+                    loading="lazy"
+                    className="h-full w-full object-cover object-top rounded"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/35 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                    <span className="flex min-h-8 items-center gap-1.5 rounded-full border border-[#D4AF37]/40 bg-black/80 px-2.5 text-[10px] font-bold text-white shadow-md">
+                      <Maximize2 className="h-3 w-3 text-[#E7C960]" />
+                      View
+                    </span>
+                  </div>
+                  {/* <span className="absolute bottom-1.5 right-1.5 rounded-full bg-[#D4AF37] px-1.5 py-0.5 text-[9px] font-extrabold text-black shadow-sm">
+                    Verified
+                  </span> */}
+                </button>
+
+                <div className="min-w-0 flex-1 space-y-1 text-center sm:text-left">
+                  <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
+                    <div
+                      className={`inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.14em] ${
+                        isDark ? 'text-[#E7C960]' : 'text-[#8A6D1F]'
+                      }`}
+                    >
+                      <Quote className="h-3 w-3" />
+                      Student Testimonial
+                    </div>
+                    <div className="flex items-center gap-0.5 text-[#E7C960]">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="h-3 w-3 fill-[#E7C960]" />
+                      ))}
+                    </div>
+                  </div>
+
+                  <h3
+                    className={`text-base font-bold leading-snug sm:text-lg ${
+                      isDark ? 'text-white' : 'text-stone-900'
+                    }`}
+                  >
+                    Novya{' '}
+                  </h3>
+
+                  <p
+                    className={`text-[12px] font-light leading-relaxed sm:text-[13px] line-clamp-2 ${
+                      isDark ? 'text-stone-300' : 'text-stone-600'
+                    }`}
+                  >
+                    “I was honestly amazed by how much I could learn and improve in just 10 classes... Ms. Vidya taught me that makeup and styling should enhance natural features.”
+                  </p>
+
+                  <button
+                    type="button"
+                    onClick={() => setReviewModalOpen(true)}
+                    className={`inline-flex min-h-9 items-center gap-1 text-xs font-bold active:opacity-70 ${
+                      isDark ? 'text-[#E7C960]' : 'text-stone-900'
+                    }`}
+                  >
+                    Read full review
+                    <ChevronRight className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       {certModal}
+
+      {/* Student Review Lightbox Modal */}
+      {reviewModalOpen &&
+        createPortal(
+          <div
+            onClick={() => setReviewModalOpen(false)}
+            className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/92 p-3 backdrop-blur-xl animate-fadeIn sm:p-6"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Student review by Novya from Malaysia"
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className={`relative flex max-h-[94dvh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border shadow-2xl sm:rounded-3xl ${
+                isDark
+                  ? 'glass-panel border-[#D4AF37]/35 text-white'
+                  : 'border-stone-200 bg-white text-stone-900'
+              }`}
+            >
+              {/* Header */}
+              <div
+                className={`flex items-start justify-between gap-3 border-b px-4 py-3.5 sm:px-6 sm:py-4 ${
+                  isDark ? 'border-[#D4AF37]/25' : 'border-stone-200'
+                }`}
+              >
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="section-eyebrow !mb-0">Student Feedback</span>
+                    {/* <span
+                      className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                        isDark ? 'bg-[#D4AF37]/15 text-[#E7C960]' : 'bg-[#D4AF37]/15 text-[#8A6D1F]'
+                      }`}
+                    >
+                      Novya · Malaysia
+                    </span> */}
+                  </div>
+                  <h3
+                    className={`mt-1 text-base font-bold sm:text-lg ${
+                      isDark ? 'text-white' : 'text-stone-900'
+                    }`}
+                  >
+                    Personalized Makeup &amp; Hairstyling Class Review
+                  </h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setReviewModalOpen(false)}
+                  className={`tap-target shrink-0 rounded-full border p-2.5 active:scale-95 ${
+                    isDark
+                      ? 'border-[#D4AF37]/35 bg-black/60 text-[#E7C960]'
+                      : 'border-stone-200 bg-stone-100 text-stone-800'
+                  }`}
+                  aria-label="Close"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              {/* Scrollable Stage */}
+              <div className="relative flex min-h-0 flex-1 items-center justify-center overflow-y-auto bg-black/95 p-3 sm:p-5">
+                <img
+                  src="/assets/GV studio review.webp"
+                  alt="Student review by Novya from Malaysia"
+                  width="865"
+                  height="920"
+                  className="max-h-[75dvh] w-auto max-w-full rounded-xl object-contain shadow-2xl"
+                />
+              </div>
+            </div>
+          </div>,
+          document.body
+        )}
     </section>
   );
 }
