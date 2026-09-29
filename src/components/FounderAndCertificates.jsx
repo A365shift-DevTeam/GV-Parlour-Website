@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, memo } from 'react';
+import React, { useState, useEffect, useCallback, useRef, memo } from 'react';
 import { createPortal } from 'react-dom';
 import {
   Award,
@@ -287,11 +287,233 @@ function CertificateCarouselModal({ isDark, open, onClose, index, setIndex }) {
   );
 }
 
+/*
+ * Feedback & Testimonials — Student & Client reviews
+ */
+const FEEDBACKS = [
+  {
+    id: 'novya',
+    type: 'Testimonial',
+    eyebrow: 'Testimonial',
+    name: 'Novya',
+    rating: 5,  
+    quote:
+      '“I was honestly amazed by how much I could learn and improve in just 10 classes. Ms. Vidya taught me that makeup and styling should enhance natural features.”',
+    fullTitle: 'Personalized Makeup & Hairstyling Class Review',
+    src: '/assets/GV studio review.webp',
+    alt: 'Review by Novya',
+    width: 865,
+    height: 920,
+  },
+  {
+    id: 'swetha',
+    type: 'Testimonial',
+    eyebrow: 'Testimonial',
+    name: 'Swetha',
+    tag: 'Nails & Makeup',
+    rating: 5,
+    quote:
+      '“I really loved how the nails turned out! As it was my first time, the process was so smooth and easy. And my brows were looking perfect in shape and denser too!”',
+    fullTitle: 'Nails & Professional Makeup Review',
+    src: '/assets/GV feedback 2.webp',
+    alt: 'Client feedback by Swetha for Nails & Makeup',
+    width: 720,
+    height: 1375,
+  },
+];
+
+function FeedbackCarouselModal({ isDark, open, onClose, index, setIndex }) {
+  const total = FEEDBACKS.length;
+  const current = FEEDBACKS[index] ?? FEEDBACKS[0];
+
+  const goPrev = useCallback(() => {
+    setIndex((i) => (i - 1 + total) % total);
+  }, [setIndex, total]);
+
+  const goNext = useCallback(() => {
+    setIndex((i) => (i + 1) % total);
+  }, [setIndex, total]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e) => {
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowLeft') goPrev();
+      if (e.key === 'ArrowRight') goNext();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open, onClose, goPrev, goNext]);
+
+  if (!open) return null;
+
+  return createPortal(
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/92 p-3 backdrop-blur-xl animate-fadeIn sm:p-6"
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${current.eyebrow} by ${current.name}`}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className={`relative flex max-h-[94dvh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border shadow-2xl sm:rounded-3xl ${
+          isDark
+            ? 'glass-panel border-[#D4AF37]/35 text-white'
+            : 'border-stone-200 bg-white text-stone-900'
+        }`}
+      >
+        {/* Header */}
+        <div
+          className={`flex items-start justify-between gap-3 border-b px-4 py-3.5 sm:px-6 sm:py-4 ${
+            isDark ? 'border-[#D4AF37]/25' : 'border-stone-200'
+          }`}
+        >
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="section-eyebrow !mb-0">{current.eyebrow}</span>
+              <span
+                className={`rounded-full px-2 py-0.5 text-[10px] font-bold tabular-nums ${
+                  isDark
+                    ? 'bg-[#D4AF37]/15 text-[#E7C960]'
+                    : 'bg-[#D4AF37]/15 text-[#8A6D1F]'
+                }`}
+              >
+                {index + 1} / {total}
+              </span>
+              <span
+                className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                  isDark ? 'bg-white/10 text-stone-300' : 'bg-stone-100 text-stone-700'
+                }`}
+              >
+                {current.name}
+                {current.tag ? ` · ${current.tag}` : ''}
+              </span>
+            </div>
+            <h3
+              className={`mt-1 text-base font-bold sm:text-lg ${
+                isDark ? 'text-white' : 'text-stone-900'
+              }`}
+            >
+              {current.fullTitle}
+            </h3>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className={`tap-target shrink-0 rounded-full border p-2.5 active:scale-95 ${
+              isDark
+                ? 'border-[#D4AF37]/35 bg-black/60 text-[#E7C960]'
+                : 'border-stone-200 bg-stone-100 text-stone-800'
+            }`}
+            aria-label="Close"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        {/* Scrollable Stage */}
+        <div className="relative flex min-h-0 flex-1 items-center justify-center overflow-y-auto bg-black/95 p-2 sm:p-4">
+          <img
+            key={current.id}
+            src={current.src}
+            alt={current.alt}
+            width={current.width}
+            height={current.height}
+            className="m-auto max-h-[calc(94dvh-175px)] w-auto max-w-full rounded-xl object-contain shadow-2xl animate-fadeIn"
+          />
+
+          {total > 1 && (
+            <>
+              <button
+                type="button"
+                onClick={goPrev}
+                className="absolute left-2 top-1/2 z-20 -translate-y-1/2 rounded-full border border-[#D4AF37]/40 bg-black/75 p-2.5 text-[#E7C960] transition-all hover:bg-[#D4AF37] hover:text-black sm:left-3 sm:p-3"
+                aria-label="Previous review"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <button
+                type="button"
+                onClick={goNext}
+                className="absolute right-2 top-1/2 z-20 -translate-y-1/2 rounded-full border border-[#D4AF37]/40 bg-black/75 p-2.5 text-[#E7C960] transition-all hover:bg-[#D4AF37] hover:text-black sm:right-3 sm:p-3"
+                aria-label="Next review"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+            </>
+          )}
+        </div>
+
+        {/* Thumbnails + dots */}
+        {total > 1 && (
+          <div
+            className={`flex flex-col gap-2.5 border-t px-4 py-3 sm:px-6 ${
+              isDark ? 'border-[#D4AF37]/20 bg-black/30' : 'border-stone-200 bg-stone-50'
+            }`}
+          >
+            <div className="flex items-center justify-center gap-2">
+              {FEEDBACKS.map((fb, i) => {
+                const active = i === index;
+                return (
+                  <button
+                    key={fb.id}
+                    type="button"
+                    onClick={() => setIndex(i)}
+                    aria-label={`Show ${fb.name}'s review`}
+                    aria-current={active ? 'true' : undefined}
+                    className={`relative h-12 w-16 shrink-0 overflow-hidden rounded-lg border-2 transition-all ${
+                      active
+                        ? 'border-[#D4AF37] shadow-[0_0_0_1px_rgba(212,175,55,0.5)]'
+                        : isDark
+                          ? 'border-white/15 opacity-60 hover:opacity-100'
+                          : 'border-stone-200 opacity-70 hover:opacity-100'
+                    }`}
+                  >
+                    <img
+                      src={fb.src}
+                      alt={fb.name}
+                      width="64"
+                      height="48"
+                      className="h-full w-full object-contain bg-black"
+                    />
+                  </button>
+                );
+              })}
+            </div>
+            <div className="flex items-center justify-center gap-1.5">
+              {FEEDBACKS.map((fb, i) => (
+                <button
+                  key={`modal-dot-${fb.id}`}
+                  type="button"
+                  onClick={() => setIndex(i)}
+                  aria-label={`Go to ${fb.name}'s review`}
+                  className={`h-1.5 rounded-full transition-all ${
+                    i === index
+                      ? 'w-6 bg-[#D4AF37]'
+                      : isDark
+                        ? 'w-1.5 bg-white/30 hover:bg-white/50'
+                        : 'w-1.5 bg-stone-300 hover:bg-stone-400'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>,
+    document.body
+  );
+}
+
 function FounderAndCertificates({ theme, compact = false }) {
   const [certModalOpen, setCertModalOpen] = useState(false);
   const [certIndex, setCertIndex] = useState(0);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
+  const [reviewIndex, setReviewIndex] = useState(0);
+  const [isReviewPaused, setIsReviewPaused] = useState(false);
   const [philosophyOpen, setPhilosophyOpen] = useState(false);
+  const touchStartXRef = useRef(null);
   const isDark = theme !== 'light';
 
   const openCerts = (startIndex = 0) => {
@@ -299,20 +521,48 @@ function FounderAndCertificates({ theme, compact = false }) {
     setCertModalOpen(true);
   };
 
+  const prevReview = useCallback(() => {
+    setReviewIndex((i) => (i - 1 + FEEDBACKS.length) % FEEDBACKS.length);
+  }, []);
+
+  const nextReview = useCallback(() => {
+    setReviewIndex((i) => (i + 1) % FEEDBACKS.length);
+  }, []);
+
+  const openReview = useCallback((startIndex = 0) => {
+    setReviewIndex(startIndex);
+    setReviewModalOpen(true);
+  }, []);
+
+  /* Auto-advance review carousel card (pauses on hover or modal open) */
+  useEffect(() => {
+    if (reviewModalOpen || FEEDBACKS.length <= 1 || isReviewPaused) return;
+    const id = window.setInterval(() => {
+      setReviewIndex((i) => (i + 1) % FEEDBACKS.length);
+    }, 5500);
+    return () => window.clearInterval(id);
+  }, [reviewModalOpen, isReviewPaused]);
+
+  const handleTouchStart = (e) => {
+    touchStartXRef.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e) => {
+    if (touchStartXRef.current === null) return;
+    const diff = touchStartXRef.current - e.changedTouches[0].clientX;
+    if (diff > 40) {
+      nextReview();
+    } else if (diff < -40) {
+      prevReview();
+    }
+    touchStartXRef.current = null;
+  };
+
   useEffect(() => {
     if (typeof window === 'undefined') return;
     if ((certModalOpen || reviewModalOpen) && window.lenis) window.lenis.stop();
     else if (window.lenis) window.lenis.start();
   }, [certModalOpen, reviewModalOpen]);
-
-  useEffect(() => {
-    if (!reviewModalOpen) return;
-    const onKey = (e) => {
-      if (e.key === 'Escape') setReviewModalOpen(false);
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [reviewModalOpen]);
 
   /* Client-provided credential copy only (no extra invented lines) */
   const credentials = [
@@ -380,6 +630,16 @@ function FounderAndCertificates({ theme, compact = false }) {
       onClose={() => setCertModalOpen(false)}
       index={certIndex}
       setIndex={setCertIndex}
+    />
+  );
+
+  const reviewModal = (
+    <FeedbackCarouselModal
+      isDark={isDark}
+      open={reviewModalOpen}
+      onClose={() => setReviewModalOpen(false)}
+      index={reviewIndex}
+      setIndex={setReviewIndex}
     />
   );
 
@@ -542,6 +802,7 @@ function FounderAndCertificates({ theme, compact = false }) {
         </div>
 
         {certModal}
+        {reviewModal}
       </section>
     );
   }
@@ -958,171 +1219,169 @@ function FounderAndCertificates({ theme, compact = false }) {
               </div>
             </div>
 
-            {/* Student Review Showcase */}
-            <div
-              className={`relative overflow-hidden rounded-xl border sm:rounded-2xl transition-all duration-300 ${
-                isDark
-                  ? 'border-[#D4AF37]/35 bg-gradient-to-r from-[#1a1710] via-[#12100c] to-[#0e0c09]'
-                  : 'border-stone-200 bg-white shadow-sm'
-              }`}
-            >
-              <span
-                aria-hidden
-                className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#D4AF37]/65 to-transparent"
-              />
-              <div className="flex flex-col items-center gap-3.5 p-3.5 sm:flex-row sm:gap-4 sm:p-4">
-                <button
-                  type="button"
-                  onClick={() => setReviewModalOpen(true)}
-                  className={`group relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-lg border p-1 transition-transform active:scale-[0.98] sm:w-36 sm:rounded-xl ${
+            {/* Student & Client Review Showcase Carousel */}
+            {(() => {
+              const currentReview = FEEDBACKS[reviewIndex] ?? FEEDBACKS[0];
+              return (
+                <div
+                  className={`relative overflow-hidden rounded-xl border sm:rounded-2xl transition-all duration-300 ${
                     isDark
-                      ? 'border-[#D4AF37]/40 bg-black/50'
-                      : 'border-stone-200 bg-stone-100'
+                      ? 'border-[#D4AF37]/35 bg-gradient-to-r from-[#1a1710] via-[#12100c] to-[#0e0c09]'
+                      : 'border-stone-200 bg-white shadow-sm'
                   }`}
-                  aria-label="View student review from Novya"
+                  onMouseEnter={() => setIsReviewPaused(true)}
+                  onMouseLeave={() => setIsReviewPaused(false)}
+                  onTouchStart={handleTouchStart}
+                  onTouchEnd={handleTouchEnd}
                 >
-                  <img
-                    src="/assets/GV studio review.webp"
-                    alt="Student review by Novya from Malaysia"
-                    width="144"
-                    height="108"
-                    loading="lazy"
-                    className="h-full w-full object-cover object-top rounded"
+                  <span
+                    aria-hidden
+                    className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#D4AF37]/65 to-transparent"
                   />
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/35 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
-                    <span className="flex min-h-8 items-center gap-1.5 rounded-full border border-[#D4AF37]/40 bg-black/80 px-2.5 text-[10px] font-bold text-white shadow-md">
-                      <Maximize2 className="h-3 w-3 text-[#E7C960]" />
-                      View
-                    </span>
-                  </div>
-                  {/* <span className="absolute bottom-1.5 right-1.5 rounded-full bg-[#D4AF37] px-1.5 py-0.5 text-[9px] font-extrabold text-black shadow-sm">
-                    Verified
-                  </span> */}
-                </button>
-
-                <div className="min-w-0 flex-1 space-y-1 text-center sm:text-left">
-                  <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
-                    <div
-                      className={`inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.14em] ${
-                        isDark ? 'text-[#E7C960]' : 'text-[#8A6D1F]'
+                  <div className="flex flex-col items-center gap-3.5 p-3.5 sm:flex-row sm:gap-4 sm:p-4">
+                    <button
+                      type="button"
+                      onClick={() => openReview(reviewIndex)}
+                      className={`group relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-lg border p-1 transition-transform active:scale-[0.98] sm:w-36 sm:rounded-xl ${
+                        isDark
+                          ? 'border-[#D4AF37]/40 bg-black/50'
+                          : 'border-stone-200 bg-stone-100'
                       }`}
+                      aria-label={`View review from ${currentReview.name}`}
                     >
-                      <Quote className="h-3 w-3" />
-                      Student Testimonial
-                    </div>
-                    <div className="flex items-center gap-0.5 text-[#E7C960]">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="h-3 w-3 fill-[#E7C960]" />
-                      ))}
+                      <img
+                        key={currentReview.id}
+                        src={currentReview.src}
+                        alt={currentReview.alt}
+                        width="144"
+                        height="108"
+                        loading="lazy"
+                        className="h-full w-full object-contain rounded animate-fadeIn"
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/35 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                        <span className="flex min-h-8 items-center gap-1.5 rounded-full border border-[#D4AF37]/40 bg-black/80 px-2.5 text-[10px] font-bold text-white shadow-md">
+                          <Maximize2 className="h-3 w-3 text-[#E7C960]" />
+                          View
+                        </span>
+                      </div>
+                      <span className="absolute bottom-1.5 right-1.5 rounded-full bg-[#D4AF37] px-1.5 py-0.5 text-[9px] font-extrabold text-black shadow-sm tabular-nums">
+                        {reviewIndex + 1} / {FEEDBACKS.length}
+                      </span>
+                    </button>
+
+                    <div className="min-w-0 flex-1 space-y-1 text-center sm:text-left">
+                      <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
+                        <div
+                          className={`inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.14em] ${
+                            isDark ? 'text-[#E7C960]' : 'text-[#8A6D1F]'
+                          }`}
+                        >
+                          <Quote className="h-3 w-3" />
+                          {currentReview.type}
+                        </div>
+                        <div className="flex items-center gap-0.5 text-[#E7C960]">
+                          {[...Array(currentReview.rating)].map((_, i) => (
+                            <Star key={i} className="h-3 w-3 fill-[#E7C960]" />
+                          ))}
+                        </div>
+                      </div>
+
+                      <h3
+                        className={`text-base font-bold leading-snug sm:text-lg ${
+                          isDark ? 'text-white' : 'text-stone-900'
+                        }`}
+                      >
+                        {currentReview.name}
+                        {currentReview.tag && (
+                          <span
+                            className={`ml-2 text-xs font-normal ${
+                              isDark ? 'text-stone-400' : 'text-stone-500'
+                            }`}
+                          >
+                            · {currentReview.tag}
+                          </span>
+                        )}
+                      </h3>
+
+                      <p
+                        className={`text-[12px] font-light leading-relaxed sm:text-[13px] ${
+                          isDark ? 'text-stone-300' : 'text-stone-600'
+                        }`}
+                      >
+                        {currentReview.quote}
+                      </p>
+
+                      <div className="flex items-center justify-between gap-2 pt-1">
+                        <button
+                          type="button"
+                          onClick={() => openReview(reviewIndex)}
+                          className={`inline-flex min-h-9 items-center gap-1 text-xs font-bold active:opacity-70 ${
+                            isDark ? 'text-[#E7C960]' : 'text-stone-900'
+                          }`}
+                        >
+                          Read full review
+                          <ChevronRight className="h-3.5 w-3.5" />
+                        </button>
+
+                        {/* Carousel Controls */}
+                        <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+                          {/* Dot indicators */}
+                          <div className="flex items-center gap-1 mr-1">
+                            {FEEDBACKS.map((fb, idx) => (
+                              <button
+                                key={fb.id}
+                                type="button"
+                                onClick={() => setReviewIndex(idx)}
+                                aria-label={`Show review by ${fb.name}`}
+                                className={`h-1.5 rounded-full transition-all duration-300 ${
+                                  idx === reviewIndex
+                                    ? 'w-4 bg-[#D4AF37]'
+                                    : isDark
+                                      ? 'w-1.5 bg-white/30 hover:bg-white/50'
+                                      : 'w-1.5 bg-stone-300 hover:bg-stone-500'
+                                }`}
+                              />
+                            ))}
+                          </div>
+
+                          {/* Prev / Next buttons */}
+                          <button
+                            type="button"
+                            onClick={prevReview}
+                            aria-label="Previous review"
+                            className={`flex h-7 w-7 items-center justify-center rounded-full border transition-all active:scale-95 ${
+                              isDark
+                                ? 'border-[#D4AF37]/35 bg-black/50 text-[#E7C960] hover:border-[#D4AF37] hover:bg-[#D4AF37]/20'
+                                : 'border-stone-200 bg-stone-100 text-stone-700 hover:border-[#D4AF37] hover:bg-stone-200'
+                            }`}
+                          >
+                            <ChevronLeft className="h-3.5 w-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={nextReview}
+                            aria-label="Next review"
+                            className={`flex h-7 w-7 items-center justify-center rounded-full border transition-all active:scale-95 ${
+                              isDark
+                                ? 'border-[#D4AF37]/35 bg-black/50 text-[#E7C960] hover:border-[#D4AF37] hover:bg-[#D4AF37]/20'
+                                : 'border-stone-200 bg-stone-100 text-stone-700 hover:border-[#D4AF37] hover:bg-stone-200'
+                            }`}
+                          >
+                            <ChevronRight className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
-
-                  <h3
-                    className={`text-base font-bold leading-snug sm:text-lg ${
-                      isDark ? 'text-white' : 'text-stone-900'
-                    }`}
-                  >
-                    Novya{' '}
-                  </h3>
-
-                  <p
-                    className={`text-[12px] font-light leading-relaxed sm:text-[13px] line-clamp-2 ${
-                      isDark ? 'text-stone-300' : 'text-stone-600'
-                    }`}
-                  >
-                    “I was honestly amazed by how much I could learn and improve in just 10 classes... Ms. Vidya taught me that makeup and styling should enhance natural features.”
-                  </p>
-
-                  <button
-                    type="button"
-                    onClick={() => setReviewModalOpen(true)}
-                    className={`inline-flex min-h-9 items-center gap-1 text-xs font-bold active:opacity-70 ${
-                      isDark ? 'text-[#E7C960]' : 'text-stone-900'
-                    }`}
-                  >
-                    Read full review
-                    <ChevronRight className="h-3.5 w-3.5" />
-                  </button>
                 </div>
-              </div>
-            </div>
+              );
+            })()}
           </div>
         </div>
       </div>
 
       {certModal}
-
-      {/* Student Review Lightbox Modal */}
-      {reviewModalOpen &&
-        createPortal(
-          <div
-            onClick={() => setReviewModalOpen(false)}
-            className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/92 p-3 backdrop-blur-xl animate-fadeIn sm:p-6"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Student review by Novya from Malaysia"
-          >
-            <div
-              onClick={(e) => e.stopPropagation()}
-              className={`relative flex max-h-[94dvh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border shadow-2xl sm:rounded-3xl ${
-                isDark
-                  ? 'glass-panel border-[#D4AF37]/35 text-white'
-                  : 'border-stone-200 bg-white text-stone-900'
-              }`}
-            >
-              {/* Header */}
-              <div
-                className={`flex items-start justify-between gap-3 border-b px-4 py-3.5 sm:px-6 sm:py-4 ${
-                  isDark ? 'border-[#D4AF37]/25' : 'border-stone-200'
-                }`}
-              >
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="section-eyebrow !mb-0">Student Feedback</span>
-                    {/* <span
-                      className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
-                        isDark ? 'bg-[#D4AF37]/15 text-[#E7C960]' : 'bg-[#D4AF37]/15 text-[#8A6D1F]'
-                      }`}
-                    >
-                      Novya · Malaysia
-                    </span> */}
-                  </div>
-                  <h3
-                    className={`mt-1 text-base font-bold sm:text-lg ${
-                      isDark ? 'text-white' : 'text-stone-900'
-                    }`}
-                  >
-                    Personalized Makeup &amp; Hairstyling Class Review
-                  </h3>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setReviewModalOpen(false)}
-                  className={`tap-target shrink-0 rounded-full border p-2.5 active:scale-95 ${
-                    isDark
-                      ? 'border-[#D4AF37]/35 bg-black/60 text-[#E7C960]'
-                      : 'border-stone-200 bg-stone-100 text-stone-800'
-                  }`}
-                  aria-label="Close"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-
-              {/* Scrollable Stage */}
-              <div className="relative flex min-h-0 flex-1 items-center justify-center overflow-y-auto bg-black/95 p-3 sm:p-5">
-                <img
-                  src="/assets/GV studio review.webp"
-                  alt="Student review by Novya from Malaysia"
-                  width="865"
-                  height="920"
-                  className="max-h-[75dvh] w-auto max-w-full rounded-xl object-contain shadow-2xl"
-                />
-              </div>
-            </div>
-          </div>,
-          document.body
-        )}
+      {reviewModal}
     </section>
   );
 }

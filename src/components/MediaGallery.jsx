@@ -47,10 +47,10 @@ const LOOKS = [
   {
     id: 4,
     kind: 'image',
-    title: 'Haircut',
-    // subtitle: 'Global colour & soft highlights',
-    src: '/assets/hair2.webp',
-    category: 'hair',
+    title: 'Hairstyling',
+    // subtitle: 'Everyday elegance, elevated',
+    src: '/assets/look.webp',
+    category: 'bridal',
     objectPosition: 'center 20%',
   },
   {
@@ -75,10 +75,10 @@ const LOOKS = [
   {
     id: 7,
     kind: 'image',
-    title: ' Hairstyling',
-    // subtitle: 'Everyday elegance, elevated',
-    src: '/assets/look.webp',
-    category: 'bridal',
+    title: 'Haircut',
+    // subtitle: 'Global colour & soft highlights',
+    src: '/assets/hair2.webp',
+    category: 'hair',
     objectPosition: 'center 20%',
   },
   {
